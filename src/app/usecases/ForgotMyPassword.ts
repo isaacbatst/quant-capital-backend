@@ -1,6 +1,6 @@
 import {PasswordReset} from '../../domain/entities/PasswordReset';
 import {type EmailGateway} from '../../infra/gateways/EmailGateway/EmailGateway';
-import {type ResetPasswordRepository} from '../../infra/persistance/repositories/ResetPasswordTokenRepository';
+import {type PasswordResetRepository} from '../../infra/persistance/repositories/PasswordResetRepository';
 import {type TokenGenerator} from '../../infra/TokenGenerator/TokenGenerator';
 
 type Input = {
@@ -10,7 +10,7 @@ type Input = {
 export class ForgotMyPassword {
 	constructor(
 		private readonly tokenGenerator: TokenGenerator,
-		private readonly passwordResetRepository: ResetPasswordRepository,
+		private readonly passwordResetRepository: PasswordResetRepository,
 		private readonly emailGateway: EmailGateway,
 		private readonly appUrl: string,
 	) {}
