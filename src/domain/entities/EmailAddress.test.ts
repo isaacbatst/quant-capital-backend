@@ -12,4 +12,10 @@ describe('Email', () => {
 			const email = new EmailAddress('invalidemail.com');
 		}).toThrow('INVALID_EMAIL');
 	});
+
+	it('should not create with an empty strign', () => {
+		expect(() => {
+			const email = new EmailAddress('');
+		}).toThrow('INVALID_EMAIL');
+	});
 });
