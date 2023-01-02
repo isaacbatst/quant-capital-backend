@@ -1,33 +1,25 @@
 import {PasswordFactory} from '../../domain/entities/PasswordFactory';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
-import {type PasswordResetRequestRepository} from '../../infra/persistance/repositories/PasswordResetRequestRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type Encrypter} from '../../infra/util/Encrypter/Encrypter';
 
 type Input = {
-	token: string;
 	password: string;
+	sessionToken: string;
 };
 
-export class ResetPassword {
+export class ChangePassword {
 	readonly accountRepository: AccountRepository;
-	readonly passwordResetRequestRepository: PasswordResetRequestRepository;
+
 	constructor(
 		repositoryFactory: RepositoryFactory,
 		readonly encrypter: Encrypter,
 	) {
 		this.accountRepository = repositoryFactory.accountRepository;
-		this.passwordResetRequestRepository = repositoryFactory.passwordResetRequestRepository;
 	}
 
-	async execute(input: Input): Promise<void> {
-		const passwordResetRequest = await this.passwordResetRequestRepository.getByToken(input.token);
-
-		if (!passwordResetRequest) {
-			throw new Error('PASSWORD_RESET_REQUEST_NOT_FOUND');
-		}
-
-		const account = await this.accountRepository.getByEmail(passwordResetRequest.emailAddress.value);
+	async execute(input: Input) {
+		const account = await this.accountRepository.getBySessionToken(input.sessionToken);
 
 		if (!account) {
 			throw new Error('ACCOUNT_NOT_FOUND');
@@ -35,8 +27,6 @@ export class ResetPassword {
 
 		const password = await PasswordFactory.make(input.password, this.encrypter);
 		account.changePassword(password);
-		passwordResetRequest.use();
-		await this.passwordResetRequestRepository.update(passwordResetRequest);
 		await this.accountRepository.update(account);
 	}
 }

@@ -1,13 +1,22 @@
+
 export class Password {
 	constructor(
 		readonly value: string,
+		readonly hash: string,
 	) {
 		this.validateValue();
+		this.validateHash();
 	}
 
 	private validateValue() {
 		if (this.value.length < 8) {
-			throw new Error('INVALID_PASSWORD');
+			throw new Error('INVALID_PASSWORD_VALUE');
+		}
+	}
+
+	private validateHash() {
+		if (this.hash.length === 0) {
+			throw new Error('INVALID_PASSWORD_HASH');
 		}
 	}
 }
