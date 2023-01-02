@@ -1,6 +1,6 @@
 import {type EmailAddress} from './EmailAddress';
 
-export class User {
+export class Account {
 	constructor(
 		private readonly email: EmailAddress,
 		private passwordHash: string,

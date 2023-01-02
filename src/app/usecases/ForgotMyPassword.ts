@@ -4,7 +4,7 @@ import {PasswordResetRequestEmailGenerator} from '../../domain/entities/Password
 import {type EmailGateway} from '../../infra/gateways/EmailGateway/EmailGateway';
 import {type PasswordResetRequestRepository} from '../../infra/persistance/repositories/PasswordResetRequestRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
-import {type UserRepository} from '../../infra/persistance/repositories/UserRepository';
+import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type TokenGenerator} from '../../infra/util/TokenGenerator/TokenGenerator';
 
 type Input = {
@@ -13,7 +13,7 @@ type Input = {
 
 export class ForgotMyPassword {
 	private readonly passwordResetRequestRepository: PasswordResetRequestRepository;
-	private readonly userRepository: UserRepository;
+	private readonly accountRepository: AccountRepository;
 	constructor(
 		repositoryFactory: RepositoryFactory,
 		private readonly tokenGenerator: TokenGenerator,
@@ -21,14 +21,14 @@ export class ForgotMyPassword {
 		private readonly appUrl: string,
 	) {
 		this.passwordResetRequestRepository = repositoryFactory.passwordResetRequestRepository;
-		this.userRepository = repositoryFactory.userRepository;
+		this.accountRepository = repositoryFactory.accountRepository;
 	}
 
 	async execute(input: Input) {
-		const user = await this.userRepository.getByEmail(input.email);
+		const account = await this.accountRepository.getByEmail(input.email);
 
-		if (!user) {
-			throw new Error('USER_NOT_FOUND');
+		if (!account) {
+			throw new Error('ACCOUNT_NOT_FOUND');
 		}
 
 		const token = await this.tokenGenerator.generate();

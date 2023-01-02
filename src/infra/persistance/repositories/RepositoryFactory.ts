@@ -1,7 +1,7 @@
 import {type PasswordResetRequestRepository} from './PasswordResetRequestRepository';
-import {type UserRepository} from './UserRepository';
+import {type AccountRepository} from './AccountRepository';
 
 export type RepositoryFactory = {
 	passwordResetRequestRepository: PasswordResetRequestRepository;
-	userRepository: UserRepository;
+	accountRepository: AccountRepository;
 };

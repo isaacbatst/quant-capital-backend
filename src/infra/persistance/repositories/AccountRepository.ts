@@ -1,0 +1,7 @@
+import {type Account} from '../../../domain/entities/Account';
+
+export type AccountRepository = {
+	getByEmail(email: string): Promise<Account | undefined>;
+	update(account: Account): Promise<void>;
+	save(account: Account): Promise<void>;
+};

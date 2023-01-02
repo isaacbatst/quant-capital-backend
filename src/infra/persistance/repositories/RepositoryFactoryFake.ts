@@ -1,8 +1,8 @@
 import {PasswordResetRequestRepositoryFake} from './PasswordResetRequestRepositoryFake';
 import {type RepositoryFactory} from './RepositoryFactory';
-import {UserRepositoryFake} from './UserRepositoryFake';
+import {AccountRepositoryFake} from './AccountRepositoryFake';
 
 export class RepositoryFactoryFake implements RepositoryFactory {
 	passwordResetRequestRepository: PasswordResetRequestRepositoryFake = new PasswordResetRequestRepositoryFake();
-	userRepository: UserRepositoryFake = new UserRepositoryFake();
+	accountRepository: AccountRepositoryFake = new AccountRepositoryFake();
 }

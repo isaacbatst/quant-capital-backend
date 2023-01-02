@@ -1,6 +1,6 @@
 import {EmailAddress} from '../../domain/entities/EmailAddress';
 import {PasswordResetRequest} from '../../domain/entities/PasswordResetRequest';
-import {User} from '../../domain/entities/User';
+import {Account} from '../../domain/entities/Account';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
 import {EncrypterFake} from '../../infra/util/Encrypter/EncrypterFake';
 import {ResetPassword} from './ResetPassword';
@@ -20,7 +20,7 @@ const makeSut = () => {
 describe('ResetPassword', () => {
 	it('should encrypt password', async () => {
 		const {repositoryFactory, resetPassword, encrypter} = makeSut();
-		await repositoryFactory.userRepository.save(new User(new EmailAddress('any@email.com'), 'old-hash'));
+		await repositoryFactory.accountRepository.save(new Account(new EmailAddress('any@email.com'), 'old-hash'));
 		await repositoryFactory.passwordResetRequestRepository.save(
 			new PasswordResetRequest('any-token', new Date(), new EmailAddress('any@email.com')),
 		);
@@ -30,22 +30,22 @@ describe('ResetPassword', () => {
 		expect(encrypter.encrypt).toHaveBeenCalledWith('new-password');
 	});
 
-	it('should update user password hash', async () => {
+	it('should update account password hash', async () => {
 		const {repositoryFactory, resetPassword} = makeSut();
-		const user = new User(new EmailAddress('any@email.com'), 'old-hash');
-		await repositoryFactory.userRepository.save(user);
+		const account = new Account(new EmailAddress('any@email.com'), 'old-hash');
+		await repositoryFactory.accountRepository.save(account);
 		await repositoryFactory.passwordResetRequestRepository.save(
 			new PasswordResetRequest('any-token', new Date(), new EmailAddress('any@email.com')),
 		);
 
 		await resetPassword.execute({password: 'new-password', token: 'any-token'});
 
-		expect(user.getPasswordHash()).toBe('any-hash');
+		expect(account.getPasswordHash()).toBe('any-hash');
 	});
 
 	it('should update password reset request', async () => {
 		const {repositoryFactory, resetPassword, encrypter} = makeSut();
-		await repositoryFactory.userRepository.save(new User(new EmailAddress('any@email.com'), 'old-hash'));
+		await repositoryFactory.accountRepository.save(new Account(new EmailAddress('any@email.com'), 'old-hash'));
 		const request = new PasswordResetRequest('any-token', new Date(), new EmailAddress('any@email.com'));
 		await repositoryFactory.passwordResetRequestRepository.save(request);
 
@@ -54,7 +54,7 @@ describe('ResetPassword', () => {
 		expect(request.getWasUsed()).toBe(true);
 	});
 
-	it('should not update user password hash with unknown request', async () => {
+	it('should not update account password hash with unknown request', async () => {
 		const {resetPassword} = makeSut();
 
 		await expect(async () => {
@@ -62,7 +62,7 @@ describe('ResetPassword', () => {
 		}).rejects.toThrow('PASSWORD_RESET_REQUEST_NOT_FOUND');
 	});
 
-	it('should not update user password hash with unknown email', async () => {
+	it('should not update account password hash with unknown email', async () => {
 		const {repositoryFactory, resetPassword} = makeSut();
 		await repositoryFactory.passwordResetRequestRepository.save(
 			new PasswordResetRequest('any-token', new Date(), new EmailAddress('any@email.com')),
@@ -70,6 +70,6 @@ describe('ResetPassword', () => {
 
 		await expect(async () => {
 			await resetPassword.execute({password: 'new-password', token: 'any-token'});
-		}).rejects.toThrow('USER_NOT_FOUND');
+		}).rejects.toThrow('ACCOUNT_NOT_FOUND');
 	});
 });

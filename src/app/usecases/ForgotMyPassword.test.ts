@@ -1,5 +1,5 @@
+import {Account} from '../../domain/entities/Account';
 import {EmailAddress} from '../../domain/entities/EmailAddress';
-import {User} from '../../domain/entities/User';
 import {EmailGatewayFake} from '../../infra/gateways/EmailGateway/EmailGatewayFake';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
 import {TokenGeneratorFake} from '../../infra/util/TokenGenerator/TokenGeneratorFake';
@@ -20,7 +20,7 @@ const makeSut = () => {
 describe('ForgotMyPassword', () => {
 	it('should save request', async () => {
 		const {forgotMyPassword, repositoryFactory} = makeSut();
-		await repositoryFactory.userRepository.save(new User(new EmailAddress('any@email.com'), 'any-hash'));
+		await repositoryFactory.accountRepository.save(new Account(new EmailAddress('any@email.com'), 'any-hash'));
 		await forgotMyPassword.execute({email: 'any@email.com'});
 
 		expect(repositoryFactory.passwordResetRequestRepository.requests).toContainEqual(expect.objectContaining({emailAddress: new EmailAddress('any@email.com')}));
@@ -31,6 +31,6 @@ describe('ForgotMyPassword', () => {
 
 		await expect(async () => {
 			await forgotMyPassword.execute({email: 'unknown@email.com'});
-		}).rejects.toThrow('USER_NOT_FOUND');
+		}).rejects.toThrow('ACCOUNT_NOT_FOUND');
 	});
 });
