@@ -24,6 +24,7 @@ describe('ChangePassword', () => {
 
 		await changePassword.execute({password: 'new-password', sessionToken: 'any-token'});
 		expect(account.getPasswordHash()).toBe('any-hash');
+		expect(repositoryFactory.accountRepository.update).toHaveBeenCalledWith(account);
 	});
 
 	it('should not change account password with unknown session token', async () => {

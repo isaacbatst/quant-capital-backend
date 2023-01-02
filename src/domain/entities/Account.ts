@@ -3,9 +3,13 @@ import {type Password} from './Password';
 
 export class Account {
 	constructor(
-		private readonly email: EmailAddress,
+		private email: EmailAddress,
 		private passwordHash: string,
 	) {
+	}
+
+	changeEmail(email: EmailAddress) {
+		this.email = email;
 	}
 
 	changePassword(password: Password): void {

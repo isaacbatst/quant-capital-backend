@@ -41,6 +41,7 @@ describe('ResetPassword', () => {
 		await resetPassword.execute({password: 'new-password', token: 'any-token'});
 
 		expect(account.getPasswordHash()).toBe('any-hash');
+		expect(repositoryFactory.accountRepository.update).toHaveBeenCalledWith(account);
 	});
 
 	it('should update password reset request', async () => {
