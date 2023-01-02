@@ -1,3 +1,3 @@
 export type TokenGenerator = {
-	generate(): string;
+	generate(): Promise<string>;
 };
