@@ -1,4 +1,3 @@
-import {EmailAddress} from '../../domain/entities/EmailAddress';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 
@@ -23,7 +22,7 @@ export class ChangeEmail {
 			throw new Error('ACCOUNT_NOT_FOUND');
 		}
 
-		account.changeEmail(new EmailAddress(input.email));
+		account.changeEmail(input.email);
 		await this.accountRepository.update(account);
 	}
 }

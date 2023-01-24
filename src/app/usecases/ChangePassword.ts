@@ -1,4 +1,3 @@
-import {PasswordFactory} from '../../domain/entities/PasswordFactory';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type Encrypter} from '../../infra/util/Encrypter/Encrypter';
@@ -20,13 +19,12 @@ export class ChangePassword {
 
 	async execute(input: Input) {
 		const account = await this.accountRepository.getBySessionToken(input.sessionToken);
-
 		if (!account) {
 			throw new Error('ACCOUNT_NOT_FOUND');
 		}
 
-		const password = await PasswordFactory.make(input.password, this.encrypter);
-		account.changePassword(password);
+		const hash = await this.encrypter.encrypt(input.password);
+		account.changePassword(input.password, hash);
 		await this.accountRepository.update(account);
 	}
 }

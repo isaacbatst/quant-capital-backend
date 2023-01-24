@@ -1,5 +1,5 @@
-import {type EmailAddress} from './EmailAddress';
-import {type Password} from './Password';
+import {EmailAddress} from './EmailAddress';
+import {Password} from './Password';
 
 export class Account {
 	constructor(
@@ -8,12 +8,12 @@ export class Account {
 	) {
 	}
 
-	changeEmail(email: EmailAddress) {
-		this.email = email;
+	changeEmail(email: string) {
+		this.email = new EmailAddress(email);
 	}
 
-	changePassword(password: Password): void {
-		this.passwordHash = password.hash;
+	changePassword(password: string, hash: string): void {
+		this.passwordHash = new Password(password, hash).hash;
 	}
 
 	getEmail(): EmailAddress {
