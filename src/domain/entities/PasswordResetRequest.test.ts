@@ -5,27 +5,27 @@ import {PasswordResetRequest} from './PasswordResetRequest';
 describe('PasswordResetRequest', () => {
 	it('should create open reset request', () => {
 		const now = new Date();
-		const resetPassword = new PasswordResetRequest({
+		const request = new PasswordResetRequest({
 			token: 'any-token',
 			createdAt: now,
 			emailAddress: new EmailAddress('any@email.com'),
 		});
 
-		expect(resetPassword.token).toBe('any-token');
-		expect(resetPassword.createdAt).toBe(now);
-		expect(resetPassword.getWasUsed()).toBe(false);
+		expect(request.token).toBe('any-token');
+		expect(request.createdAt).toBe(now);
+		expect(request.getWasUsed()).toBe(false);
 	});
 
 	it('should use request', () => {
 		const now = new Date();
-		const resetPassword = new PasswordResetRequest({
+		const request = new PasswordResetRequest({
 			token: 'any-token',
 			createdAt: now,
 			emailAddress: new EmailAddress('any@email.com'),
 		});
 
-		resetPassword.use();
+		request.use();
 
-		expect(resetPassword.getWasUsed()).toBe(true);
+		expect(request.getWasUsed()).toBe(true);
 	});
 });
