@@ -23,7 +23,11 @@ describe('ResetPassword', () => {
 		const {repositoryFactory, resetPassword, encrypter} = makeSut();
 		await repositoryFactory.accountRepository.save(new Account('any-id', new EmailAddress('any@email.com'), 'old-hash'));
 		await repositoryFactory.passwordResetRequestRepository.save(
-			new PasswordResetRequest('any-token', new Date(), new EmailAddress('any@email.com')),
+			new PasswordResetRequest({
+				createdAt: new Date(),
+				emailAddress: new EmailAddress('any@email.com'),
+				token: 'any-token',
+			}),
 		);
 
 		await resetPassword.execute({password: 'new-password', token: 'any-token'});
@@ -36,7 +40,11 @@ describe('ResetPassword', () => {
 		const account = new Account('any-id', new EmailAddress('any@email.com'), 'old-hash');
 		await repositoryFactory.accountRepository.save(account);
 		await repositoryFactory.passwordResetRequestRepository.save(
-			new PasswordResetRequest('any-token', new Date(), new EmailAddress('any@email.com')),
+			new PasswordResetRequest({
+				createdAt: new Date(),
+				emailAddress: new EmailAddress('any@email.com'),
+				token: 'any-token',
+			}),
 		);
 
 		await resetPassword.execute({password: 'new-password', token: 'any-token'});
@@ -48,7 +56,11 @@ describe('ResetPassword', () => {
 	it('should update password reset request', async () => {
 		const {repositoryFactory, resetPassword, encrypter} = makeSut();
 		await repositoryFactory.accountRepository.save(new Account('any-id', new EmailAddress('any@email.com'), 'old-hash'));
-		const request = new PasswordResetRequest('any-token', new Date(), new EmailAddress('any@email.com'));
+		const request = new PasswordResetRequest({
+			createdAt: new Date(),
+			emailAddress: new EmailAddress('any@email.com'),
+			token: 'any-token',
+		});
 		await repositoryFactory.passwordResetRequestRepository.save(request);
 
 		await resetPassword.execute({password: 'new-password', token: 'any-token'});
@@ -67,7 +79,11 @@ describe('ResetPassword', () => {
 	it('should not update account password hash with unknown email', async () => {
 		const {repositoryFactory, resetPassword} = makeSut();
 		await repositoryFactory.passwordResetRequestRepository.save(
-			new PasswordResetRequest('any-token', new Date(), new EmailAddress('any@email.com')),
+			new PasswordResetRequest({
+				createdAt: new Date(),
+				emailAddress: new EmailAddress('any@email.com'),
+				token: 'any-token',
+			}),
 		);
 
 		await expect(async () => {
