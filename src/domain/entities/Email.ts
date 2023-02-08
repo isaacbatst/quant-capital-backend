@@ -1,3 +1,4 @@
+import {ValidationError} from '../errors/ValidationError';
 import {type EmailAddress} from './EmailAddress';
 
 export class Email {
@@ -12,13 +13,13 @@ export class Email {
 
 	private validateSubject() {
 		if (this.subject.length === 0) {
-			throw new Error('INVALID_SUBJECT');
+			throw new ValidationError('INVALID_SUBJECT');
 		}
 	}
 
 	private validateMessage() {
 		if (this.message.length === 0) {
-			throw new Error('INVALID_MESSAGE');
+			throw new ValidationError('INVALID_MESSAGE');
 		}
 	}
 }

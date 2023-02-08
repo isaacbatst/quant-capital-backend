@@ -1,3 +1,4 @@
+import {ValidationError} from '../errors/ValidationError';
 
 export class Password {
 	constructor(
@@ -10,13 +11,13 @@ export class Password {
 
 	private validateValue() {
 		if (this.value.length < 8) {
-			throw new Error('INVALID_PASSWORD_VALUE');
+			throw new ValidationError('INVALID_PASSWORD_VALUE');
 		}
 	}
 
 	private validateHash() {
 		if (this.hash.length === 0) {
-			throw new Error('INVALID_PASSWORD_HASH');
+			throw new ValidationError('INVALID_PASSWORD_HASH');
 		}
 	}
 }

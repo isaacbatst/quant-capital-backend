@@ -3,6 +3,7 @@ import {Password} from './Password';
 
 export class Account {
 	constructor(
+		private readonly id: string,
 		private email: EmailAddress,
 		private passwordHash: string,
 	) {
@@ -22,5 +23,9 @@ export class Account {
 
 	getPasswordHash(): string {
 		return this.passwordHash;
+	}
+
+	getId(): string {
+		return this.id;
 	}
 }

@@ -1,4 +1,5 @@
 import {type PasswordResetRequest} from '../../../domain/entities/PasswordResetRequest';
+import {NotFoundError} from '../../../domain/errors/NotFoundError';
 import {type PasswordResetRequestRepository} from './PasswordResetRequestRepository';
 
 export class PasswordResetRequestRepositoryFake implements PasswordResetRequestRepository {
@@ -16,7 +17,7 @@ export class PasswordResetRequestRepositoryFake implements PasswordResetRequestR
 		const foundIndex = this.requests.findIndex(request => request.token === updatedRequest.token);
 
 		if (foundIndex < 0) {
-			throw new Error('PASSWORD_RESET_REQUEST_NOT_FOUND');
+			throw new NotFoundError('PASSWORD_RESET_REQUEST_NOT_FOUND');
 		}
 
 		this.requests[foundIndex] = updatedRequest;

@@ -1,3 +1,5 @@
+import {AuthError} from '../../domain/errors/AuthError';
+import {NotFoundError} from '../../domain/errors/NotFoundError';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type PasswordResetRequestRepository} from '../../infra/persistance/repositories/PasswordResetRequestRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
@@ -22,12 +24,12 @@ export class ResetPassword {
 	async execute(input: Input): Promise<void> {
 		const passwordResetRequest = await this.passwordResetRequestRepository.getByToken(input.token);
 		if (!passwordResetRequest) {
-			throw new Error('PASSWORD_RESET_REQUEST_NOT_FOUND');
+			throw new NotFoundError('PASSWORD_RESET_REQUEST_NOT_FOUND');
 		}
 
 		const account = await this.accountRepository.getByEmail(passwordResetRequest.emailAddress.value);
 		if (!account) {
-			throw new Error('ACCOUNT_NOT_FOUND');
+			throw new AuthError('ACCOUNT_NOT_FOUND');
 		}
 
 		const hash = await this.encrypter.encrypt(input.password);

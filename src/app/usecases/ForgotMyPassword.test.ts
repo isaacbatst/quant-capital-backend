@@ -1,3 +1,4 @@
+import {describe, expect, it} from 'vitest';
 import {Account} from '../../domain/entities/Account';
 import {EmailAddress} from '../../domain/entities/EmailAddress';
 import {EmailGatewayFake} from '../../infra/gateways/EmailGateway/EmailGatewayFake';
@@ -20,7 +21,7 @@ const makeSut = () => {
 describe('ForgotMyPassword', () => {
 	it('should save request', async () => {
 		const {forgotMyPassword, repositoryFactory} = makeSut();
-		await repositoryFactory.accountRepository.save(new Account(new EmailAddress('any@email.com'), 'any-hash'));
+		await repositoryFactory.accountRepository.save(new Account('any-id', new EmailAddress('any@email.com'), 'any-hash'));
 		await forgotMyPassword.execute({email: 'any@email.com'});
 
 		expect(repositoryFactory.passwordResetRequestRepository.requests).toContainEqual(expect.objectContaining({emailAddress: new EmailAddress('any@email.com')}));

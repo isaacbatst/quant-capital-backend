@@ -1,5 +1,6 @@
+import {vi} from 'vitest';
 import {type EmailGateway} from './EmailGateway';
 
 export class EmailGatewayFake implements EmailGateway {
-	send = jest.fn();
+	send = vi.fn();
 }

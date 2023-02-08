@@ -1,13 +1,15 @@
 import {type Account} from '../../../domain/entities/Account';
 import {type AccountRepository} from './AccountRepository';
+import {vi} from 'vitest';
+import {NotFoundError} from '../../../domain/errors/NotFoundError';
 
 export class AccountRepositoryFake implements AccountRepository {
 	accounts: Array<{account: Account; sessionToken: string | undefined}> = [];
-	update = jest.fn(async (updatedAccount: Account) => {
+	update = vi.fn(async (updatedAccount: Account) => {
 		const foundIndex = this.accounts.findIndex(({account}) => account.getEmail().value === updatedAccount.getEmail().value);
 
 		if (foundIndex < 0) {
-			throw new Error('ACCOUNT_NOT_FOUND');
+			throw new NotFoundError('ACCOUNT_NOT_FOUND');
 		}
 
 		this.accounts[foundIndex].account = updatedAccount;

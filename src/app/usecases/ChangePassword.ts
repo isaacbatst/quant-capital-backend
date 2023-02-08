@@ -1,3 +1,4 @@
+import {AuthError} from '../../domain/errors/AuthError';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type Encrypter} from '../../infra/util/Encrypter/Encrypter';
@@ -20,7 +21,7 @@ export class ChangePassword {
 	async execute(input: Input) {
 		const account = await this.accountRepository.getBySessionToken(input.sessionToken);
 		if (!account) {
-			throw new Error('ACCOUNT_NOT_FOUND');
+			throw new AuthError('ACCOUNT_NOT_FOUND');
 		}
 
 		const hash = await this.encrypter.encrypt(input.password);
