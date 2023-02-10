@@ -1,3 +1,4 @@
+import {ValidationError} from '../../errors/ValidationError';
 import {ContractWithdrawRequestStatus} from './ContractWithdawRequestStatus';
 
 type ContractWithdrawRequestParams = {
@@ -19,9 +20,17 @@ export class ContractWithdrawRequest {
 		this.contractId = params.contractId;
 		this.value = params.value;
 		this.status = params.status ?? ContractWithdrawRequestStatus.open;
+
+		this.validateValue();
 	}
 
 	getStatus() {
 		return this.status;
+	}
+
+	private validateValue() {
+		if (this.value <= 0) {
+			throw new ValidationError('INVALID_ZERO_VALUE');
+		}
 	}
 }

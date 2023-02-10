@@ -8,7 +8,7 @@ import {RequestContractWithdraw} from './RequestContractWithdraw';
 describe('RequestContractWithdraw', () => {
 	it('should save a contract withdraw request', async () => {
 		const input = {
-			contractId: 'contractId',
+			contractId: '112',
 			value: 100,
 			password: '120943',
 		};
@@ -22,10 +22,10 @@ describe('RequestContractWithdraw', () => {
 		expect(request).toBeDefined();
 	});
 
-	it('should not save a contract withdraw request with a value bigger than available', async () => {
+	it('should not save a contract withdraw request with a value bigger than available balance', async () => {
 		const input = {
-			contractId: 'contractId',
-			value: 100,
+			contractId: '112',
+			value: 30000,
 			password: '120943',
 		};
 		const repositoryFactory = new RepositoryFactoryFake();
@@ -36,6 +36,6 @@ describe('RequestContractWithdraw', () => {
 		const requestContractWithdraw = new RequestContractWithdraw(repositoryFactory, idGenerator);
 		await expect(async () => {
 			await requestContractWithdraw.execute(input);
-		}).rejects.toThrow('INVALID_VALUE');
+		}).rejects.toThrow('INSUFFICIENT_BALANCE');
 	});
 });
