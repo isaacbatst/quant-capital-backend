@@ -1,4 +1,4 @@
-import {ConflictError} from '../errors/ConflictError';
+import {ConflictError} from '../../errors/ConflictError';
 import {type EmailAddress} from './EmailAddress';
 
 export type PasswordResetRequestParams = {

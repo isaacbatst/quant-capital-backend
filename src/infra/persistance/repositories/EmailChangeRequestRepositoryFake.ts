@@ -1,6 +1,6 @@
 import {vi} from 'vitest';
-import {type EmailChangeRequest} from '../../../domain/entities/EmailChangeRequest.';
-import {EmailChangeRequestStatus} from '../../../domain/entities/EmailChangeRequestStatus';
+import {type EmailChangeRequest} from '../../../domain/entities/Account/EmailChangeRequest.';
+import {EmailChangeRequestStatus} from '../../../domain/entities/Account/EmailChangeRequestStatus';
 import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository';
 
 export class EmailChangeRequestRepositoryFake implements EmailChangeRequestRepository {

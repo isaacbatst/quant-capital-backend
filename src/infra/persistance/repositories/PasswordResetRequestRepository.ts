@@ -1,4 +1,4 @@
-import {type PasswordResetRequest} from '../../../domain/entities/PasswordResetRequest';
+import {type PasswordResetRequest} from '../../../domain/entities/Account/PasswordResetRequest';
 
 export type PasswordResetRequestRepository = {
 	getByToken(token: string): Promise<PasswordResetRequest | undefined>;

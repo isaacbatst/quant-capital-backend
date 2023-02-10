@@ -1,4 +1,4 @@
-import {type Account} from '../../../domain/entities/Account';
+import {type Account} from '../../../domain/entities/Account/Account';
 import {type AccountRepository} from './AccountRepository';
 import {vi} from 'vitest';
 import {NotFoundError} from '../../../domain/errors/NotFoundError';

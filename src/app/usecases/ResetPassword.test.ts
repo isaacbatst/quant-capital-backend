@@ -1,7 +1,7 @@
 import {describe, expect, it} from 'vitest';
-import {EmailAddress} from '../../domain/entities/EmailAddress';
-import {PasswordResetRequest} from '../../domain/entities/PasswordResetRequest';
-import {Account} from '../../domain/entities/Account';
+import {Account} from '../../domain/entities/Account/Account';
+import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
+import {PasswordResetRequest} from '../../domain/entities/Account/PasswordResetRequest';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
 import {EncrypterFake} from '../../infra/util/Encrypter/EncrypterFake';
 import {ResetPassword} from './ResetPassword';

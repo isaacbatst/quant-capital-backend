@@ -1,4 +1,4 @@
-import {type Account} from '../../../domain/entities/Account';
+import {type Account} from '../../../domain/entities/Account/Account';
 
 export type AccountRepository = {
 	getByEmail(email: string): Promise<Account | undefined>;

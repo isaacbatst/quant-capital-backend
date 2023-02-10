@@ -1,5 +1,5 @@
-import {EmailChangeRequest} from '../../domain/entities/EmailChangeRequest.';
-import {EmailChangeRequestStatus} from '../../domain/entities/EmailChangeRequestStatus';
+import {EmailChangeRequest} from '../../domain/entities/Account/EmailChangeRequest.';
+import {EmailChangeRequestStatus} from '../../domain/entities/Account/EmailChangeRequestStatus';
 import {AuthError} from '../../domain/errors/AuthError';
 import {ConflictError} from '../../domain/errors/ConflictError';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';

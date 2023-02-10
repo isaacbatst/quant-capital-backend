@@ -1,8 +1,8 @@
 import {describe, expect, it} from 'vitest';
-import {Account} from '../../domain/entities/Account';
-import {EmailAddress} from '../../domain/entities/EmailAddress';
-import {EmailChangeRequest} from '../../domain/entities/EmailChangeRequest.';
-import {EmailChangeRequestStatus} from '../../domain/entities/EmailChangeRequestStatus';
+import {Account} from '../../domain/entities/Account/Account';
+import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
+import {EmailChangeRequest} from '../../domain/entities/Account/EmailChangeRequest.';
+import {EmailChangeRequestStatus} from '../../domain/entities/Account/EmailChangeRequestStatus';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
 import {IdGeneratorFake} from '../../infra/util/IdGenerator/IdGeneratorFake';
 import {RequestEmailChange} from './RequestEmailChange';
