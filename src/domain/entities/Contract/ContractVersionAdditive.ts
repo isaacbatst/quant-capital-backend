@@ -1,6 +1,6 @@
 import {ContractVersion, type ContractVersionParams} from './ContractVersion';
 
-type ContractVersionAdditiveParams = Omit<ContractVersionParams, 'type'> & {
+export type ContractVersionAdditiveParams = Omit<ContractVersionParams, 'type'> & {
 	readjustmentDate: Date;
 };
 

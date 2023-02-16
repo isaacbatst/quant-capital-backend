@@ -15,7 +15,7 @@ describe('ContractVersion', () => {
 
 		const contractVersion = new ContractVersion({
 			id: '112',
-			date: new Date('2022-08-15'),
+			startDate: new Date('2022-08-15'),
 			dueDate: new Date('2023-02-15'),
 			type: 'contract',
 			rate: new ContractRate(1.5, 'perYear'),
@@ -26,7 +26,7 @@ describe('ContractVersion', () => {
 		const transactions = contractVersion.getTransactions();
 
 		expect(contractVersion.getId()).toBe('112');
-		expect(contractVersion.getDate()).toEqual(new Date('2022-08-15'));
+		expect(contractVersion.getStartDate()).toEqual(new Date('2022-08-15'));
 		expect(contractVersion.getDueDate()).toEqual(new Date('2023-02-15'));
 		expect(contractVersion.getType()).toBe('contract');
 		expect(contractVersion.getRate()).toEqual(new ContractRate(1.5, 'perYear'));
@@ -42,7 +42,7 @@ describe('ContractVersion', () => {
 		});
 		const additiveVersion = new ContractVersionAdditive({
 			id: '200',
-			date: new Date('2022-08-15'),
+			startDate: new Date('2022-08-15'),
 			dueDate: new Date('2023-02-15'),
 			readjustmentDate: new Date('2022-09-20'),
 			rate: new ContractRate(100, 'perYear'),
