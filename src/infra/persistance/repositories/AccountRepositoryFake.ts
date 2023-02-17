@@ -1,10 +1,11 @@
-import {type Account} from '../../../domain/entities/Account/Account';
-import {type AccountRepository} from './AccountRepository';
 import {vi} from 'vitest';
+import {type Account} from '../../../domain/entities/Account/Account';
 import {NotFoundError} from '../../../domain/errors/NotFoundError';
+import {type AccountRepository} from './AccountRepository';
+import {AccountRepositoryFakeData} from './AccountRepositoryFakeData';
 
 export class AccountRepositoryFake implements AccountRepository {
-	accounts: Array<{account: Account; sessionToken: string | undefined}> = [];
+	accounts: Array<{account: Account; sessionToken: string | undefined}> = AccountRepositoryFakeData.accounts;
 	update = vi.fn(async (updatedAccount: Account) => {
 		const foundIndex = this.accounts.findIndex(({account}) => account.getEmail().value === updatedAccount.getEmail().value);
 

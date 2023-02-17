@@ -8,4 +8,8 @@ export class ContractRepositoryFake implements ContractRepository {
 	async getById(id: string): Promise<Contract | undefined> {
 		return this.contracts.find(contract => contract.getId() === id);
 	}
+
+	async getClientContracts(clientId: string): Promise<Contract[]> {
+		return this.contracts.filter(contract => contract.getClientId() === clientId);
+	}
 }

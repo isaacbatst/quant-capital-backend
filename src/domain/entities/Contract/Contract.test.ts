@@ -37,7 +37,7 @@ describe('Contract', () => {
 		});
 		expect(contract.getId()).toBe('112');
 		expect(contract.getDate()).toEqual(new Date('2022-08-15'));
-		expect(contract.getUserId()).toBe('62');
+		expect(contract.getClientId()).toBe('62');
 		expect(contract.getBalance()).toBe(27600);
 		expect(contract.getVersions().initial).toEqual(initialVersion);
 	});

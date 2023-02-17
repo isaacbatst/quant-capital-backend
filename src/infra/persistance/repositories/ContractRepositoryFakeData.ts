@@ -77,7 +77,7 @@ export class ContractRepositoryFakeData {
 			}),
 			new Contract({
 				id: '11',
-				clientId: '62',
+				clientId: '25',
 				contractDate: new Date('2020-10-09'),
 				balance: 0,
 				initialVersion: {

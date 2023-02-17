@@ -84,7 +84,7 @@ export class Contract {
 		return this.contractDate;
 	}
 
-	getUserId(): string {
+	getClientId(): string {
 		return this.userId;
 	}
 
