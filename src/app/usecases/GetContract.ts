@@ -6,6 +6,7 @@ import {NotFoundError} from '../../domain/errors/NotFoundError';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
+import {type AuthService} from './AuthService';
 
 type Input = {
 	sessionToken: string;
@@ -48,18 +49,16 @@ export class GetContract {
 	private readonly contractRepository: ContractRepository;
 	private readonly accountRepository: AccountRepository;
 
-	constructor(repositoryFactory: RepositoryFactory) {
+	constructor(
+		repositoryFactory: RepositoryFactory,
+		private readonly authService: AuthService,
+	) {
 		this.accountRepository = repositoryFactory.accountRepository;
 		this.contractRepository = repositoryFactory.contractRepository;
 	}
 
 	async execute(input: Input): Promise<Output> {
-		const account = await this.accountRepository.getBySessionToken(input.sessionToken);
-
-		if (!account) {
-			throw new AuthError('ACCOUNT_NOT_FOUND');
-		}
-
+		const account = await this.authService.getAccountBySessionToken(input.sessionToken);
 		const contract = await this.contractRepository.getById(input.contractId, account.getId());
 
 		if (!contract) {

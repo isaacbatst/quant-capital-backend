@@ -1,14 +1,14 @@
 import {describe, expect, it} from 'vitest';
-import {Account} from '../../domain/entities/Account/Account';
-import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
 import {EncrypterFake} from '../../infra/util/Encrypter/EncrypterFake';
+import {AuthService} from './AuthService';
 import {ChangePassword} from './ChangePassword';
 
 const makeSut = () => {
 	const encrypter = new EncrypterFake();
 	const repositoryFactory = new RepositoryFactoryFake();
-	const changePassword = new ChangePassword(repositoryFactory, encrypter);
+	const authService = new AuthService(repositoryFactory.accountRepository);
+	const changePassword = new ChangePassword(repositoryFactory, encrypter, authService);
 
 	return {
 		encrypter,

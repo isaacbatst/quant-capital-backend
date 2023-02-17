@@ -15,4 +15,13 @@ export class AuthService {
 
 		return account;
 	}
+
+	async getAccountByEmail(email: string): Promise<Account> {
+		const account = await this.accountRepository.getByEmail(email);
+		if (!account) {
+			throw new AuthError('ACCOUNT_NOT_FOUND');
+		}
+
+		return account;
+	}
 }

@@ -1,16 +1,16 @@
 import {describe, expect, it} from 'vitest';
-import {Account} from '../../domain/entities/Account/Account';
-import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
 import {EmailChangeRequest} from '../../domain/entities/Account/EmailChangeRequest.';
 import {EmailChangeRequestStatus} from '../../domain/entities/Account/EmailChangeRequestStatus';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
 import {IdGeneratorFake} from '../../infra/util/IdGenerator/IdGeneratorFake';
+import {AuthService} from './AuthService';
 import {RequestEmailChange} from './RequestEmailChange';
 
 const makeSut = () => {
 	const repositoryFactory = new RepositoryFactoryFake();
 	const idGenerator = new IdGeneratorFake();
-	const requestEmailChange = new RequestEmailChange(repositoryFactory, idGenerator);
+	const authService = new AuthService(repositoryFactory.accountRepository);
+	const requestEmailChange = new RequestEmailChange(repositoryFactory, idGenerator, authService);
 
 	return {
 		requestEmailChange,
@@ -22,7 +22,7 @@ const makeSut = () => {
 describe('RequestEmailChange', () => {
 	it('should save an email change request', async () => {
 		const {requestEmailChange, repositoryFactory: {
-			accountRepository, emailChangeRequestRepository,
+			emailChangeRequestRepository,
 		}} = makeSut();
 		await requestEmailChange.execute({sessionToken: 'session-token-25'});
 		const openRequests = await emailChangeRequestRepository.getUserOpenRequests('25');
@@ -30,9 +30,7 @@ describe('RequestEmailChange', () => {
 	});
 
 	it('should not save an email change request if another is open for the same user', async () => {
-		const {requestEmailChange, repositoryFactory: {
-			accountRepository,
-		}} = makeSut();
+		const {requestEmailChange} = makeSut();
 		await requestEmailChange.execute({sessionToken: 'session-token-25'});
 
 		await expect(async () => {
@@ -42,7 +40,7 @@ describe('RequestEmailChange', () => {
 
 	it('should save an email change request if others are not open for the same user', async () => {
 		const {requestEmailChange, idGenerator, repositoryFactory: {
-			accountRepository, emailChangeRequestRepository,
+			emailChangeRequestRepository,
 		}} = makeSut();
 		idGenerator.generatedId = 'request-id';
 		await requestEmailChange.execute({sessionToken: 'session-token-25'});

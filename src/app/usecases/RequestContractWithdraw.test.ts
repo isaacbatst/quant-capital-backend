@@ -1,9 +1,20 @@
 import {describe, expect, it} from 'vitest';
-import {Account} from '../../domain/entities/Account/Account';
-import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
 import {IdGeneratorFake} from '../../infra/util/IdGenerator/IdGeneratorFake';
+import {AuthService} from './AuthService';
 import {RequestContractWithdraw} from './RequestContractWithdraw';
+
+const makeSut = () => {
+	const repositoryFactory = new RepositoryFactoryFake();
+	const idGenerator = new IdGeneratorFake();
+	const authService = new AuthService(repositoryFactory.accountRepository);
+	const requestContractWithdraw = new RequestContractWithdraw(repositoryFactory, idGenerator, authService);
+	return {
+		requestContractWithdraw,
+		repositoryFactory,
+		idGenerator,
+	};
+};
 
 describe('RequestContractWithdraw', () => {
 	it('should save a contract withdraw request', async () => {
@@ -13,13 +24,9 @@ describe('RequestContractWithdraw', () => {
 			numericPassword: '120943',
 			sessionToken: 'session-token-62',
 		};
-		const repositoryFactory = new RepositoryFactoryFake();
-		const idGenerator = new IdGeneratorFake();
-		idGenerator.generatedId = 'request-id';
-		const requestContractWithdraw = new RequestContractWithdraw(repositoryFactory, idGenerator);
-		const {contractWithdrawRequestRepository} = repositoryFactory;
+		const {idGenerator, requestContractWithdraw, repositoryFactory: {contractWithdrawRequestRepository}} = makeSut();
 		await requestContractWithdraw.execute(input);
-		const request = await contractWithdrawRequestRepository.getById('request-id');
+		const request = await contractWithdrawRequestRepository.getById(idGenerator.generatedId);
 		expect(request).toBeDefined();
 	});
 
@@ -30,9 +37,7 @@ describe('RequestContractWithdraw', () => {
 			numericPassword: '120943',
 			sessionToken: 'session-token-62',
 		};
-		const repositoryFactory = new RepositoryFactoryFake();
-		const idGenerator = new IdGeneratorFake();
-		const requestContractWithdraw = new RequestContractWithdraw(repositoryFactory, idGenerator);
+		const {requestContractWithdraw} = makeSut();
 		await expect(async () => {
 			await requestContractWithdraw.execute(input);
 		}).rejects.toThrow('INSUFFICIENT_BALANCE');

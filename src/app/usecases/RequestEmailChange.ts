@@ -6,6 +6,7 @@ import {type AccountRepository} from '../../infra/persistance/repositories/Accou
 import {type EmailChangeRequestRepository} from '../../infra/persistance/repositories/EmailChangeRequestRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type IdGenerator} from '../../infra/util/IdGenerator/IdGenerator';
+import {type AuthService} from './AuthService';
 
 type Input = {
 	sessionToken: string;
@@ -18,20 +19,15 @@ export class RequestEmailChange {
 	constructor(
 		repositoryFactory: RepositoryFactory,
 		private readonly idGenerator: IdGenerator,
+		private readonly authService: AuthService,
 	) {
 		this.accountRepository = repositoryFactory.accountRepository;
 		this.emailChangeRequestRepository = repositoryFactory.emailChangeRequestRepository;
 	}
 
 	async execute(input: Input) {
-		const account = await this.accountRepository.getBySessionToken(input.sessionToken);
-
-		if (!account) {
-			throw new AuthError('ACCOUNT_NOT_FOUND');
-		}
-
+		const account = await this.authService.getAccountBySessionToken(input.sessionToken);
 		const userOpenRequests = await this.emailChangeRequestRepository.getUserOpenRequests(account.getId());
-
 		if (userOpenRequests.length) {
 			throw new ConflictError('DUPLICATED_REQUEST');
 		}

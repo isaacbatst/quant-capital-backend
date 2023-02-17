@@ -1,9 +1,10 @@
 import {type PasswordResetRequest} from '../../../domain/entities/Account/PasswordResetRequest';
 import {NotFoundError} from '../../../domain/errors/NotFoundError';
 import {type PasswordResetRequestRepository} from './PasswordResetRequestRepository';
+import {PasswordResetRequestRepositoryFakeData} from './PasswordResetRequestRepositoryFakeData';
 
 export class PasswordResetRequestRepositoryFake implements PasswordResetRequestRepository {
-	requests: PasswordResetRequest[] = [];
+	requests: PasswordResetRequest[] = PasswordResetRequestRepositoryFakeData.requests;
 
 	async getByToken(token: string): Promise<PasswordResetRequest | undefined> {
 		return this.requests.find(request => request.token === token);

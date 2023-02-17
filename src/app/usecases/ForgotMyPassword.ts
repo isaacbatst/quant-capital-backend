@@ -7,35 +7,45 @@ import {type AccountRepository} from '../../infra/persistance/repositories/Accou
 import {type PasswordResetRequestRepository} from '../../infra/persistance/repositories/PasswordResetRequestRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type TokenGenerator} from '../../infra/util/TokenGenerator/TokenGenerator';
+import {type AuthService} from './AuthService';
 
 type Input = {
 	email: string;
 };
 
+type Params = {
+	repositoryFactory: RepositoryFactory;
+	tokenGenerator: TokenGenerator;
+	emailGateway: EmailGateway;
+	appUrl: string;
+	authService: AuthService;
+};
+
 export class ForgotMyPassword {
 	private readonly passwordResetRequestRepository: PasswordResetRequestRepository;
 	private readonly accountRepository: AccountRepository;
+	private readonly tokenGenerator: TokenGenerator;
+	private readonly emailGateway: EmailGateway;
+	private readonly appUrl: string;
+	private readonly authService: AuthService;
 	constructor(
-		repositoryFactory: RepositoryFactory,
-		private readonly tokenGenerator: TokenGenerator,
-		private readonly emailGateway: EmailGateway,
-		private readonly appUrl: string,
+		{appUrl, authService, emailGateway, repositoryFactory, tokenGenerator}: Params,
 	) {
 		this.passwordResetRequestRepository = repositoryFactory.passwordResetRequestRepository;
 		this.accountRepository = repositoryFactory.accountRepository;
+		this.tokenGenerator = tokenGenerator;
+		this.emailGateway = emailGateway;
+		this.appUrl = appUrl;
+		this.authService = authService;
 	}
 
 	async execute(input: Input) {
-		const account = await this.accountRepository.getByEmail(input.email);
-
-		if (!account) {
-			throw new AuthError('ACCOUNT_NOT_FOUND');
-		}
+		const account = await this.authService.getAccountByEmail(input.email);
 
 		const token = await this.tokenGenerator.generate();
 		const request = new PasswordResetRequest({
 			createdAt: new Date(),
-			emailAddress: new EmailAddress(input.email),
+			emailAddress: new EmailAddress(account.getEmail().value),
 			token,
 		});
 		const email = PasswordResetRequestEmailGenerator.generate(request.emailAddress, request.token, this.appUrl);

@@ -4,13 +4,21 @@ import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
 import {EmailGatewayFake} from '../../infra/gateways/EmailGateway/EmailGatewayFake';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
 import {TokenGeneratorFake} from '../../infra/util/TokenGenerator/TokenGeneratorFake';
+import {AuthService} from './AuthService';
 import {ForgotMyPassword} from './ForgotMyPassword';
 
 const makeSut = () => {
 	const tokenGenerator = new TokenGeneratorFake();
 	const emailGateway = new EmailGatewayFake();
 	const repositoryFactory = new RepositoryFactoryFake();
-	const forgotMyPassword = new ForgotMyPassword(repositoryFactory, tokenGenerator, emailGateway, 'test.url');
+	const authService = new AuthService(repositoryFactory.accountRepository);
+	const forgotMyPassword = new ForgotMyPassword({
+		repositoryFactory,
+		tokenGenerator,
+		emailGateway,
+		authService,
+		appUrl: 'test.url',
+	});
 
 	return {
 		forgotMyPassword,

@@ -4,12 +4,14 @@ import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
 import {PasswordResetRequest} from '../../domain/entities/Account/PasswordResetRequest';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
 import {EncrypterFake} from '../../infra/util/Encrypter/EncrypterFake';
+import {AuthService} from './AuthService';
 import {ResetPassword} from './ResetPassword';
 
 const makeSut = () => {
 	const repositoryFactory = new RepositoryFactoryFake();
 	const encrypter = new EncrypterFake();
-	const resetPassword = new ResetPassword(repositoryFactory, encrypter);
+	const authService = new AuthService(repositoryFactory.accountRepository);
+	const resetPassword = new ResetPassword(repositoryFactory, encrypter, authService);
 
 	return {
 		repositoryFactory,
@@ -21,79 +23,38 @@ const makeSut = () => {
 describe('ResetPassword', () => {
 	it('should encrypt password', async () => {
 		const {repositoryFactory, resetPassword, encrypter} = makeSut();
-		await repositoryFactory.accountRepository.save(new Account({
-			id: 'any-id', email: new EmailAddress('any@email.com'), passwordHash: 'old-hash', numericPasswordHash: 'numeric-hash',
-		}));
-		await repositoryFactory.passwordResetRequestRepository.save(
-			new PasswordResetRequest({
-				createdAt: new Date(),
-				emailAddress: new EmailAddress('any@email.com'),
-				token: 'any-token',
-			}),
-		);
-
 		await resetPassword.execute({password: 'new-password', token: 'any-token'});
-
 		expect(encrypter.encrypt).toHaveBeenCalledWith('new-password');
 	});
 
 	it('should update account password hash', async () => {
-		const {repositoryFactory, resetPassword} = makeSut();
-		const account = new Account({
-			id: 'any-id', email: new EmailAddress('any@email.com'), passwordHash: 'old-hash', numericPasswordHash: 'numeric-hash',
-		});
-		await repositoryFactory.accountRepository.save(account);
-		await repositoryFactory.passwordResetRequestRepository.save(
-			new PasswordResetRequest({
-				createdAt: new Date(),
-				emailAddress: new EmailAddress('any@email.com'),
-				token: 'any-token',
-			}),
-		);
-
+		const {repositoryFactory, resetPassword, encrypter} = makeSut();
 		await resetPassword.execute({password: 'new-password', token: 'any-token'});
-
-		expect(account.getPasswordHash()).toBe('any-hash');
-		expect(repositoryFactory.accountRepository.update).toHaveBeenCalledWith(account);
+		const account = await repositoryFactory.accountRepository.getByEmail('test25@email.com');
+		expect(account).toBeDefined();
+		expect(account!.getPasswordHash()).toBe(encrypter.hash);
 	});
 
 	it('should update password reset request', async () => {
-		const {repositoryFactory, resetPassword, encrypter} = makeSut();
-		await repositoryFactory.accountRepository.save(new Account({
-			id: 'any-id', email: new EmailAddress('any@email.com'), passwordHash: 'any-hash', numericPasswordHash: 'numeric-hash',
-		}));
-		const request = new PasswordResetRequest({
-			createdAt: new Date(),
-			emailAddress: new EmailAddress('any@email.com'),
-			token: 'any-token',
-		});
-		await repositoryFactory.passwordResetRequestRepository.save(request);
-
+		const {repositoryFactory, resetPassword} = makeSut();
 		await resetPassword.execute({password: 'new-password', token: 'any-token'});
-
-		expect(request.getWasUsed()).toBe(true);
+		const request = await repositoryFactory.passwordResetRequestRepository.getByToken('any-token');
+		expect(request).toBeDefined();
+		expect(request!.getWasUsed()).toBe(true);
 	});
 
 	it('should not update account password hash with unknown request', async () => {
 		const {resetPassword} = makeSut();
 
 		await expect(async () => {
-			await resetPassword.execute({password: 'new-password', token: 'any-token'});
+			await resetPassword.execute({password: 'new-password', token: 'unknown-token'});
 		}).rejects.toThrow('PASSWORD_RESET_REQUEST_NOT_FOUND');
 	});
 
 	it('should not update account password hash with unknown email', async () => {
 		const {repositoryFactory, resetPassword} = makeSut();
-		await repositoryFactory.passwordResetRequestRepository.save(
-			new PasswordResetRequest({
-				createdAt: new Date(),
-				emailAddress: new EmailAddress('any@email.com'),
-				token: 'any-token',
-			}),
-		);
-
 		await expect(async () => {
-			await resetPassword.execute({password: 'new-password', token: 'any-token'});
+			await resetPassword.execute({password: 'new-password', token: 'unknown-email-token'});
 		}).rejects.toThrow('ACCOUNT_NOT_FOUND');
 	});
 });

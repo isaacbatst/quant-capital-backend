@@ -1,12 +1,19 @@
 import {describe, expect, it} from 'vitest';
 import {AuthError} from '../../domain/errors/AuthError';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
+import {AuthService} from './AuthService';
 import {GetContracts} from './GetContracts';
+
+const makeSut = () => {
+	const repositoryFactory = new RepositoryFactoryFake();
+	const authService = new AuthService(repositoryFactory.accountRepository);
+	const getContracts = new GetContracts(repositoryFactory, authService);
+	return getContracts;
+};
 
 describe('GetContracts', () => {
 	it('should get user contracts', async () => {
-		const repositoryFactory = new RepositoryFactoryFake();
-		const getContracts = new GetContracts(repositoryFactory);
+		const getContracts = makeSut();
 		const contracts = await getContracts.execute({sessionToken: 'session-token-25'});
 		expect(contracts).toHaveLength(1);
 		expect(contracts[0].id).toEqual('11');
@@ -16,9 +23,7 @@ describe('GetContracts', () => {
 	});
 
 	it('should not get contract if user is not found', async () => {
-		const repositoryFactory = new RepositoryFactoryFake();
-		const getContracts = new GetContracts(repositoryFactory);
-
+		const getContracts = makeSut();
 		return expect(async () =>
 			getContracts.execute({sessionToken: 'invalid-token'}))
 			.rejects.toThrow(new AuthError('ACCOUNT_NOT_FOUND'));

@@ -4,6 +4,7 @@ import {type AccountRepository} from '../../infra/persistance/repositories/Accou
 import {type PasswordResetRequestRepository} from '../../infra/persistance/repositories/PasswordResetRequestRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type Encrypter} from '../../infra/util/Encrypter/Encrypter';
+import {type AuthService} from './AuthService';
 
 type Input = {
 	token: string;
@@ -15,7 +16,8 @@ export class ResetPassword {
 	readonly passwordResetRequestRepository: PasswordResetRequestRepository;
 	constructor(
 		repositoryFactory: RepositoryFactory,
-		readonly encrypter: Encrypter,
+		private readonly encrypter: Encrypter,
+		private readonly authService: AuthService,
 	) {
 		this.accountRepository = repositoryFactory.accountRepository;
 		this.passwordResetRequestRepository = repositoryFactory.passwordResetRequestRepository;
@@ -27,11 +29,7 @@ export class ResetPassword {
 			throw new NotFoundError('PASSWORD_RESET_REQUEST_NOT_FOUND');
 		}
 
-		const account = await this.accountRepository.getByEmail(passwordResetRequest.emailAddress.value);
-		if (!account) {
-			throw new AuthError('ACCOUNT_NOT_FOUND');
-		}
-
+		const account = await this.authService.getAccountByEmail(passwordResetRequest.emailAddress.value);
 		const hash = await this.encrypter.encrypt(input.password);
 		account.changePassword(input.password, hash);
 		passwordResetRequest.use();
