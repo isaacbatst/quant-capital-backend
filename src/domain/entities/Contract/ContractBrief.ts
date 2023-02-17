@@ -1,18 +1,21 @@
 type ContractBriefParams = {
 	id: string;
 	date: Date;
-	value: number;
+	balance: number;
+	clientId: string;
 };
 
 export class ContractBrief {
 	private readonly id: string;
+	private readonly clientId: string;
 	private readonly date: Date;
-	private readonly value: number;
+	private readonly balance: number;
 
-	constructor({id, date, value}: ContractBriefParams) {
+	constructor({id, date, balance, clientId}: ContractBriefParams) {
 		this.id = id;
 		this.date = date;
-		this.value = value;
+		this.balance = balance;
+		this.clientId = clientId;
 	}
 
 	getId(): string {
@@ -23,7 +26,11 @@ export class ContractBrief {
 		return this.date;
 	}
 
-	getValue(): number {
-		return this.value;
+	getBalance(): number {
+		return this.balance;
+	}
+
+	getClientId(): string {
+		return this.clientId;
 	}
 }

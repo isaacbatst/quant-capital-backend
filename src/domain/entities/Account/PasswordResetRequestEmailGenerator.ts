@@ -1,4 +1,4 @@
-import {Email} from './Email';
+import {Email} from '../Email';
 import {type EmailAddress} from './EmailAddress';
 
 export class PasswordResetRequestEmailGenerator {

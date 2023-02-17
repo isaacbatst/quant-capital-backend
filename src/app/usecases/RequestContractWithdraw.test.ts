@@ -10,7 +10,8 @@ describe('RequestContractWithdraw', () => {
 		const input = {
 			contractId: '112',
 			value: 100,
-			password: '120943',
+			numericPassword: '120943',
+			sessionToken: 'session-token-62',
 		};
 		const repositoryFactory = new RepositoryFactoryFake();
 		const idGenerator = new IdGeneratorFake();
@@ -26,12 +27,10 @@ describe('RequestContractWithdraw', () => {
 		const input = {
 			contractId: '112',
 			value: 30000,
-			password: '120943',
+			numericPassword: '120943',
+			sessionToken: 'session-token-62',
 		};
 		const repositoryFactory = new RepositoryFactoryFake();
-		await repositoryFactory.accountRepository.save(
-			new Account('account-id', new EmailAddress('any@email.com'), 'account-password'),
-		);
 		const idGenerator = new IdGeneratorFake();
 		const requestContractWithdraw = new RequestContractWithdraw(repositoryFactory, idGenerator);
 		await expect(async () => {

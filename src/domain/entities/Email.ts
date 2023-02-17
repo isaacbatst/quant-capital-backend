@@ -1,5 +1,5 @@
-import {ValidationError} from '../../errors/ValidationError';
-import {type EmailAddress} from './EmailAddress';
+import {ValidationError} from '../errors/ValidationError';
+import {type EmailAddress} from './Account/EmailAddress';
 
 export class Email {
 	constructor(

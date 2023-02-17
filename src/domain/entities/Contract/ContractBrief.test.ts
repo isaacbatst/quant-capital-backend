@@ -9,10 +9,11 @@ describe('ContractBrief', () => {
 		const contractBrief = new ContractBrief({
 			id,
 			date,
-			value,
+			balance: value,
+			clientId: 'any-client-id',
 		});
 		expect(contractBrief.getId()).toBe(id);
-		expect(contractBrief.getValue()).toBe(value);
+		expect(contractBrief.getBalance()).toBe(value);
 		expect(contractBrief.getDate()).toBe(date);
 	});
 });

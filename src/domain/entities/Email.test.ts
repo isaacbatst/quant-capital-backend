@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {Email} from './Email';
-import {EmailAddress} from './EmailAddress';
+import {EmailAddress} from './Account/EmailAddress';
 
 describe('Email', () => {
 	it('should create email', () => {

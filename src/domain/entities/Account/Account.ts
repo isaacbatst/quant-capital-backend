@@ -1,12 +1,25 @@
 import {EmailAddress} from './EmailAddress';
 import {Password} from './Password';
 
+type AccountParams = {
+	id: string;
+	email: EmailAddress;
+	passwordHash: string;
+	numericPasswordHash: string;
+};
+
 export class Account {
+	private readonly id: string;
+	private email: EmailAddress;
+	private passwordHash: string;
+	private readonly numericPasswordHash: string;
 	constructor(
-		private readonly id: string,
-		private email: EmailAddress,
-		private passwordHash: string,
+		params: AccountParams,
 	) {
+		this.id = params.id;
+		this.email = params.email;
+		this.passwordHash = params.passwordHash;
+		this.numericPasswordHash = params.numericPasswordHash;
 	}
 
 	changeEmail(email: string) {
@@ -23,6 +36,10 @@ export class Account {
 
 	getPasswordHash(): string {
 		return this.passwordHash;
+	}
+
+	getNumericPasswordHash(): string {
+		return this.numericPasswordHash;
 	}
 
 	getId(): string {

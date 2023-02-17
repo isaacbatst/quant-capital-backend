@@ -24,9 +24,8 @@ describe('RequestEmailChange', () => {
 		const {requestEmailChange, repositoryFactory: {
 			accountRepository, emailChangeRequestRepository,
 		}} = makeSut();
-		await accountRepository.save(new Account('user-id', new EmailAddress('email@email.com'), 'any-hash'), 'user-token');
-		await requestEmailChange.execute({sessionToken: 'user-token'});
-		const openRequests = await emailChangeRequestRepository.getUserOpenRequests('user-id');
+		await requestEmailChange.execute({sessionToken: 'session-token'});
+		const openRequests = await emailChangeRequestRepository.getUserOpenRequests('25');
 		expect(openRequests).toHaveLength(1);
 	});
 
@@ -34,7 +33,9 @@ describe('RequestEmailChange', () => {
 		const {requestEmailChange, repositoryFactory: {
 			accountRepository,
 		}} = makeSut();
-		await accountRepository.save(new Account('user-id', new EmailAddress('email@email.com'), 'any-hash'), 'user-token');
+		await accountRepository.save(new Account({
+			id: 'any-id', email: new EmailAddress('any@email.com'), passwordHash: 'any-hash', numericPasswordHash: 'numeric-hash',
+		}), 'user-token');
 		await requestEmailChange.execute({sessionToken: 'user-token'});
 
 		await expect(async () => {
@@ -47,14 +48,13 @@ describe('RequestEmailChange', () => {
 			accountRepository, emailChangeRequestRepository,
 		}} = makeSut();
 		idGenerator.generatedId = 'request-id';
-		await accountRepository.save(new Account('user-id', new EmailAddress('email@email.com'), 'any-hash'), 'user-token');
-		await requestEmailChange.execute({sessionToken: 'user-token'});
-		await emailChangeRequestRepository.update(new EmailChangeRequest('request-id', 'user-id', EmailChangeRequestStatus.finished));
-		await requestEmailChange.execute({sessionToken: 'user-token'});
-		await emailChangeRequestRepository.update(new EmailChangeRequest('request-id', 'user-id', EmailChangeRequestStatus.cancelled));
+		await requestEmailChange.execute({sessionToken: 'session-token'});
+		await emailChangeRequestRepository.update(new EmailChangeRequest('request-id', '25', EmailChangeRequestStatus.finished));
+		await requestEmailChange.execute({sessionToken: 'session-token'});
+		await emailChangeRequestRepository.update(new EmailChangeRequest('request-id', '25', EmailChangeRequestStatus.cancelled));
 
-		await requestEmailChange.execute({sessionToken: 'user-token'});
-		const openRequests = await emailChangeRequestRepository.getUserOpenRequests('user-id');
+		await requestEmailChange.execute({sessionToken: 'session-token'});
+		const openRequests = await emailChangeRequestRepository.getUserOpenRequests('25');
 		expect(openRequests).toHaveLength(1);
 	});
 });

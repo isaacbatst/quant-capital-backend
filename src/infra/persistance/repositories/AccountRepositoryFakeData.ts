@@ -8,8 +8,16 @@ export class AccountRepositoryFakeData {
 	}> {
 		return [
 			{
-				account: new Account('25', new EmailAddress('test@email.com'), 'password-hash'),
+				account: new Account({
+					id: '25', email: new EmailAddress('test@email.com'), passwordHash: 'password-hash', numericPasswordHash: 'numeric-hash',
+				}),
 				sessionToken: 'session-token',
+			},
+			{
+				account: new Account({
+					id: '62', email: new EmailAddress('test2@email.com'), passwordHash: 'password-hash', numericPasswordHash: 'numeric-hash',
+				}),
+				sessionToken: 'session-token-62',
 			},
 		];
 	}
