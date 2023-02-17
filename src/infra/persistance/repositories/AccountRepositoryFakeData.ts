@@ -9,13 +9,21 @@ export class AccountRepositoryFakeData {
 		return [
 			{
 				account: new Account({
-					id: '25', email: new EmailAddress('test@email.com'), passwordHash: 'password-hash', numericPasswordHash: 'numeric-hash',
+					id: '25',
+					email: new EmailAddress('test25@email.com'),
+					passwordHash: 'password-hash',
+					numericPasswordHash: 'numeric-hash',
+					name: 'Cliente 25',
 				}),
-				sessionToken: 'session-token',
+				sessionToken: 'session-token-25',
 			},
 			{
 				account: new Account({
-					id: '62', email: new EmailAddress('test2@email.com'), passwordHash: 'password-hash', numericPasswordHash: 'numeric-hash',
+					id: '62',
+					name: 'Cliente 62',
+					email: new EmailAddress('test62@email.com'),
+					passwordHash: 'password-hash',
+					numericPasswordHash: 'numeric-hash',
 				}),
 				sessionToken: 'session-token-62',
 			},

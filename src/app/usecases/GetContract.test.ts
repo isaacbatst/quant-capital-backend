@@ -7,7 +7,7 @@ describe('GetContract', () => {
 	it('should get user contract', async () => {
 		const repositoryFactory = new RepositoryFactoryFake();
 		const getContract = new GetContract(repositoryFactory);
-		const contract = await getContract.execute({sessionToken: 'session-token', contractId: '11'});
+		const contract = await getContract.execute({sessionToken: 'session-token-25', contractId: '11'});
 		expect(contract.id).toBe('11');
 		expect(contract.contractDate).toBe('2020-10-09T00:00:00.000Z');
 		expect(contract.balance).toBe(0);
@@ -20,7 +20,7 @@ describe('GetContract', () => {
 		const getContract = new GetContract(repositoryFactory);
 
 		return expect(async () =>
-			getContract.execute({sessionToken: 'session-token', contractId: '75'}))
+			getContract.execute({sessionToken: 'session-token-25', contractId: '75'}))
 			.rejects.toThrow(new NotFoundError('CONTRACT_NOT_FOUND'));
 	});
 
@@ -29,7 +29,7 @@ describe('GetContract', () => {
 		const getContract = new GetContract(repositoryFactory);
 
 		return expect(async () =>
-			getContract.execute({sessionToken: 'session-token', contractId: '76'}))
+			getContract.execute({sessionToken: 'session-token-25', contractId: '76'}))
 			.rejects.toThrow(new NotFoundError('CONTRACT_NOT_FOUND'));
 	});
 });

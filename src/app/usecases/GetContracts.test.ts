@@ -7,7 +7,7 @@ describe('GetContracts', () => {
 	it('should get user contracts', async () => {
 		const repositoryFactory = new RepositoryFactoryFake();
 		const getContracts = new GetContracts(repositoryFactory);
-		const contracts = await getContracts.execute({sessionToken: 'session-token'});
+		const contracts = await getContracts.execute({sessionToken: 'session-token-25'});
 		expect(contracts).toHaveLength(1);
 		expect(contracts[0].id).toEqual('11');
 		expect(contracts[0].date).toEqual('2020-10-09T00:00:00.000Z');

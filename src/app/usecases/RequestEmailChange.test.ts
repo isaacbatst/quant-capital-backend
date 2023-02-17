@@ -24,7 +24,7 @@ describe('RequestEmailChange', () => {
 		const {requestEmailChange, repositoryFactory: {
 			accountRepository, emailChangeRequestRepository,
 		}} = makeSut();
-		await requestEmailChange.execute({sessionToken: 'session-token'});
+		await requestEmailChange.execute({sessionToken: 'session-token-25'});
 		const openRequests = await emailChangeRequestRepository.getUserOpenRequests('25');
 		expect(openRequests).toHaveLength(1);
 	});
@@ -33,13 +33,10 @@ describe('RequestEmailChange', () => {
 		const {requestEmailChange, repositoryFactory: {
 			accountRepository,
 		}} = makeSut();
-		await accountRepository.save(new Account({
-			id: 'any-id', email: new EmailAddress('any@email.com'), passwordHash: 'any-hash', numericPasswordHash: 'numeric-hash',
-		}), 'user-token');
-		await requestEmailChange.execute({sessionToken: 'user-token'});
+		await requestEmailChange.execute({sessionToken: 'session-token-25'});
 
 		await expect(async () => {
-			await requestEmailChange.execute({sessionToken: 'user-token'});
+			await requestEmailChange.execute({sessionToken: 'session-token-25'});
 		}).rejects.toThrow('DUPLICATED_REQUEST');
 	});
 
@@ -48,12 +45,12 @@ describe('RequestEmailChange', () => {
 			accountRepository, emailChangeRequestRepository,
 		}} = makeSut();
 		idGenerator.generatedId = 'request-id';
-		await requestEmailChange.execute({sessionToken: 'session-token'});
+		await requestEmailChange.execute({sessionToken: 'session-token-25'});
 		await emailChangeRequestRepository.update(new EmailChangeRequest('request-id', '25', EmailChangeRequestStatus.finished));
-		await requestEmailChange.execute({sessionToken: 'session-token'});
+		await requestEmailChange.execute({sessionToken: 'session-token-25'});
 		await emailChangeRequestRepository.update(new EmailChangeRequest('request-id', '25', EmailChangeRequestStatus.cancelled));
 
-		await requestEmailChange.execute({sessionToken: 'session-token'});
+		await requestEmailChange.execute({sessionToken: 'session-token-25'});
 		const openRequests = await emailChangeRequestRepository.getUserOpenRequests('25');
 		expect(openRequests).toHaveLength(1);
 	});

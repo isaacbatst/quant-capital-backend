@@ -21,14 +21,11 @@ const makeSut = () => {
 describe('ForgotMyPassword', () => {
 	it('should save request', async () => {
 		const {forgotMyPassword, repositoryFactory} = makeSut();
-		await repositoryFactory.accountRepository.save(
-			new Account({
-				id: 'any-id', email: new EmailAddress('any@email.com'), passwordHash: 'any-hash', numericPasswordHash: 'numeric-hash',
-			}),
-		);
-		await forgotMyPassword.execute({email: 'any@email.com'});
+		await forgotMyPassword.execute({email: 'test25@email.com'});
 
-		expect(repositoryFactory.passwordResetRequestRepository.requests).toContainEqual(expect.objectContaining({emailAddress: new EmailAddress('any@email.com')}));
+		expect(repositoryFactory.passwordResetRequestRepository.requests).toContainEqual(expect.objectContaining({
+			emailAddress: new EmailAddress('test25@email.com'),
+		}));
 	});
 
 	it('should not save request with unknown email', async () => {

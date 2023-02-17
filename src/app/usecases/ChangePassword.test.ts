@@ -19,34 +19,25 @@ const makeSut = () => {
 
 describe('ChangePassword', () => {
 	it('should change account password', async () => {
-		const {changePassword, repositoryFactory} = makeSut();
-		const account = new Account({
-			id: 'any-id', email: new EmailAddress('any@email.com'), passwordHash: 'old-hash', numericPasswordHash: 'numeric-hash',
-		});
-		await repositoryFactory.accountRepository.save(account, 'any-token');
-
-		await changePassword.execute({password: 'new-password', sessionToken: 'any-token'});
-		expect(account.getPasswordHash()).toBe('any-hash');
+		const {changePassword, repositoryFactory, encrypter} = makeSut();
+		await changePassword.execute({password: 'new-password', sessionToken: 'session-token-25'});
+		const account = await repositoryFactory.accountRepository.getBySessionToken('session-token-25');
+		expect(account).toBeDefined();
+		expect(account!.getPasswordHash()).toBe(encrypter.hash);
 		expect(repositoryFactory.accountRepository.update).toHaveBeenCalledWith(account);
 	});
 
 	it('should not change account password with unknown session token', async () => {
 		const {changePassword} = makeSut();
-
 		await expect(async () => {
-			await changePassword.execute({password: 'new-password', sessionToken: 'any-token'});
+			await changePassword.execute({password: 'any-password', sessionToken: 'any-token'});
 		}).rejects.toThrow('ACCOUNT_NOT_FOUND');
 	});
 
 	it('should not change account password with invalid password', async () => {
-		const {changePassword, repositoryFactory} = makeSut();
-		const account = new Account({
-			id: 'any-id', email: new EmailAddress('any@email.com'), passwordHash: 'old-hash', numericPasswordHash: 'numeric-hash',
-		});
-		await repositoryFactory.accountRepository.save(account, 'any-token');
-
+		const {changePassword} = makeSut();
 		await expect(async () => {
-			await changePassword.execute({password: 'invalid', sessionToken: 'any-token'});
+			await changePassword.execute({password: 'invalid', sessionToken: 'session-token-25'});
 		}).rejects.toThrow('INVALID_PASSWORD_VALUE');
 	});
 });
