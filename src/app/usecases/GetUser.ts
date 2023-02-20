@@ -1,6 +1,4 @@
 import {AccountBalanceCalculator} from '../../domain/entities/Account/AccountBalanceCalculator';
-import {AuthError} from '../../domain/errors/AuthError';
-import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type AuthService} from './AuthService';
@@ -17,14 +15,12 @@ type Output = {
 };
 
 export class GetUser {
-	private readonly accountRepository: AccountRepository;
 	private readonly contractRepository: ContractRepository;
 
 	constructor(
 		repositoryFactory: RepositoryFactory,
 		private readonly authService: AuthService,
 	) {
-		this.accountRepository = repositoryFactory.accountRepository;
 		this.contractRepository = repositoryFactory.contractRepository;
 	}
 
