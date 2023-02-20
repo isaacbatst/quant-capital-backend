@@ -19,7 +19,6 @@ export class GetProducts {
 
 	constructor(
 		repository: RepositoryFactory,
-		private readonly encrypter: EncrypterFake,
 		private readonly authService: AuthService,
 	) {
 		this.productRepository = repository.productRepository;
