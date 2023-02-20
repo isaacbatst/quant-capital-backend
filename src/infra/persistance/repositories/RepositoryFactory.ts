@@ -3,6 +3,7 @@ import {type ContractRepository} from './ContractRepository';
 import {type ContractWithdrawRequestRepository} from './ContractWithdrawRequestRepository';
 import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository';
 import {type PasswordResetRequestRepository} from './PasswordResetRequestRepository';
+import {type ProductRepository} from './ProductRepository';
 
 export type RepositoryFactory = {
 	passwordResetRequestRepository: PasswordResetRequestRepository;
@@ -10,4 +11,5 @@ export type RepositoryFactory = {
 	emailChangeRequestRepository: EmailChangeRequestRepository;
 	contractWithdrawRequestRepository: ContractWithdrawRequestRepository;
 	contractRepository: ContractRepository;
+	productRepository: ProductRepository;
 };

@@ -4,6 +4,7 @@ import {ContractWithdrawRequestRepositoryFake} from './ContractWithdrawRequestRe
 import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository';
 import {EmailChangeRequestRepositoryFake} from './EmailChangeRequestRepositoryFake';
 import {PasswordResetRequestRepositoryFake} from './PasswordResetRequestRepositoryFake';
+import {ProductRepositoryFake} from './ProductRepositoryFake';
 import {type RepositoryFactory} from './RepositoryFactory';
 
 export class RepositoryFactoryFake implements RepositoryFactory {
@@ -12,4 +13,5 @@ export class RepositoryFactoryFake implements RepositoryFactory {
 	emailChangeRequestRepository: EmailChangeRequestRepository = new EmailChangeRequestRepositoryFake();
 	contractWithdrawRequestRepository: ContractWithdrawRequestRepositoryFake = new ContractWithdrawRequestRepositoryFake();
 	contractRepository: ContractRepositoryFake = new ContractRepositoryFake();
+	productRepository: ProductRepositoryFake = new ProductRepositoryFake();
 }
