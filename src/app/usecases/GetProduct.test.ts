@@ -9,6 +9,6 @@ describe('GetProduct', () => {
 		const authService = new AuthService(repositoryFactory.accountRepository);
 		const getProducts = new GetProduct(repositoryFactory.productRepository, authService);
 		const product = await getProducts.execute({sessionToken: 'session-token-25', productId: 'product-id-1'});
-		expect(product).toEqual(repositoryFactory.productRepository.products[0]);
+		expect(product.id).toEqual(repositoryFactory.productRepository.products[0].getId());
 	});
 });
