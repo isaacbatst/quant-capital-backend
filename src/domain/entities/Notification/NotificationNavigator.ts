@@ -12,7 +12,7 @@ export type PushNotificationNavigatorPayload = {
 	external?: boolean;
 };
 
-type NotificationNavigatorParams = Omit<NotificationParams, 'type'> & {
+export type NotificationNavigatorParams = Omit<NotificationParams, 'type'> & {
 	payload: PushNotificationNavigatorPayload;
 };
 
