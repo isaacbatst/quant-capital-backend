@@ -26,7 +26,7 @@ export class GetUser {
 
 	async execute(input: Input): Promise<Output> {
 		const account = await this.authService.getAccountBySessionToken(input.sessionToken);
-		const contracts = await this.contractRepository.getClientContractBriefs(account.getId());
+		const contracts = await this.contractRepository.getContractBriefsByClientId(account.getId());
 
 		return {
 			id: account.getId(),

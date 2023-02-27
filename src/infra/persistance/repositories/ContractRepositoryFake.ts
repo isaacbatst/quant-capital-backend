@@ -10,7 +10,11 @@ export class ContractRepositoryFake implements ContractRepository {
 		return this.contracts.find(contract => contract.getId() === id && contract.getClientId() === clientId);
 	}
 
-	async getClientContractBriefs(clientId: string): Promise<ContractBrief[]> {
+	async getContractsByClientId(clientId: string): Promise<Contract[]> {
+		return this.contracts.filter(contract => contract.getClientId() === clientId);
+	}
+
+	async getContractBriefsByClientId(clientId: string): Promise<ContractBrief[]> {
 		return this.contracts
 			.filter(contract => contract.getClientId() === clientId)
 			.map(contract => new ContractBrief({

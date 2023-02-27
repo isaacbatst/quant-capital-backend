@@ -3,5 +3,6 @@ import {type ContractBrief} from '../../../domain/entities/Contract/ContractBrie
 
 export type ContractRepository = {
 	getById(contractId: string, clientId: string): Promise<Contract | undefined>;
-	getClientContractBriefs(clientId: string): Promise<ContractBrief[]>;
+	getContractBriefsByClientId(clientId: string): Promise<ContractBrief[]>;
+	getContractsByClientId(clientId: string): Promise<Contract[]>;
 };

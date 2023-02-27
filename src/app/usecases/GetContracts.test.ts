@@ -15,7 +15,7 @@ describe('GetContracts', () => {
 	it('should get user contracts', async () => {
 		const getContracts = makeSut();
 		const contracts = await getContracts.execute({sessionToken: 'session-token-25'});
-		expect(contracts).toHaveLength(1);
+		expect(contracts).toHaveLength(2);
 		expect(contracts[0].id).toEqual('11');
 		expect(contracts[0].date).toEqual('2020-10-09T00:00:00.000Z');
 		expect(contracts[0].balance).toEqual(0);
