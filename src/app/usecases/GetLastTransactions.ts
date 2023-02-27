@@ -1,13 +1,11 @@
 import {ContractsList} from '../../domain/entities/Contract/ContractsList';
 import {type ContractTransactionType} from '../../domain/entities/Contract/ContractTransaction';
-import {Paginator} from '../../domain/entities/Paginator';
 import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type AuthService} from './AuthService';
 
 type Input = {
 	sessionToken: string;
-	page: number;
 };
 
 type Output = {
@@ -17,8 +15,11 @@ type Output = {
 	type: ContractTransactionType;
 };
 
-export class GetTransactions {
-	static pageSize = 15;
+export class GetLastTransactions {
+	private static get lastTransactionsLength() {
+		return 6;
+	}
+
 	private readonly contractRepository: ContractRepository;
 	private readonly authService: AuthService;
 
@@ -36,8 +37,8 @@ export class GetTransactions {
 		const contractsList = new ContractsList(contracts);
 		const transactions = contractsList.getTransactions();
 		const transactionsByDate = transactions.getTransactionsSortedByDate();
-		const pageTransactions = Paginator.getPage(transactionsByDate, input.page, GetTransactions.pageSize);
-		return pageTransactions.map(transaction => ({
+		const lastTransactions = transactionsByDate.slice(0, GetLastTransactions.lastTransactionsLength);
+		return lastTransactions.map(transaction => ({
 			date: transaction.getDate().toISOString(),
 			id: transaction.getId(),
 			value: transaction.getValue(),
