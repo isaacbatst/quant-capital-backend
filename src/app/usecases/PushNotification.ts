@@ -1,17 +1,14 @@
-import {type Notification} from '../../domain/entities/Notification/Notification';
+import {type Account} from '../../domain/entities/Account/Account';
 import {NotificationFactory} from '../../domain/entities/Notification/NotificationFactory';
+import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
+import {type NotificationRepository} from '../../infra/persistance/repositories/NotificationRepository';
 import {type IdGenerator} from '../../infra/util/IdGenerator/IdGenerator';
 
 type NotificationGateway = {
-	push(to: string | string[], title: string, body: string): Promise<void>;
-};
-
-type NotificationRepository = {
-	save(notification: Notification): Promise<void>;
+	push(to: Account[], title: string, body: string): Promise<void>;
 };
 
 type Input = {
-	to: string | string[];
 	title: string;
 	body: string;
 	type: string;
@@ -22,6 +19,7 @@ export class PushNotification {
 	constructor(
 		readonly notificationGateway: NotificationGateway,
 		readonly notificationRepository: NotificationRepository,
+		readonly accountRepository: AccountRepository,
 		readonly idGenerator: IdGenerator,
 	) {}
 
@@ -34,8 +32,8 @@ export class PushNotification {
 			createdAt: new Date(),
 			payload: input.payload,
 		});
-
-		await this.notificationGateway.push(input.to, input.title, input.body);
+		const accounts = await this.accountRepository.getAllWithPushToken();
+		await this.notificationGateway.push(accounts, input.title, input.body);
 		await this.notificationRepository.save(notification);
 	}
 }

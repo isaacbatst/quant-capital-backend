@@ -10,6 +10,7 @@ describe('Notification', () => {
 			body: 'body',
 			title: 'title',
 			createdAt: now,
+			to: ['client-id-1', 'client-id-2'],
 		});
 		expect(notification.getId()).toBe('id');
 		expect(notification.getBody()).toBe('body');
@@ -27,6 +28,7 @@ describe('Notification', () => {
 			payload: {
 				to: AppRoutePath.myAccount,
 			},
+			to: ['client-id-1', 'client-id-2'],
 		});
 
 		expect(notification.getId()).toBe('id');

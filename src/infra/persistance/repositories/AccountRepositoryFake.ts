@@ -5,7 +5,12 @@ import {type AccountRepository} from './AccountRepository';
 import {AccountRepositoryFakeData} from './AccountRepositoryFakeData';
 
 export class AccountRepositoryFake implements AccountRepository {
-	accounts: Array<{account: Account; sessionToken: string | undefined}> = AccountRepositoryFakeData.accounts;
+	accounts: Array<{
+		account: Account;
+		sessionToken?: string | undefined;
+		pushTokens?: string[] | undefined;
+	}> = AccountRepositoryFakeData.accounts;
+
 	update = vi.fn(async (updatedAccount: Account) => {
 		const foundIndex = this.accounts.findIndex(({account}) => account.getEmail().value === updatedAccount.getEmail().value);
 
@@ -15,6 +20,10 @@ export class AccountRepositoryFake implements AccountRepository {
 
 		this.accounts[foundIndex].account = updatedAccount;
 	});
+
+	async getAccountPushTokens(accountId: string): Promise<string[]> {
+		return this.accounts.find(({account}) => account.getId() === accountId)?.pushTokens ?? [];
+	}
 
 	async getByEmail(email: string): Promise<Account | undefined> {
 		return this.accounts.find(({account}) => account.getEmail().value === email)?.account;
@@ -26,5 +35,11 @@ export class AccountRepositoryFake implements AccountRepository {
 
 	async save(account: Account, sessionToken?: string): Promise<void> {
 		this.accounts.push({account, sessionToken});
+	}
+
+	async getAllWithPushToken(): Promise<Account[]> {
+		return this.accounts
+			.filter(({pushTokens: pushToken}) => pushToken && pushToken.length > 0)
+			.map(({account}) => account);
 	}
 }

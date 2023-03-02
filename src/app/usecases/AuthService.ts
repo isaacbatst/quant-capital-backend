@@ -4,7 +4,7 @@ import {type AccountRepository} from '../../infra/persistance/repositories/Accou
 
 export class AuthService {
 	constructor(
-		private readonly accountRepository: AccountRepository,
+		readonly accountRepository: AccountRepository,
 	) {}
 
 	async getAccountBySessionToken(sessionToken: string): Promise<Account> {

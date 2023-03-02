@@ -9,6 +9,7 @@ export type NotificationParams = {
 	title: string;
 	body: string;
 	createdAt: Date;
+	to: string[];
 };
 
 export abstract class Notification {
@@ -17,6 +18,7 @@ export abstract class Notification {
 	private readonly title: string;
 	private readonly body: string;
 	private readonly createdAt: Date;
+	private readonly to: string[];
 
 	constructor(
 		params: NotificationParams,
@@ -26,8 +28,10 @@ export abstract class Notification {
 		this.title = params.title;
 		this.body = params.body;
 		this.createdAt = params.createdAt;
+		this.to = params.to;
 		this.validateTitle();
 		this.validateBody();
+		this.validateTo();
 	}
 
 	getId(): string {
@@ -48,6 +52,16 @@ export abstract class Notification {
 
 	getBody(): string {
 		return this.body;
+	}
+
+	getTo(): string[] {
+		return this.to;
+	}
+
+	private validateTo(): void {
+		if (this.to.length === 0) {
+			throw new Error('EMPTY_TO');
+		}
 	}
 
 	private validateTitle(): void {
