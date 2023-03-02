@@ -29,7 +29,7 @@ export class ResetPassword {
 			throw new NotFoundError('PASSWORD_RESET_REQUEST_NOT_FOUND');
 		}
 
-		const account = await this.authService.getAccountByEmail(passwordResetRequest.emailAddress.value);
+		const account = await this.authService.getAccountByEmail(passwordResetRequest.emailAddress);
 		const hash = await this.encrypter.encrypt(input.password);
 		account.changePassword(input.password, hash);
 		passwordResetRequest.use();

@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest';
+import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
 import {EncrypterFake} from '../../infra/util/Encrypter/EncrypterFake';
 import {AuthService} from './AuthService';
@@ -27,7 +28,7 @@ describe('ResetPassword', () => {
 	it('should update account password hash', async () => {
 		const {repositoryFactory, resetPassword, encrypter} = makeSut();
 		await resetPassword.execute({password: 'new-password', token: 'any-token'});
-		const account = await repositoryFactory.accountRepository.getByEmail('test25@email.com');
+		const account = await repositoryFactory.accountRepository.getByEmail(new EmailAddress('test25@email.com'));
 		expect(account).toBeDefined();
 		expect(account!.getPasswordHash()).toBe(encrypter.hash);
 	});

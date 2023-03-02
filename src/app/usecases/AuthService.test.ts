@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest';
+import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
 import {AuthService} from './AuthService';
 
@@ -27,14 +28,14 @@ describe('AuthService', () => {
 	describe('getAccountByEmail', () => {
 		it('should return a account', async () => {
 			const authService = makeSut();
-			const account = await authService.getAccountByEmail('test25@email.com');
+			const account = await authService.getAccountByEmail(new EmailAddress('test25@email.com'));
 			expect(account.getId()).toBe('25');
 		});
 
 		it('should throw when account not found', async () => {
 			const authService = makeSut();
 			return expect(async () => {
-				await authService.getAccountByEmail('testinvalid@email.com');
+				await authService.getAccountByEmail(new EmailAddress('testinvalid@email.com'));
 			}).rejects.toThrow('ACCOUNT_NOT_FOUND');
 		});
 	});

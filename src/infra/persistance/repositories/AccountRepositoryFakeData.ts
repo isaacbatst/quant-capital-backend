@@ -4,7 +4,7 @@ import {EmailAddress} from '../../../domain/entities/Account/EmailAddress';
 export class AccountRepositoryFakeData {
 	static get accounts(): Array<{
 		account: Account;
-		sessionToken: string | undefined;
+		sessionTokens: string[];
 		pushTokens: string[] | undefined;
 	}> {
 		return [
@@ -16,7 +16,7 @@ export class AccountRepositoryFakeData {
 					numericPasswordHash: 'numeric-hash',
 					name: 'Cliente 25',
 				}),
-				sessionToken: 'session-token-25',
+				sessionTokens: ['session-token-25'],
 				pushTokens: ['push-token-25'],
 			},
 			{
@@ -27,7 +27,7 @@ export class AccountRepositoryFakeData {
 					passwordHash: 'password-hash',
 					numericPasswordHash: 'numeric-hash',
 				}),
-				sessionToken: 'session-token-62',
+				sessionTokens: ['session-token-62'],
 				pushTokens: ['push-token-62-a', 'push-token-62-b'],
 			},
 		];

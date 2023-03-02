@@ -40,7 +40,7 @@ export class ForgotMyPassword {
 	}
 
 	async execute(input: Input) {
-		const account = await this.authService.getAccountByEmail(input.email);
+		const account = await this.authService.getAccountByEmail(new EmailAddress(input.email));
 
 		const token = await this.tokenGenerator.generate();
 		const request = new PasswordResetRequest({

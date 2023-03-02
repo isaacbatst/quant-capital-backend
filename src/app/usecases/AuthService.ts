@@ -1,4 +1,5 @@
 import {type Account} from '../../domain/entities/Account/Account';
+import {type EmailAddress} from '../../domain/entities/Account/EmailAddress';
 import {AuthError} from '../../domain/errors/AuthError';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 
@@ -16,7 +17,7 @@ export class AuthService {
 		return account;
 	}
 
-	async getAccountByEmail(email: string): Promise<Account> {
+	async getAccountByEmail(email: EmailAddress): Promise<Account> {
 		const account = await this.accountRepository.getByEmail(email);
 		if (!account) {
 			throw new AuthError('ACCOUNT_NOT_FOUND');
