@@ -1,3 +1,4 @@
+import {type Account} from '../../../domain/entities/Account/Account';
 import {ClientNotification} from '../../../domain/entities/Notification/ClientNotification';
 import {type Notification} from '../../../domain/entities/Notification/Notification';
 import {Paginator} from '../../../domain/entities/Paginator';
@@ -11,10 +12,15 @@ export class NotificationRepositoryFake implements NotificationRepository {
 		this.notifications.push({notification, isViewed: false});
 	}
 
-	async getClientNotifications(clientTokens: string[], page: number, pageSize: number): Promise<ClientNotification[]> {
+	async getUnreadNotificationsCount(accountId: string): Promise<number> {
+		return this.notifications
+			.filter(({notification, isViewed}) => notification.getTo().includes(accountId) && !isViewed)
+			.length;
+	}
+
+	async getClientNotifications(clientId: string, page: number, pageSize: number): Promise<ClientNotification[]> {
 		const notifications = this.notifications
-			.filter(({notification}) => clientTokens
-				.find(clientToken => notification.getTo().includes(clientToken)));
+			.filter(({notification}) => notification.getTo().includes(clientId));
 
 		return Paginator.getPage(notifications, page, pageSize)
 			.map(({notification, isViewed}) => new ClientNotification(notification, isViewed));

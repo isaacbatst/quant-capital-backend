@@ -3,5 +3,6 @@ import {type Notification} from '../../../domain/entities/Notification/Notificat
 
 export type NotificationRepository = {
 	save(notification: Notification): Promise<void>;
-	getClientNotifications(clientTokens: string[], page: number, pageSize: number): Promise<ClientNotification[]>;
+	getUnreadNotificationsCount(accountId: string): Promise<number>;
+	getClientNotifications(accountId: string, page: number, pageSize: number): Promise<ClientNotification[]>;
 };

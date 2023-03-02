@@ -56,9 +56,8 @@ export class GetNotifications {
 		page: number;
 	}): Promise<Output[]> {
 		const account = await this.authService.getAccountBySessionToken(params.sessionToken);
-		const clientTokens = await this.authService.accountRepository.getAccountPushTokens(account.getId());
 		const notifications = await this.notificationsRepository.getClientNotifications(
-			clientTokens,
+			account.getId(),
 			params.page,
 			GetNotifications.pageSize,
 		);
