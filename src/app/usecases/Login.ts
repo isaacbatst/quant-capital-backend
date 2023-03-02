@@ -20,6 +20,7 @@ export class Login {
 		}
 
 		const passwordHash = account.getPasswordHash();
+
 		const isValid = await this.encrypter.compare(password, passwordHash);
 
 		if (!isValid) {

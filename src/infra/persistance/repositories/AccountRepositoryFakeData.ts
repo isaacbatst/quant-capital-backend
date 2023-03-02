@@ -12,7 +12,7 @@ export class AccountRepositoryFakeData {
 				account: new Account({
 					id: '25',
 					email: new EmailAddress('test25@email.com'),
-					passwordHash: 'password-hash',
+					passwordHash: '$2b$10$m7fi0dhDaXA9skOAnOYQ8eIa76eAlufvyWD4EKeNMVv/cdG8b2v92', // 123
 					numericPasswordHash: 'numeric-hash',
 					name: 'Cliente 25',
 				}),

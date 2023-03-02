@@ -20,11 +20,11 @@ const makeSut = () => {
 describe('ChangePassword', () => {
 	it('should change account password', async () => {
 		const {changePassword, repositoryFactory, encrypter} = makeSut();
+		encrypter.hash = 'new-hash';
 		await changePassword.execute({password: 'new-password', sessionToken: 'session-token-25'});
 		const account = await repositoryFactory.accountRepository.getBySessionToken('session-token-25');
 		expect(account).toBeDefined();
 		expect(account!.getPasswordHash()).toBe(encrypter.hash);
-		expect(repositoryFactory.accountRepository.update).toHaveBeenCalledWith(account);
 	});
 
 	it('should not change account password with unknown session token', async () => {

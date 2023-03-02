@@ -12,7 +12,7 @@ export class AccountRepositoryFake implements AccountRepository {
 		pushTokens?: string[] | undefined;
 	}> = AccountRepositoryFakeData.accounts;
 
-	update = vi.fn(async (updatedAccount: Account) => {
+	async update(updatedAccount: Account): Promise<void> {
 		const foundIndex = this.accounts.findIndex(({account}) => account.getEmail().value === updatedAccount.getEmail().value);
 
 		if (foundIndex < 0) {
@@ -20,7 +20,7 @@ export class AccountRepositoryFake implements AccountRepository {
 		}
 
 		this.accounts[foundIndex].account = updatedAccount;
-	});
+	}
 
 	async getAccountPushTokens(accountId: string): Promise<string[]> {
 		return this.accounts.find(({account}) => account.getId() === accountId)?.pushTokens ?? [];
