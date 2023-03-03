@@ -1,3 +1,4 @@
+import {ConflictError} from '../../errors/ConflictError';
 import {EmailAddress} from './EmailAddress';
 import {Password} from './Password';
 

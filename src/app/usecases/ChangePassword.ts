@@ -1,3 +1,4 @@
+import {ConflictError} from '../../domain/errors/ConflictError';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type Encrypter} from '../../infra/util/Encrypter/Encrypter';
@@ -21,6 +22,12 @@ export class ChangePassword {
 
 	async execute(input: Input) {
 		const account = await this.authService.getAccountBySessionToken(input.sessionToken);
+
+		const isTheSame = await this.encrypter.compare(input.password, account.getPasswordHash());
+
+		if (isTheSame) {
+			throw new ConflictError('EQUAL_PASSWORD');
+		}
 
 		const hash = await this.encrypter.encrypt(input.password);
 		account.changePassword(input.password, hash);
