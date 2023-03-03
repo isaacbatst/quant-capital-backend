@@ -4,7 +4,7 @@ import {type EmailAddress} from '../../../domain/entities/Account/EmailAddress';
 export type AccountRepository = {
 	getByEmail(email: EmailAddress): Promise<Account | undefined>;
 	getBySessionToken(sessionToken: string): Promise<Account | undefined>;
-	getAllWithPushToken(): Promise<Account[]>;
+	getAllPushTokens(): Promise<string[]>;
 	getAccountPushTokens(accountId: string): Promise<string[]>;
 	update(account: Account): Promise<void>;
 	save(account: Account): Promise<void>;

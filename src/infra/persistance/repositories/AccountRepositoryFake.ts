@@ -1,4 +1,3 @@
-import {vi} from 'vitest';
 import {type Account} from '../../../domain/entities/Account/Account';
 import {type EmailAddress} from '../../../domain/entities/Account/EmailAddress';
 import {NotFoundError} from '../../../domain/errors/NotFoundError';
@@ -44,9 +43,8 @@ export class AccountRepositoryFake implements AccountRepository {
 		this.accounts[foundIndex].sessionTokens.push(sessionToken);
 	}
 
-	async getAllWithPushToken(): Promise<Account[]> {
+	async getAllPushTokens(): Promise<string[]> {
 		return this.accounts
-			.filter(({pushTokens: pushToken}) => pushToken && pushToken.length > 0)
-			.map(({account}) => account);
+			.flatMap(({pushTokens}) => pushTokens ?? []);
 	}
 }

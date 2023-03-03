@@ -12,7 +12,7 @@ describe('ClientNotification', () => {
 			createdAt: now,
 			to: ['client-id-1', 'client-id-2'],
 		});
-		const clientNotification = new ClientNotification(notification, false);
+		const clientNotification = new ClientNotification(notification, false, '25');
 		expect(clientNotification.getNotification()).toEqual(notification);
 		expect(clientNotification.getIsViewed()).toBe(false);
 	});
@@ -26,7 +26,7 @@ describe('ClientNotification', () => {
 			createdAt: now,
 			to: ['client-id-1', 'client-id-2'],
 		});
-		const clientNotification = new ClientNotification(notification, false);
+		const clientNotification = new ClientNotification(notification, false, '25');
 		clientNotification.view();
 		expect(clientNotification.getIsViewed()).toBe(true);
 	});
@@ -40,7 +40,7 @@ describe('ClientNotification', () => {
 			createdAt: now,
 			to: ['client-id-1', 'client-id-2'],
 		});
-		const clientNotification = new ClientNotification(notification, true);
+		const clientNotification = new ClientNotification(notification, true, '25');
 
 		expect(() => {
 			clientNotification.view();

@@ -9,6 +9,7 @@ type NotificationFactoryBasicParams = {
 	body: string;
 	createdAt: Date;
 	payload?: Record<string, unknown>;
+	to: string[];
 };
 
 type NotificationFactoryParams = NotificationFactoryBasicParams
