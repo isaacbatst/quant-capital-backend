@@ -1,4 +1,3 @@
-import {vi} from 'vitest';
 import {type EmailChangeRequest} from '../../../domain/entities/Account/EmailChangeRequest.';
 import {EmailChangeRequestStatus} from '../../../domain/entities/Account/EmailChangeRequestStatus';
 import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository';
@@ -6,7 +5,7 @@ import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository'
 export class EmailChangeRequestRepositoryFake implements EmailChangeRequestRepository {
 	requests: EmailChangeRequest[] = [];
 
-	update = vi.fn(async (updated: EmailChangeRequest) => {
+	update = async (updated: EmailChangeRequest) => {
 		this.requests = this.requests.map(request => {
 			if (request.id === updated.id) {
 				return updated;
@@ -14,12 +13,12 @@ export class EmailChangeRequestRepositoryFake implements EmailChangeRequestRepos
 
 			return request;
 		});
-	});
+	};
 
-	create = vi.fn(async request => {
+	create = async (request: EmailChangeRequest) => {
 		this.requests.push(request);
-	});
+	};
 
-	getUserOpenRequests = vi.fn(async userId => this.requests
-		.filter(request => request.userId === userId && request.getStatus() === EmailChangeRequestStatus.open));
+	getUserOpenRequests = async (userId: string) => this.requests
+		.filter(request => request.userId === userId && request.getStatus() === EmailChangeRequestStatus.open);
 }
