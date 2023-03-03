@@ -9,7 +9,7 @@ type Input = {
 };
 
 export class ChangePassword {
-	readonly accountRepository: AccountRepository;
+	private readonly accountRepository: AccountRepository;
 
 	constructor(
 		repositoryFactory: RepositoryFactory,

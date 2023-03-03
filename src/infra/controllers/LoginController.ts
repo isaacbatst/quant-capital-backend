@@ -20,13 +20,8 @@ export class LoginController {
 	) {}
 
 	async handle(req: Request, res: Response) {
-		const validation = await LoginController.bodySchema.safeParseAsync(req.body);
-
-		if (!validation.success) {
-			throw validation.error;
-		}
-
-		const token = await this.login.execute(validation.data.email, validation.data.password);
+		const {email, password} = await LoginController.bodySchema.parseAsync(req.body);
+		const token = await this.login.execute(email, password);
 		res.status(200).json({token});
 	}
 }
