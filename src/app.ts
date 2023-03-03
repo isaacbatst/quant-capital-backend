@@ -1,10 +1,13 @@
 import express from 'express';
 import 'express-async-errors';
 import {AuthService} from './app/usecases/AuthService';
+import {GetContracts} from './app/usecases/GetContracts';
 import {GetUser} from './app/usecases/GetUser';
 import {Login} from './app/usecases/Login';
+import {GetContractsController} from './infra/controllers/GetContractsController';
 import {GetUserController} from './infra/controllers/GetUserController';
 import {LoginController} from './infra/controllers/LoginController';
+import {AuthMiddleware} from './infra/middlewares/AuthMiddleware';
 import {ErrorMiddleware} from './infra/middlewares/ErrorMiddleware';
 import {RepositoryFactoryFake} from './infra/persistance/repositories/RepositoryFactoryFake';
 import {EncrypterBcrypt} from './infra/util/Encrypter/EncrypterBcrypt';
@@ -27,12 +30,17 @@ export class App {
 
 		const login = new Login(repositoryFactory.accountRepository, encrypter, tokenGenerator);
 		const getUser = new GetUser(repositoryFactory, authService);
+		const getContracts = new GetContracts(repositoryFactory, authService);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
+		const getContractsController = new GetContractsController(getContracts);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
+
+		this.app.use(AuthMiddleware.handle);
 		this.app.get('/user', async (req, res) => getUserController.handle(req, res));
+		this.app.get('/contracts', async (req, res) => getContractsController.handle(req, res));
 
 		this.app.use(ErrorMiddleware.handle);
 	}

@@ -1,5 +1,6 @@
 import {type Request, type Response} from 'express';
 import {type GetUser} from '../../app/usecases/GetUser';
+import {HeadersHelper} from '../util/HeadersHelper';
 
 export class GetUserController {
 	constructor(
@@ -7,13 +8,7 @@ export class GetUserController {
 	) {}
 
 	async handle(req: Request, res: Response) {
-		if (!req.headers.authorization) {
-			return res.status(401).json({
-				error: 'UNAUTHORIZED',
-			});
-		}
-
-		const sessionToken = req.headers.authorization.split(' ')[1]; // "Bearer token"
+		const sessionToken = HeadersHelper.getAuthorizationHeader(req.headers);
 		const user = await this.getUser.execute({sessionToken});
 		return res.json(user);
 	}

@@ -1,5 +1,6 @@
 import {type Request, type Response} from 'express';
 import {type GetContracts} from '../../app/usecases/GetContracts';
+import {HeadersHelper} from '../util/HeadersHelper';
 
 export class GetContractsController {
 	constructor(
@@ -7,13 +8,7 @@ export class GetContractsController {
 	) {}
 
 	async handle(req: Request, res: Response) {
-		if (!req.headers.authorization) {
-			return res.status(401).json({
-				error: 'UNAUTHORIZED',
-			});
-		}
-
-		const sessionToken = req.headers.authorization.split(' ')[1]; // "Bearer token"
+		const sessionToken = HeadersHelper.getAuthorizationHeader(req.headers);
 		const contracts = await this.getContracts.execute({sessionToken});
 		return res.json(contracts);
 	}
