@@ -65,9 +65,9 @@ export class App {
 		this.app.use(ErrorMiddleware.handle);
 	}
 
-	public listen() {
-		this.app.listen(3000, () => {
-			console.log('Server started on port 3000');
+	public listen(port = 3000): void {
+		this.app.listen(port, () => {
+			console.log('Server started on port', port);
 		});
 	}
 }
