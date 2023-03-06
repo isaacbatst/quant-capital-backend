@@ -29,7 +29,7 @@ import {GetUserController} from './infra/controllers/GetUserController';
 import {LoginController} from './infra/controllers/LoginController';
 import {ResetPasswordController} from './infra/controllers/ResetPasswordController';
 import {ViewNotificationController} from './infra/controllers/ViewNotification';
-import {EmailGatewayNodemailer} from './infra/gateways/EmailGateway/EmailGatewayNodemailer';
+import {type EmailGateway} from './infra/gateways/EmailGateway/EmailGateway';
 import {AuthMiddleware} from './infra/middlewares/AuthMiddleware';
 import {ErrorMiddleware} from './infra/middlewares/ErrorMiddleware';
 import {RepositoryFactoryFake} from './infra/persistance/repositories/RepositoryFactoryFake';
@@ -40,7 +40,7 @@ import {TokenGeneratorCrypto} from './infra/util/TokenGenerator/TokenGeneratorCr
 export class App {
 	private readonly app: express.Application;
 
-	constructor(appUrl: string) {
+	constructor(appUrl: string, emailGateway: EmailGateway) {
 		this.app = express();
 		this.app.use(express.json());
 
@@ -49,8 +49,6 @@ export class App {
 		const encrypter = new EncrypterBcrypt();
 		const tokenGenerator = new TokenGeneratorCrypto();
 		const idGenerator = new IdGeneratorCrypto();
-		const emailGateway = new EmailGatewayNodemailer();
-
 		const authService = new AuthService(repositoryFactory.accountRepository);
 
 		const login = new Login(repositoryFactory.accountRepository, encrypter, tokenGenerator);
