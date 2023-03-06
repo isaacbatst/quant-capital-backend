@@ -5,6 +5,8 @@ import {ChangePassword} from './app/usecases/ChangePassword';
 import {GetContract} from './app/usecases/GetContract';
 import {GetContracts} from './app/usecases/GetContracts';
 import {GetLastTransactions} from './app/usecases/GetLastTransactions';
+import {GetProduct} from './app/usecases/GetProduct';
+import {GetProducts} from './app/usecases/GetProducts';
 import {GetTransactions} from './app/usecases/GetTransactions';
 import {GetUser} from './app/usecases/GetUser';
 import {Login} from './app/usecases/Login';
@@ -12,6 +14,8 @@ import {ChangePasswordController} from './infra/controllers/ChangePasswordContro
 import {GetContractController} from './infra/controllers/GetContractController';
 import {GetContractsController} from './infra/controllers/GetContractsController';
 import {GetLastTransactionsController} from './infra/controllers/GetLastTransactionsController';
+import {GetProductController} from './infra/controllers/GetProductController';
+import {GetProductsController} from './infra/controllers/GetProductsController';
 import {GetTransactionsController} from './infra/controllers/GetTransactionsController';
 import {GetUserController} from './infra/controllers/GetUserController';
 import {LoginController} from './infra/controllers/LoginController';
@@ -43,6 +47,8 @@ export class App {
 		const getContract = new GetContract(repositoryFactory, authService);
 		const getTransactions = new GetTransactions(repositoryFactory, authService);
 		const getLastTransactions = new GetLastTransactions(repositoryFactory, authService);
+		const getProduct = new GetProduct(repositoryFactory.productRepository, authService);
+		const getProducts = new GetProducts(repositoryFactory, authService);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -51,6 +57,8 @@ export class App {
 		const getContractController = new GetContractController(getContract);
 		const getTransactionsController = new GetTransactionsController(getTransactions);
 		const getLastTransactionsController = new GetLastTransactionsController(getLastTransactions);
+		const getProductController = new GetProductController(getProduct);
+		const getProductsController = new GetProductsController(getProducts);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
 
@@ -61,6 +69,8 @@ export class App {
 		this.app.get('/contract/:id', async (req, res) => getContractController.handle(req, res));
 		this.app.get('/transactions', async (req, res) => getTransactionsController.handle(req, res));
 		this.app.get('/last-transactions', async (req, res) => getLastTransactionsController.handle(req, res));
+		this.app.get('/product/:id', async (req, res) => getProductController.handle(req, res));
+		this.app.get('/products', async (req, res) => getProductsController.handle(req, res));
 
 		this.app.use(ErrorMiddleware.handle);
 	}
