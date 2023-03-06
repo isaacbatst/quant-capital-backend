@@ -32,7 +32,7 @@ describe('ChangePassword', () => {
 		const {changePassword} = makeSut();
 		await expect(async () => {
 			await changePassword.execute({password: 'any-password', sessionToken: 'any-token'});
-		}).rejects.toThrow('ACCOUNT_NOT_FOUND');
+		}).rejects.toThrow('UNAUTHENTICATED');
 	});
 
 	it('should not change account password with invalid password', async () => {

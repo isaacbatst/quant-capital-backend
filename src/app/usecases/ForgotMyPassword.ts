@@ -23,7 +23,6 @@ type Params = {
 
 export class ForgotMyPassword {
 	private readonly passwordResetRequestRepository: PasswordResetRequestRepository;
-	private readonly accountRepository: AccountRepository;
 	private readonly tokenGenerator: TokenGenerator;
 	private readonly emailGateway: EmailGateway;
 	private readonly appUrl: string;
@@ -32,7 +31,6 @@ export class ForgotMyPassword {
 		{appUrl, authService, emailGateway, repositoryFactory, tokenGenerator}: Params,
 	) {
 		this.passwordResetRequestRepository = repositoryFactory.passwordResetRequestRepository;
-		this.accountRepository = repositoryFactory.accountRepository;
 		this.tokenGenerator = tokenGenerator;
 		this.emailGateway = emailGateway;
 		this.appUrl = appUrl;
@@ -49,7 +47,7 @@ export class ForgotMyPassword {
 			token,
 		});
 		const email = PasswordResetRequestEmailGenerator.generate(request.emailAddress, request.token, this.appUrl);
-		await this.emailGateway.send(email);
 		await this.passwordResetRequestRepository.save(request);
+		await this.emailGateway.send(email);
 	}
 }

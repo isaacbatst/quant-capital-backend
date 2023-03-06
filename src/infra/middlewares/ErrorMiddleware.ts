@@ -20,6 +20,7 @@ export class ErrorMiddleware {
 			});
 		}
 
+		console.error(error);
 		return res.status(500).end();
 	}
 

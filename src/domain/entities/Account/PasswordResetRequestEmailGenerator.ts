@@ -7,7 +7,8 @@ export class PasswordResetRequestEmailGenerator {
 	}
 
 	static generate(to: EmailAddress, token: string, appUrl: string): Email {
-		const emailMessage = `Botão com link ${appUrl}/forgot-password?token=${token}`;
+		const link = `${appUrl}/reset-password?token=${token}`;
+		const emailMessage = `<a href="${link}">Clique aqui para redefinir sua senha</a>`;
 		return new Email(
 			to,
 			PasswordResetRequestEmailGenerator.emailSubject,

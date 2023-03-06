@@ -21,6 +21,6 @@ describe('GetProducts', () => {
 
 		return expect(async () => {
 			await getProducts.execute({sessionToken: 'session-token-invalid'});
-		}).rejects.toThrow(new AuthError('ACCOUNT_NOT_FOUND'));
+		}).rejects.toThrow(new AuthError('UNAUTHENTICATED'));
 	});
 });

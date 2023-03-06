@@ -21,7 +21,7 @@ describe('AuthService', () => {
 			const authService = makeSut();
 			return expect(async () => {
 				await authService.getAccountBySessionToken('session-token-invalid');
-			}).rejects.toThrow('ACCOUNT_NOT_FOUND');
+			}).rejects.toThrow('UNAUTHENTICATED');
 		});
 	});
 

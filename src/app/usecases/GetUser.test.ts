@@ -18,6 +18,6 @@ describe('GetUser', () => {
 		const authService = new AuthService(repositoryFactory.accountRepository);
 		return expect(async () => {
 			await authService.getAccountBySessionToken('session-token-invalid');
-		}).rejects.toThrow('ACCOUNT_NOT_FOUND');
+		}).rejects.toThrow('UNAUTHENTICATED');
 	});
 });

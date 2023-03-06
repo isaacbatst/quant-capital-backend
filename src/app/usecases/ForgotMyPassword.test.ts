@@ -31,9 +31,8 @@ describe('ForgotMyPassword', () => {
 		const {forgotMyPassword, repositoryFactory} = makeSut();
 		await forgotMyPassword.execute({email: 'test25@email.com'});
 
-		expect(repositoryFactory.passwordResetRequestRepository.requests).toContainEqual(expect.objectContaining({
-			emailAddress: new EmailAddress('test25@email.com'),
-		}));
+		expect(repositoryFactory.passwordResetRequestRepository.requests).toHaveLength(3);
+		expect(repositoryFactory.passwordResetRequestRepository.requests[2].emailAddress).toEqual(new EmailAddress('test25@email.com'));
 	});
 
 	it('should not save request with unknown email', async () => {

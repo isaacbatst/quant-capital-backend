@@ -2,6 +2,7 @@ import express from 'express';
 import 'express-async-errors';
 import {AuthService} from './app/usecases/AuthService';
 import {ChangePassword} from './app/usecases/ChangePassword';
+import {ForgotMyPassword} from './app/usecases/ForgotMyPassword';
 import {GetContract} from './app/usecases/GetContract';
 import {GetContracts} from './app/usecases/GetContracts';
 import {GetLastTransactions} from './app/usecases/GetLastTransactions';
@@ -14,6 +15,7 @@ import {GetUser} from './app/usecases/GetUser';
 import {Login} from './app/usecases/Login';
 import {ViewNotification} from './app/usecases/ViewNotification';
 import {ChangePasswordController} from './infra/controllers/ChangePasswordController';
+import {ForgotMyPasswordController} from './infra/controllers/ForgotMyPasswordController';
 import {GetContractController} from './infra/controllers/GetContractController';
 import {GetContractsController} from './infra/controllers/GetContractsController';
 import {GetLastTransactionsController} from './infra/controllers/GetLastTransactionsController';
@@ -25,6 +27,7 @@ import {GetUnreadNotificationsCountController} from './infra/controllers/GetUnre
 import {GetUserController} from './infra/controllers/GetUserController';
 import {LoginController} from './infra/controllers/LoginController';
 import {ViewNotificationController} from './infra/controllers/ViewNotification';
+import {EmailGatewayNodemailer} from './infra/gateways/EmailGateway/EmailGatewayNodemailer';
 import {AuthMiddleware} from './infra/middlewares/AuthMiddleware';
 import {ErrorMiddleware} from './infra/middlewares/ErrorMiddleware';
 import {RepositoryFactoryFake} from './infra/persistance/repositories/RepositoryFactoryFake';
@@ -35,7 +38,7 @@ import {TokenGeneratorCrypto} from './infra/util/TokenGenerator/TokenGeneratorCr
 export class App {
 	private readonly app: express.Application;
 
-	constructor() {
+	constructor(appUrl: string) {
 		this.app = express();
 		this.app.use(express.json());
 
@@ -44,6 +47,8 @@ export class App {
 		const encrypter = new EncrypterBcrypt();
 		const tokenGenerator = new TokenGeneratorCrypto();
 		const idGenerator = new IdGeneratorCrypto();
+		const emailGateway = new EmailGatewayNodemailer();
+
 		const authService = new AuthService(repositoryFactory.accountRepository);
 
 		const login = new Login(repositoryFactory.accountRepository, encrypter, tokenGenerator);
@@ -58,6 +63,7 @@ export class App {
 		const getNotifications = new GetNotifications(repositoryFactory.notificationRepository, authService);
 		const getUnreadNotificationsCount = new GetUnreadNotificationsCount(repositoryFactory.notificationRepository, authService);
 		const viewNotification = new ViewNotification(repositoryFactory.notificationRepository, authService);
+		const forgotMyPassword = new ForgotMyPassword({appUrl, authService, repositoryFactory, tokenGenerator, emailGateway});
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -71,8 +77,10 @@ export class App {
 		const getNotificationsController = new GetNotificationsController(getNotifications);
 		const getUnreadNotificationsCountController = new GetUnreadNotificationsCountController(getUnreadNotificationsCount);
 		const viewNotificationController = new ViewNotificationController(viewNotification);
+		const forgotMyPasswordController = new ForgotMyPasswordController(forgotMyPassword);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
+		this.app.post('/forgot-password', async (req, res) => forgotMyPasswordController.handle(req, res));
 
 		this.app.use(AuthMiddleware.handle);
 		this.app.get('/user', async (req, res) => getUserController.handle(req, res));

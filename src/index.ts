@@ -1,5 +1,9 @@
 import {App} from './app';
 
-const app = new App();
+if (!process.env.APP_URL) {
+	throw new Error('APP_URL is not defined');
+}
+
+const app = new App(process.env.APP_URL);
 
 app.listen(Number(process.env.PORT));

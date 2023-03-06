@@ -26,6 +26,6 @@ describe('GetContracts', () => {
 		const getContracts = makeSut();
 		return expect(async () =>
 			getContracts.execute({sessionToken: 'invalid-token'}))
-			.rejects.toThrow(new AuthError('ACCOUNT_NOT_FOUND'));
+			.rejects.toThrow(new AuthError('UNAUTHENTICATED'));
 	});
 });
