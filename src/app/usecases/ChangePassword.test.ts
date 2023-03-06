@@ -21,6 +21,7 @@ describe('ChangePassword', () => {
 	it('should change account password', async () => {
 		const {changePassword, repositoryFactory, encrypter} = makeSut();
 		encrypter.hash = 'new-hash';
+		encrypter.isTheSame = false;
 		await changePassword.execute({password: 'new-password', sessionToken: 'session-token-25'});
 		const account = await repositoryFactory.accountRepository.getBySessionToken('session-token-25');
 		expect(account).toBeDefined();
@@ -35,7 +36,8 @@ describe('ChangePassword', () => {
 	});
 
 	it('should not change account password with invalid password', async () => {
-		const {changePassword} = makeSut();
+		const {changePassword, encrypter} = makeSut();
+		encrypter.isTheSame = false;
 		await expect(async () => {
 			await changePassword.execute({password: 'invalid', sessionToken: 'session-token-25'});
 		}).rejects.toThrow('INVALID_PASSWORD_VALUE');
