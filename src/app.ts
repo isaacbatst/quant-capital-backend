@@ -9,6 +9,7 @@ import {GetNotifications} from './app/usecases/GetNotifications';
 import {GetProduct} from './app/usecases/GetProduct';
 import {GetProducts} from './app/usecases/GetProducts';
 import {GetTransactions} from './app/usecases/GetTransactions';
+import {GetUnreadNotificationsCount} from './app/usecases/GetUnreadNotificationsCount';
 import {GetUser} from './app/usecases/GetUser';
 import {Login} from './app/usecases/Login';
 import {ChangePasswordController} from './infra/controllers/ChangePasswordController';
@@ -19,6 +20,7 @@ import {GetNotificationsController} from './infra/controllers/GetNotifications';
 import {GetProductController} from './infra/controllers/GetProductController';
 import {GetProductsController} from './infra/controllers/GetProductsController';
 import {GetTransactionsController} from './infra/controllers/GetTransactionsController';
+import {GetUnreadNotificationsCountController} from './infra/controllers/GetUnreadNotificationsCountController';
 import {GetUserController} from './infra/controllers/GetUserController';
 import {LoginController} from './infra/controllers/LoginController';
 import {AuthMiddleware} from './infra/middlewares/AuthMiddleware';
@@ -52,6 +54,7 @@ export class App {
 		const getProduct = new GetProduct(repositoryFactory.productRepository, authService);
 		const getProducts = new GetProducts(repositoryFactory, authService);
 		const getNotifications = new GetNotifications(repositoryFactory.notificationRepository, authService);
+		const getUnreadNotificationsCount = new GetUnreadNotificationsCount(repositoryFactory.notificationRepository, authService);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -63,6 +66,7 @@ export class App {
 		const getProductController = new GetProductController(getProduct);
 		const getProductsController = new GetProductsController(getProducts);
 		const getNotificationsController = new GetNotificationsController(getNotifications);
+		const getUnreadNotificationsCountController = new GetUnreadNotificationsCountController(getUnreadNotificationsCount);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
 
@@ -76,6 +80,7 @@ export class App {
 		this.app.get('/product/:id', async (req, res) => getProductController.handle(req, res));
 		this.app.get('/products', async (req, res) => getProductsController.handle(req, res));
 		this.app.get('/notifications', async (req, res) => getNotificationsController.handle(req, res));
+		this.app.get('/unread-notifications-count', async (req, res) => getUnreadNotificationsCountController.handle(req, res));
 
 		this.app.use(ErrorMiddleware.handle);
 	}
