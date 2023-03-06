@@ -1,3 +1,4 @@
+
 import {type Request, type Response} from 'express';
 import {type GetProduct} from '../../app/usecases/GetProduct';
 import {HeadersHelper} from '../util/HeadersHelper';

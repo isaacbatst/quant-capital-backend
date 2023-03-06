@@ -5,6 +5,7 @@ import {ChangePassword} from './app/usecases/ChangePassword';
 import {GetContract} from './app/usecases/GetContract';
 import {GetContracts} from './app/usecases/GetContracts';
 import {GetLastTransactions} from './app/usecases/GetLastTransactions';
+import {GetNotifications} from './app/usecases/GetNotifications';
 import {GetProduct} from './app/usecases/GetProduct';
 import {GetProducts} from './app/usecases/GetProducts';
 import {GetTransactions} from './app/usecases/GetTransactions';
@@ -14,6 +15,7 @@ import {ChangePasswordController} from './infra/controllers/ChangePasswordContro
 import {GetContractController} from './infra/controllers/GetContractController';
 import {GetContractsController} from './infra/controllers/GetContractsController';
 import {GetLastTransactionsController} from './infra/controllers/GetLastTransactionsController';
+import {GetNotificationsController} from './infra/controllers/GetNotifications';
 import {GetProductController} from './infra/controllers/GetProductController';
 import {GetProductsController} from './infra/controllers/GetProductsController';
 import {GetTransactionsController} from './infra/controllers/GetTransactionsController';
@@ -49,6 +51,7 @@ export class App {
 		const getLastTransactions = new GetLastTransactions(repositoryFactory, authService);
 		const getProduct = new GetProduct(repositoryFactory.productRepository, authService);
 		const getProducts = new GetProducts(repositoryFactory, authService);
+		const getNotifications = new GetNotifications(repositoryFactory.notificationRepository, authService);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -59,6 +62,7 @@ export class App {
 		const getLastTransactionsController = new GetLastTransactionsController(getLastTransactions);
 		const getProductController = new GetProductController(getProduct);
 		const getProductsController = new GetProductsController(getProducts);
+		const getNotificationsController = new GetNotificationsController(getNotifications);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
 
@@ -71,6 +75,7 @@ export class App {
 		this.app.get('/last-transactions', async (req, res) => getLastTransactionsController.handle(req, res));
 		this.app.get('/product/:id', async (req, res) => getProductController.handle(req, res));
 		this.app.get('/products', async (req, res) => getProductsController.handle(req, res));
+		this.app.get('/notifications', async (req, res) => getNotificationsController.handle(req, res));
 
 		this.app.use(ErrorMiddleware.handle);
 	}
