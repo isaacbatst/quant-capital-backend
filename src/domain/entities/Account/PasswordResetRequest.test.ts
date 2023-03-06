@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest';
+import {ConflictError} from '../../errors/ConflictError';
 import {EmailAddress} from './EmailAddress';
 import {PasswordResetRequest} from './PasswordResetRequest';
 
@@ -27,5 +28,17 @@ describe('PasswordResetRequest', () => {
 		request.use();
 
 		expect(request.getWasUsed()).toBe(true);
+	});
+
+	it('should not use request if expired', () => {
+		const request = new PasswordResetRequest({
+			token: 'any-token',
+			createdAt: new Date('2022-01-01T00:00:00.000Z'),
+			emailAddress: new EmailAddress('any@email.com'),
+		});
+
+		expect(() => {
+			request.use();
+		}).toThrow(new ConflictError('EXPIRED_PASSWORD_RESET'));
 	});
 });

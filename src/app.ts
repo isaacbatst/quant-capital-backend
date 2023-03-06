@@ -13,6 +13,7 @@ import {GetTransactions} from './app/usecases/GetTransactions';
 import {GetUnreadNotificationsCount} from './app/usecases/GetUnreadNotificationsCount';
 import {GetUser} from './app/usecases/GetUser';
 import {Login} from './app/usecases/Login';
+import {ResetPassword} from './app/usecases/ResetPassword';
 import {ViewNotification} from './app/usecases/ViewNotification';
 import {ChangePasswordController} from './infra/controllers/ChangePasswordController';
 import {ForgotMyPasswordController} from './infra/controllers/ForgotMyPasswordController';
@@ -26,6 +27,7 @@ import {GetTransactionsController} from './infra/controllers/GetTransactionsCont
 import {GetUnreadNotificationsCountController} from './infra/controllers/GetUnreadNotificationsCountController';
 import {GetUserController} from './infra/controllers/GetUserController';
 import {LoginController} from './infra/controllers/LoginController';
+import {ResetPasswordController} from './infra/controllers/ResetPasswordController';
 import {ViewNotificationController} from './infra/controllers/ViewNotification';
 import {EmailGatewayNodemailer} from './infra/gateways/EmailGateway/EmailGatewayNodemailer';
 import {AuthMiddleware} from './infra/middlewares/AuthMiddleware';
@@ -64,6 +66,7 @@ export class App {
 		const getUnreadNotificationsCount = new GetUnreadNotificationsCount(repositoryFactory.notificationRepository, authService);
 		const viewNotification = new ViewNotification(repositoryFactory.notificationRepository, authService);
 		const forgotMyPassword = new ForgotMyPassword({appUrl, authService, repositoryFactory, tokenGenerator, emailGateway});
+		const resetPassword = new ResetPassword(repositoryFactory, encrypter, authService);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -78,9 +81,11 @@ export class App {
 		const getUnreadNotificationsCountController = new GetUnreadNotificationsCountController(getUnreadNotificationsCount);
 		const viewNotificationController = new ViewNotificationController(viewNotification);
 		const forgotMyPasswordController = new ForgotMyPasswordController(forgotMyPassword);
+		const resetPasswordController = new ResetPasswordController(resetPassword);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
 		this.app.post('/forgot-password', async (req, res) => forgotMyPasswordController.handle(req, res));
+		this.app.post('/reset-password', async (req, res) => resetPasswordController.handle(req, res));
 
 		this.app.use(AuthMiddleware.handle);
 		this.app.get('/user', async (req, res) => getUserController.handle(req, res));
