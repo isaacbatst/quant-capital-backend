@@ -11,7 +11,7 @@ export class AuthService {
 	async getAccountBySessionToken(sessionToken: string): Promise<Account> {
 		const account = await this.accountRepository.getBySessionToken(sessionToken);
 		if (!account) {
-			throw new AuthError('ACCOUNT_NOT_FOUND');
+			throw new AuthError('UNAUTHENTICATED');
 		}
 
 		return account;

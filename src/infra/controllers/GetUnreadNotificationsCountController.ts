@@ -9,7 +9,7 @@ export class GetUnreadNotificationsCountController {
 	) {}
 
 	async handle(req: Request, res: Response) {
-		const sessionToken = HeadersHelper.getAuthorizationHeader(req.headers);
+		const sessionToken = HeadersHelper.getSessionToken(req.headers);
 		const count = await this.getUnreadNotificationsCount.execute({sessionToken});
 		return res.json({count});
 	}

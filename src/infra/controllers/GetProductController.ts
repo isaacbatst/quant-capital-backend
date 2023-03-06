@@ -9,7 +9,7 @@ export class GetProductController {
 	) {}
 
 	async handle(req: Request, res: Response) {
-		const sessionToken = HeadersHelper.getAuthorizationHeader(req.headers);
+		const sessionToken = HeadersHelper.getSessionToken(req.headers);
 		const product = await this.getProduct.execute({productId: req.params.id, sessionToken});
 		return res.json(product);
 	}

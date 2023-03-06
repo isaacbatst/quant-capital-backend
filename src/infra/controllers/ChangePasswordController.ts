@@ -18,7 +18,7 @@ export class ChangePasswordController {
 
 	async handle(req: Request, res: Response) {
 		const {password} = await ChangePasswordController.bodySchema.parseAsync(req.body);
-		const sessionToken = HeadersHelper.getAuthorizationHeader(req.headers);
+		const sessionToken = HeadersHelper.getSessionToken(req.headers);
 		await this.changePassword.execute({
 			password,
 			sessionToken,

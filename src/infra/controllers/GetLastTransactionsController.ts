@@ -8,7 +8,7 @@ export class GetLastTransactionsController {
 	) {}
 
 	async handle(req: Request, res: Response) {
-		const sessionToken = HeadersHelper.getAuthorizationHeader(req.headers);
+		const sessionToken = HeadersHelper.getSessionToken(req.headers);
 		const transactions = await this.getLastTransactions.execute({sessionToken});
 		return res.json(transactions);
 	}

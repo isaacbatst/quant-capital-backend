@@ -8,7 +8,7 @@ export class GetUserController {
 	) {}
 
 	async handle(req: Request, res: Response) {
-		const sessionToken = HeadersHelper.getAuthorizationHeader(req.headers);
+		const sessionToken = HeadersHelper.getSessionToken(req.headers);
 		const user = await this.getUser.execute({sessionToken});
 		return res.json(user);
 	}

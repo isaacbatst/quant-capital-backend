@@ -19,7 +19,7 @@ export class GetNotificationsController {
 
 	async handle(req: Request, res: Response) {
 		const {page} = GetNotificationsController.querySchema.parse(req.query);
-		const sessionToken = HeadersHelper.getAuthorizationHeader(req.headers);
+		const sessionToken = HeadersHelper.getSessionToken(req.headers);
 		const notifications = await this.getNotifications.execute({sessionToken, page});
 		return res.json(notifications);
 	}

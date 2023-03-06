@@ -4,7 +4,7 @@ export class AuthMiddleware {
 	static handle(req: Request, res: Response, next: NextFunction) {
 		if (!req.headers.authorization) {
 			return res.status(401).json({
-				error: 'UNAUTHORIZED',
+				error: 'UNAUTHENTICATED',
 			});
 		}
 

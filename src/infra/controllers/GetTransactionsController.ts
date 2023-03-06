@@ -19,7 +19,7 @@ export class GetTransactionsController {
 
 	async handle(req: Request, res: Response) {
 		const {page} = await GetTransactionsController.querySchema.parseAsync(req.query);
-		const sessionToken = HeadersHelper.getAuthorizationHeader(req.headers);
+		const sessionToken = HeadersHelper.getSessionToken(req.headers);
 		const transactions = await this.getTransactions.execute({sessionToken, page});
 		return res.json(transactions);
 	}

@@ -8,7 +8,7 @@ export class GetContractController {
 	) {}
 
 	async handle(req: Request, res: Response) {
-		const sessionToken = HeadersHelper.getAuthorizationHeader(req.headers);
+		const sessionToken = HeadersHelper.getSessionToken(req.headers);
 		const contract = await this.getContract.execute({sessionToken, contractId: req.params.id});
 		return res.json(contract);
 	}
