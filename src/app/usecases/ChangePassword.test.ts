@@ -23,7 +23,7 @@ describe('ChangePassword', () => {
 		encrypter.hash = 'new-hash';
 		encrypter.compare.mockResolvedValueOnce(true);
 		encrypter.compare.mockResolvedValueOnce(false);
-		await changePassword.execute({password: 'new-password', currentPassword: 'current', sessionToken: 'session-token-25'});
+		await changePassword.execute({password: 'new-password', passwordConfirmation: 'new-password', currentPassword: 'current', sessionToken: 'session-token-25'});
 		const account = await repositoryFactory.accountRepository.getBySessionToken('session-token-25');
 		expect(account).toBeDefined();
 		expect(account!.getPasswordHash()).toBe(encrypter.hash);
@@ -32,7 +32,7 @@ describe('ChangePassword', () => {
 	it('should not change account password with unknown session token', async () => {
 		const {changePassword} = makeSut();
 		await expect(async () => {
-			await changePassword.execute({password: 'any-password', currentPassword: 'current', sessionToken: 'any-token'});
+			await changePassword.execute({password: 'any-password', passwordConfirmation: 'any-password', currentPassword: 'current', sessionToken: 'any-token'});
 		}).rejects.toThrow('UNAUTHENTICATED');
 	});
 
@@ -41,7 +41,7 @@ describe('ChangePassword', () => {
 		encrypter.compare.mockResolvedValueOnce(true);
 		encrypter.compare.mockResolvedValueOnce(false);
 		await expect(async () => {
-			await changePassword.execute({password: 'invalid', currentPassword: 'current', sessionToken: 'session-token-25'});
+			await changePassword.execute({password: 'invalid', passwordConfirmation: 'invalid', currentPassword: 'current', sessionToken: 'session-token-25'});
 		}).rejects.toThrow('INVALID_PASSWORD_VALUE');
 	});
 
@@ -50,7 +50,16 @@ describe('ChangePassword', () => {
 		encrypter.compare.mockResolvedValueOnce(false);
 		encrypter.compare.mockResolvedValueOnce(false);
 		await expect(async () => {
-			await changePassword.execute({password: 'any-password', currentPassword: 'current-wrong', sessionToken: 'session-token-25'});
+			await changePassword.execute({password: 'any-password', passwordConfirmation: 'any-password', currentPassword: 'current-wrong', sessionToken: 'session-token-25'});
 		}).rejects.toThrow('INVALID_CURRENT_PASSWORD');
+	});
+
+	it('should not change with invalid confirmation', async () => {
+		const {changePassword, encrypter} = makeSut();
+		encrypter.compare.mockResolvedValueOnce(true);
+		encrypter.compare.mockResolvedValueOnce(false);
+		await expect(async () => {
+			await changePassword.execute({password: 'any-password', passwordConfirmation: 'invalid-confirmation', currentPassword: 'current-wrong', sessionToken: 'session-token-25'});
+		}).rejects.toThrow('INVALID_PASSWORD_CONFIRMATION');
 	});
 });

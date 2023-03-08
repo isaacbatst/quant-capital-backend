@@ -14,6 +14,10 @@ export class ChangePasswordController {
 			invalid_type_error: 'CURRENT_PASSWORD_INVALID_TYPE',
 			required_error: 'CURRENT_PASSWORD_REQUIRED',
 		}),
+		passwordConfirmation: z.string({
+			invalid_type_error: 'PASSWORD_CONFIRMATION_INVALID_TYPE',
+			required_error: 'PASSWORD_CONFIRMATION_REQUIRED',
+		}),
 	});
 
 	constructor(
@@ -21,12 +25,13 @@ export class ChangePasswordController {
 	) {}
 
 	async handle(req: Request, res: Response) {
-		const {password, currentPassword} = await ChangePasswordController.bodySchema.parseAsync(req.body);
+		const {password, currentPassword, passwordConfirmation} = await ChangePasswordController.bodySchema.parseAsync(req.body);
 		const sessionToken = HeadersHelper.getSessionToken(req.headers);
 		await this.changePassword.execute({
 			password,
 			sessionToken,
 			currentPassword,
+			passwordConfirmation,
 		});
 		return res.status(204).end();
 	}

@@ -1,5 +1,6 @@
 import {AuthError} from '../../domain/errors/AuthError';
 import {ConflictError} from '../../domain/errors/ConflictError';
+import {ValidationError} from '../../domain/errors/ValidationError';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type Encrypter} from '../../infra/util/Encrypter/Encrypter';
@@ -8,6 +9,7 @@ import {type AuthService} from './AuthService';
 type Input = {
 	currentPassword: string;
 	password: string;
+	passwordConfirmation: string;
 	sessionToken: string;
 };
 
@@ -23,6 +25,10 @@ export class ChangePassword {
 	}
 
 	async execute(input: Input) {
+		if (input.password !== input.passwordConfirmation) {
+			throw new ValidationError('INVALID_PASSWORD_CONFIRMATION');
+		}
+
 		const account = await this.authService.getAccountBySessionToken(input.sessionToken);
 
 		const isCurrentPasswordCorrect = await this.encrypter.compare(input.currentPassword, account.getPasswordHash());
