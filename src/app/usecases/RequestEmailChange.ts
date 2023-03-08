@@ -1,8 +1,6 @@
 import {EmailChangeRequest} from '../../domain/entities/Account/EmailChangeRequest.';
 import {EmailChangeRequestStatus} from '../../domain/entities/Account/EmailChangeRequestStatus';
-import {AuthError} from '../../domain/errors/AuthError';
 import {ConflictError} from '../../domain/errors/ConflictError';
-import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type EmailChangeRequestRepository} from '../../infra/persistance/repositories/EmailChangeRequestRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type IdGenerator} from '../../infra/util/IdGenerator/IdGenerator';
@@ -13,7 +11,6 @@ type Input = {
 };
 
 export class RequestEmailChange {
-	private readonly accountRepository: AccountRepository;
 	private readonly emailChangeRequestRepository: EmailChangeRequestRepository;
 
 	constructor(
@@ -21,7 +18,6 @@ export class RequestEmailChange {
 		private readonly idGenerator: IdGenerator,
 		private readonly authService: AuthService,
 	) {
-		this.accountRepository = repositoryFactory.accountRepository;
 		this.emailChangeRequestRepository = repositoryFactory.emailChangeRequestRepository;
 	}
 

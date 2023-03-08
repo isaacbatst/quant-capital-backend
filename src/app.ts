@@ -39,6 +39,8 @@ import {TokenGeneratorCrypto} from './infra/util/TokenGenerator/TokenGeneratorCr
 import morgan from 'morgan';
 import {GetRegistrationData} from './app/usecases/GetRegistrationData';
 import {GetRegistrationDataController} from './infra/controllers/GetRegistrationDataController';
+import {RequestEmailChange} from './app/usecases/RequestEmailChange';
+import {RequestEmailChangeController} from './infra/controllers/RequestEmailChangeController';
 
 export class App {
 	private readonly app: express.Application;
@@ -70,6 +72,7 @@ export class App {
 		const forgotMyPassword = new ForgotMyPassword({appUrl, authService, repositoryFactory, tokenGenerator, emailGateway});
 		const resetPassword = new ResetPassword(repositoryFactory, encrypter, authService);
 		const getRegistrationData = new GetRegistrationData(repositoryFactory.accountRepository, authService);
+		const requestEmailChange = new RequestEmailChange(repositoryFactory, idGenerator, authService);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -86,6 +89,7 @@ export class App {
 		const forgotMyPasswordController = new ForgotMyPasswordController(forgotMyPassword);
 		const resetPasswordController = new ResetPasswordController(resetPassword);
 		const getRegistrationDataController = new GetRegistrationDataController(getRegistrationData);
+		const requestEmailChangeController = new RequestEmailChangeController(requestEmailChange);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
 		this.app.post('/forgot-password', async (req, res) => forgotMyPasswordController.handle(req, res));
@@ -104,6 +108,7 @@ export class App {
 		this.app.get('/notifications', async (req, res) => getNotificationsController.handle(req, res));
 		this.app.get('/notifications/unread/count', async (req, res) => getUnreadNotificationsCountController.handle(req, res));
 		this.app.patch('/notifications/:id/view', async (req, res) => viewNotificationController.handle(req, res));
+		this.app.post('/request-email-change', async (req, res) => requestEmailChangeController.handle(req, res));
 
 		this.app.use(ErrorMiddleware.handle);
 	}
