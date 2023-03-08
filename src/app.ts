@@ -37,6 +37,8 @@ import {EncrypterBcrypt} from './infra/util/Encrypter/EncrypterBcrypt';
 import {IdGeneratorCrypto} from './infra/util/IdGenerator/IdGeneratorCrypto';
 import {TokenGeneratorCrypto} from './infra/util/TokenGenerator/TokenGeneratorCrypto';
 import morgan from 'morgan';
+import {GetRegistrationData} from './app/usecases/GetRegistrationData';
+import {GetRegistrationDataController} from './infra/controllers/GetRegistrationDataController';
 
 export class App {
 	private readonly app: express.Application;
@@ -67,6 +69,7 @@ export class App {
 		const viewNotification = new ViewNotification(repositoryFactory.notificationRepository, authService);
 		const forgotMyPassword = new ForgotMyPassword({appUrl, authService, repositoryFactory, tokenGenerator, emailGateway});
 		const resetPassword = new ResetPassword(repositoryFactory, encrypter, authService);
+		const getRegistrationData = new GetRegistrationData(repositoryFactory.accountRepository, authService);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -82,6 +85,7 @@ export class App {
 		const viewNotificationController = new ViewNotificationController(viewNotification);
 		const forgotMyPasswordController = new ForgotMyPasswordController(forgotMyPassword);
 		const resetPasswordController = new ResetPasswordController(resetPassword);
+		const getRegistrationDataController = new GetRegistrationDataController(getRegistrationData);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
 		this.app.post('/forgot-password', async (req, res) => forgotMyPasswordController.handle(req, res));
@@ -90,6 +94,7 @@ export class App {
 		this.app.use(AuthMiddleware.handle);
 		this.app.get('/user', async (req, res) => getUserController.handle(req, res));
 		this.app.patch('/user/change-password', async (req, res) => changePasswordController.handle(req, res));
+		this.app.get('/user/registration-data', async (req, res) => getRegistrationDataController.handle(req, res));
 		this.app.get('/contracts', async (req, res) => getContractsController.handle(req, res));
 		this.app.get('/contract/:id', async (req, res) => getContractController.handle(req, res));
 		this.app.get('/transactions', async (req, res) => getTransactionsController.handle(req, res));
