@@ -36,12 +36,14 @@ import {RepositoryFactoryFake} from './infra/persistance/repositories/Repository
 import {EncrypterBcrypt} from './infra/util/Encrypter/EncrypterBcrypt';
 import {IdGeneratorCrypto} from './infra/util/IdGenerator/IdGeneratorCrypto';
 import {TokenGeneratorCrypto} from './infra/util/TokenGenerator/TokenGeneratorCrypto';
+import morgan from 'morgan';
 
 export class App {
 	private readonly app: express.Application;
 
 	constructor(appUrl: string, emailGateway: EmailGateway) {
 		this.app = express();
+		this.app.use(morgan('combined'));
 		this.app.use(express.json());
 
 		const repositoryFactory = new RepositoryFactoryFake();
