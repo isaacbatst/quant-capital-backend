@@ -1,5 +1,6 @@
 import {type Contract} from '../../domain/entities/Contract/Contract';
 import {type ContractRateType} from '../../domain/entities/Contract/ContractRate';
+import {type ContractTransactionType} from '../../domain/entities/Contract/ContractTransaction';
 import {type ContractVersion, type ContractVersionTransactions, type ContractVersionType} from '../../domain/entities/Contract/ContractVersion';
 import {AuthError} from '../../domain/errors/AuthError';
 import {NotFoundError} from '../../domain/errors/NotFoundError';
@@ -17,6 +18,7 @@ type OutputTransaction = {
 	id: string;
 	date: string;
 	value: number;
+	type: ContractTransactionType;
 };
 
 type OutputVersion = {
@@ -106,11 +108,13 @@ export class GetContract {
 			id: transactions.initial.getId(),
 			date: transactions.initial.getDate().toISOString(),
 			value: transactions.initial.getValue(),
+			type: transactions.initial.getType(),
 		};
 		const otherTransactions = transactions.others.map(transaction => ({
 			id: transaction.getId(),
 			date: transaction.getDate().toISOString(),
 			value: transaction.getValue(),
+			type: transactions.initial.getType(),
 		}));
 		return {
 			initial: initialTransaction,
