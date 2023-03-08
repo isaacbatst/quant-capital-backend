@@ -114,7 +114,7 @@ export class GetContract {
 			id: transaction.getId(),
 			date: transaction.getDate().toISOString(),
 			value: transaction.getValue(),
-			type: transactions.initial.getType(),
+			type: transaction.getType(),
 		}));
 		return {
 			initial: initialTransaction,
