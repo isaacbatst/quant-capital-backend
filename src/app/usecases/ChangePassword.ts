@@ -1,3 +1,4 @@
+import {AuthError} from '../../domain/errors/AuthError';
 import {ConflictError} from '../../domain/errors/ConflictError';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
@@ -5,6 +6,7 @@ import {type Encrypter} from '../../infra/util/Encrypter/Encrypter';
 import {type AuthService} from './AuthService';
 
 type Input = {
+	currentPassword: string;
 	password: string;
 	sessionToken: string;
 };
@@ -23,9 +25,15 @@ export class ChangePassword {
 	async execute(input: Input) {
 		const account = await this.authService.getAccountBySessionToken(input.sessionToken);
 
-		const isTheSame = await this.encrypter.compare(input.password, account.getPasswordHash());
+		const isCurrentPasswordCorrect = await this.encrypter.compare(input.currentPassword, account.getPasswordHash());
 
-		if (isTheSame) {
+		if (!isCurrentPasswordCorrect) {
+			throw new AuthError('INVALID_CURRENT_PASSWORD');
+		}
+
+		const isNewPasswordEqual = await this.encrypter.compare(input.password, account.getPasswordHash());
+
+		if (isNewPasswordEqual) {
 			throw new ConflictError('EQUAL_PASSWORD');
 		}
 
