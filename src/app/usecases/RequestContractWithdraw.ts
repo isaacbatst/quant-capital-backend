@@ -1,8 +1,6 @@
 import {ContractWithdrawRequest} from '../../domain/entities/Contract/ContractWithdrawRequest';
-import {AuthError} from '../../domain/errors/AuthError';
 import {NotFoundError} from '../../domain/errors/NotFoundError';
 import {ValidationError} from '../../domain/errors/ValidationError';
-import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository';
 import {type ContractWithdrawRequestRepository} from '../../infra/persistance/repositories/ContractWithdrawRequestRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
@@ -30,6 +28,10 @@ export class RequestContractWithdraw {
 	}
 
 	async execute(input: Input) {
+		if (input.value <= 0) {
+			throw new ValidationError('INVALID_WITHDRAW_VALUE');
+		}
+
 		const account = await this.authService.getAccountBySessionToken(input.sessionToken);
 		const contract = await this.contractRepository.getById(input.contractId, account.getId());
 
