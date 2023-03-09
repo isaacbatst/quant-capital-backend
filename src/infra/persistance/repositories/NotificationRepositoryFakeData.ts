@@ -1,5 +1,6 @@
 import {type Notification} from '../../../domain/entities/Notification/Notification';
 import {NotificationBasic} from '../../../domain/entities/Notification/NotificationBasic';
+import {NotificationNavigator} from '../../../domain/entities/Notification/NotificationNavigator';
 
 export class NotificationRepositoryFakeData {
 	static get notifications(): Array<{notification: Notification; isViewed: boolean}> {
@@ -15,30 +16,43 @@ export class NotificationRepositoryFakeData {
 				isViewed: true,
 			},
 			{
-				notification: new NotificationBasic({
+				notification: new NotificationNavigator({
 					id: '2',
-					title: 'Title 2',
-					body: 'Body 2',
 					createdAt: new Date('2022-02-02T00:00:00.000Z'),
 					to: ['25', '62'],
+					title: 'Confira nossos produtos!',
+					body: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+					payload: {
+						to: 'products',
+					},
 				}),
 				isViewed: false,
 			},
 			{
-				notification: new NotificationBasic({
+				notification: new NotificationNavigator({
 					id: '3',
-					title: 'Title 3',
-					body: 'Body 3',
+					title: 'Abra a página do google!',
+					body: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+					payload: {
+						to: 'https://www.google.com',
+						external: true,
+					},
 					createdAt: new Date('2022-02-02T00:00:00.000Z'),
 					to: ['25', '62'],
 				}),
 				isViewed: false,
 			},
 			{
-				notification: new NotificationBasic({
+				notification: new NotificationNavigator({
 					id: '4',
-					title: 'Title 4',
-					body: 'Body 4',
+					title: 'Agora você pode investir em CDB',
+					body: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+					payload: {
+						to: 'product',
+						params: {
+							id: '1',
+						},
+					},
 					createdAt: new Date('2022-02-02T00:00:00.000Z'),
 					to: ['25', '62'],
 				}),
