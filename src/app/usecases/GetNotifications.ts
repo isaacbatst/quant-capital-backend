@@ -1,4 +1,5 @@
 import {type NotificationType} from '../../domain/entities/Notification/Notification';
+import {NotificationNavigator} from '../../domain/entities/Notification/NotificationNavigator';
 import {type NotificationRepository} from '../../infra/persistance/repositories/NotificationRepository';
 import {type AuthService} from './AuthService';
 
@@ -65,11 +66,18 @@ export class GetNotifications {
 			const notification = clientNotification.getNotification();
 			const isViewed = clientNotification.getIsViewed();
 
+			let payload: Record<string, unknown> = {};
+
+			if (notification instanceof NotificationNavigator) {
+				payload = notification.getPayload();
+			}
+
 			return ({
 				type: notification.getType(),
 				id: notification.getId(),
 				title: notification.getTitle(),
 				body: notification.getBody(),
+				payload,
 				isViewed,
 			});
 		});
