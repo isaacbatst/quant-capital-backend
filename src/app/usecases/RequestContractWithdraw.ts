@@ -1,9 +1,11 @@
 import {ContractWithdrawRequest} from '../../domain/entities/Contract/ContractWithdrawRequest';
+import {AuthError} from '../../domain/errors/AuthError';
 import {NotFoundError} from '../../domain/errors/NotFoundError';
 import {ValidationError} from '../../domain/errors/ValidationError';
 import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository';
 import {type ContractWithdrawRequestRepository} from '../../infra/persistance/repositories/ContractWithdrawRequestRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
+import {type Encrypter} from '../../infra/util/Encrypter/Encrypter';
 import {type IdGenerator} from '../../infra/util/IdGenerator/IdGenerator';
 import {type AuthService} from './AuthService';
 
@@ -22,6 +24,7 @@ export class RequestContractWithdraw {
 		repositoryFactory: RepositoryFactory,
 		private readonly idGenerator: IdGenerator,
 		private readonly authService: AuthService,
+		private readonly encrypter: Encrypter,
 	) {
 		this.contractWithdrawRequestRepository = repositoryFactory.contractWithdrawRequestRepository;
 		this.contractRepository = repositoryFactory.contractRepository;
@@ -33,6 +36,13 @@ export class RequestContractWithdraw {
 		}
 
 		const account = await this.authService.getAccountBySessionToken(input.sessionToken);
+
+		const isCorrectPassword = await this.encrypter.compare(input.numericPassword, account.getNumericPasswordHash());
+
+		if (!isCorrectPassword) {
+			throw new AuthError('INVALID_PASSWORD');
+		}
+
 		const contract = await this.contractRepository.getById(input.contractId, account.getId());
 
 		if (!contract) {

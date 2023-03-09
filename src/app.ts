@@ -75,7 +75,7 @@ export class App {
 		const resetPassword = new ResetPassword(repositoryFactory, encrypter, authService);
 		const getRegistrationData = new GetRegistrationData(repositoryFactory.accountRepository, authService);
 		const requestEmailChange = new RequestEmailChange(repositoryFactory, idGenerator, authService);
-		const requestContractWithdraw = new RequestContractWithdraw(repositoryFactory, idGenerator, authService);
+		const requestContractWithdraw = new RequestContractWithdraw(repositoryFactory, idGenerator, authService, encrypter);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -113,7 +113,7 @@ export class App {
 		this.app.get('/notifications/unread/count', async (req, res) => getUnreadNotificationsCountController.handle(req, res));
 		this.app.patch('/notifications/:id/view', async (req, res) => viewNotificationController.handle(req, res));
 		this.app.post('/request-email-change', async (req, res) => requestEmailChangeController.handle(req, res));
-		this.app.post('/request-contract-withdraw', async (req, res) => requestContractWithdrawController.handle(req, res));
+		this.app.post('/contract/:contractId/request-withdraw', async (req, res) => requestContractWithdrawController.handle(req, res));
 
 		this.app.use(ErrorMiddleware.handle);
 	}

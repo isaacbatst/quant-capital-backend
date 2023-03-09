@@ -6,10 +6,6 @@ import {HeadersHelper} from '../util/HeadersHelper';
 
 export class RequestContractWithdrawController {
 	static bodySchema = z.object({
-		contractId: z.string({
-			required_error: 'CONTRACT_ID_REQUIRED',
-			invalid_type_error: 'CONTRACT_ID_INVALID_TYPE',
-		}),
 		numericPassword: z.string({
 			required_error: 'NUMERIC_PASSWORD_REQUIRED',
 			invalid_type_error: 'NUMERIC_PASSWORD_INVALID_TYPE',
@@ -25,11 +21,10 @@ export class RequestContractWithdrawController {
 	) {}
 
 	async handle(req: Request, res: Response) {
-		const {contractId, numericPassword, value} = await RequestContractWithdrawController.bodySchema.parseAsync(req.body);
+		const {numericPassword, value} = await RequestContractWithdrawController.bodySchema.parseAsync(req.body);
 		const sessionToken = HeadersHelper.getSessionToken(req.headers);
-
 		await this.requestContractWithdraw.execute({
-			contractId,
+			contractId: req.params.contractId,
 			numericPassword,
 			sessionToken,
 			value,

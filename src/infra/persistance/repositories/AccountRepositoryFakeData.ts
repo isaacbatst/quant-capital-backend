@@ -15,7 +15,7 @@ export class AccountRepositoryFakeData {
 					id: '25',
 					email: new EmailAddress('test25@email.com'),
 					passwordHash: '$2b$10$m7fi0dhDaXA9skOAnOYQ8eIa76eAlufvyWD4EKeNMVv/cdG8b2v92', // 123
-					numericPasswordHash: 'numeric-hash',
+					numericPasswordHash: '$2b$10$2tFdJovvhzZTQcEJDrBqNueXjbYUXtGF0AQmksAldkG9u178PBmcO', // 120943
 					name: 'Cliente 25',
 				}),
 				sessionTokens: ['session-token-25'],
@@ -39,7 +39,7 @@ export class AccountRepositoryFakeData {
 					name: 'Cliente 62',
 					email: new EmailAddress('test62@email.com'),
 					passwordHash: 'password-hash',
-					numericPasswordHash: 'numeric-hash',
+					numericPasswordHash: '$2b$10$2tFdJovvhzZTQcEJDrBqNueXjbYUXtGF0AQmksAldkG9u178PBmcO', // 120943
 				}),
 				sessionTokens: ['session-token-62'],
 				pushTokens: ['push-token-62-a', 'push-token-62-b'],
