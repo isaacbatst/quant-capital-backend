@@ -16,7 +16,7 @@ export class AccountRepositoryFakeData {
 					email: new EmailAddress('test25@email.com'),
 					passwordHash: '$2b$10$m7fi0dhDaXA9skOAnOYQ8eIa76eAlufvyWD4EKeNMVv/cdG8b2v92', // 123
 					numericPasswordHash: '$2b$10$2tFdJovvhzZTQcEJDrBqNueXjbYUXtGF0AQmksAldkG9u178PBmcO', // 120943
-					name: 'Cliente 25',
+					name: 'Caio Oliveira',
 				}),
 				sessionTokens: ['session-token-25'],
 				pushTokens: ['push-token-25'],
