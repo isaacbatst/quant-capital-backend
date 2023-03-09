@@ -116,7 +116,7 @@ export class ContractRepositoryFakeData {
 						readjustmentDate: new Date('2022-09-09'),
 						startDate: new Date('2022-09-11'),
 						dueDate: new Date('2023-09-11'),
-						balance: 0,
+						balance: 10000,
 						rate: new ContractRate(2, 'perMonth'),
 						otherTransactions: [
 							new ContractTransaction({
