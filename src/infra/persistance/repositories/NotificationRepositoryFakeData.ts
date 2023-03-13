@@ -50,7 +50,7 @@ export class NotificationRepositoryFakeData {
 					payload: {
 						to: 'product',
 						params: {
-							id: '1',
+							id: 'product-id-1',
 						},
 					},
 					createdAt: new Date('2022-02-02T00:00:00.000Z'),
