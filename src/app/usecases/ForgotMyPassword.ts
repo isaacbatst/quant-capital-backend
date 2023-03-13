@@ -1,9 +1,7 @@
 import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
 import {PasswordResetRequest} from '../../domain/entities/Account/PasswordResetRequest';
 import {PasswordResetRequestEmailGenerator} from '../../domain/entities/Account/PasswordResetRequestEmailGenerator';
-import {AuthError} from '../../domain/errors/AuthError';
 import {type EmailGateway} from '../../infra/gateways/EmailGateway/EmailGateway';
-import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
 import {type PasswordResetRequestRepository} from '../../infra/persistance/repositories/PasswordResetRequestRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type TokenGenerator} from '../../infra/util/TokenGenerator/TokenGenerator';

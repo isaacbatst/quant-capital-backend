@@ -1,9 +1,11 @@
 import express from 'express';
 import 'express-async-errors';
 import morgan from 'morgan';
+import path from 'path';
 import {AuthService} from './app/usecases/AuthService';
 import {ChangePassword} from './app/usecases/ChangePassword';
 import {ForgotMyPassword} from './app/usecases/ForgotMyPassword';
+import {GetCarouselBanners} from './app/usecases/GetCarouselBanners';
 import {GetContract} from './app/usecases/GetContract';
 import {GetContracts} from './app/usecases/GetContracts';
 import {GetContributionsWhatsapp} from './app/usecases/GetContributionsWhatsapp';
@@ -25,6 +27,7 @@ import {UpdateNotificationSettings} from './app/usecases/UpdateNotificationSetti
 import {ViewNotification} from './app/usecases/ViewNotification';
 import {ChangePasswordController} from './infra/controllers/ChangePasswordController';
 import {ForgotMyPasswordController} from './infra/controllers/ForgotMyPasswordController';
+import {GetCarouselBannersController} from './infra/controllers/GetCarouselBannersController';
 import {GetContractController} from './infra/controllers/GetContractController';
 import {GetContractsController} from './infra/controllers/GetContractsController';
 import {GetContributionsWhatsappController} from './infra/controllers/GetContributionsWhatsappController';
@@ -59,6 +62,7 @@ export class App {
 		this.app = express();
 		this.app.use(morgan('combined'));
 		this.app.use(express.json());
+		this.app.use('/', express.static(path.join(__dirname, 'static', 'images')));
 
 		const repositoryFactory = new RepositoryFactoryFake();
 
@@ -88,6 +92,7 @@ export class App {
 		const updateNotificationSettings = new UpdateNotificationSettings(authService);
 		const getContributionsWhatsapp = new GetContributionsWhatsapp(authService);
 		const getCustomerService = new GetCustomerService(authService);
+		const getCarouselBanners = new GetCarouselBanners(authService, appUrl);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -110,6 +115,7 @@ export class App {
 		const updateNotificationSettingsController = new UpdateNotificationSettingsController(updateNotificationSettings);
 		const getContributionsWhatsappController = new GetContributionsWhatsappController(getContributionsWhatsapp);
 		const getCustomerServiceController = new GetCustomerServiceController(getCustomerService);
+		const getCarouselBannersController = new GetCarouselBannersController(getCarouselBanners);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
 		this.app.post('/forgot-password', async (req, res) => forgotMyPasswordController.handle(req, res));
@@ -134,6 +140,7 @@ export class App {
 		this.app.patch('/notifications/:id/view', async (req, res) => viewNotificationController.handle(req, res));
 		this.app.get('/whatsapp/contributions', async (req, res) => getContributionsWhatsappController.handle(req, res));
 		this.app.get('/customer-service', async (req, res) => getCustomerServiceController.handle(req, res));
+		this.app.get('/banners-carousel', async (req, res) => getCarouselBannersController.handle(req, res));
 
 		this.app.use(ErrorMiddleware.handle);
 	}
