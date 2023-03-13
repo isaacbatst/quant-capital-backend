@@ -6,7 +6,7 @@ import {ChangePassword} from './ChangePassword';
 
 const makeSut = () => {
 	const encrypter = new EncrypterFake();
-	const repositoryFactory = new RepositoryFactoryFake();
+	const repositoryFactory = new RepositoryFactoryFake('http://test.url');
 	const authService = new AuthService(repositoryFactory.accountRepository);
 	const changePassword = new ChangePassword(repositoryFactory, encrypter, authService);
 

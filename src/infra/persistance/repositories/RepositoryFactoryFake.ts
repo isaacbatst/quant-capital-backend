@@ -14,6 +14,10 @@ export class RepositoryFactoryFake implements RepositoryFactory {
 	emailChangeRequestRepository: EmailChangeRequestRepository = new EmailChangeRequestRepositoryFake();
 	contractWithdrawRequestRepository: ContractWithdrawRequestRepositoryFake = new ContractWithdrawRequestRepositoryFake();
 	contractRepository: ContractRepositoryFake = new ContractRepositoryFake();
-	productRepository: ProductRepositoryFake = new ProductRepositoryFake();
 	notificationRepository: NotificationRepositoryFake = new NotificationRepositoryFake();
+	productRepository: ProductRepositoryFake;
+
+	constructor(appUrl: string) {
+		this.productRepository = new ProductRepositoryFake(appUrl);
+	}
 }

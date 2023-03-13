@@ -64,7 +64,7 @@ export class App {
 		this.app.use(express.json());
 		this.app.use('/', express.static(path.join(__dirname, 'static', 'images')));
 
-		const repositoryFactory = new RepositoryFactoryFake();
+		const repositoryFactory = new RepositoryFactoryFake(appUrl);
 
 		const encrypter = new EncrypterBcrypt();
 		const tokenGenerator = new TokenGeneratorCrypto();

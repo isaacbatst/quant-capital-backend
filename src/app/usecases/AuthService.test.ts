@@ -4,7 +4,7 @@ import {RepositoryFactoryFake} from '../../infra/persistance/repositories/Reposi
 import {AuthService} from './AuthService';
 
 const makeSut = () => {
-	const repositoryFactory = new RepositoryFactoryFake();
+	const repositoryFactory = new RepositoryFactoryFake('http://test.url');
 	const authService = new AuthService(repositoryFactory.accountRepository);
 	return authService;
 };

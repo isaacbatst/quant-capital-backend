@@ -9,7 +9,7 @@ export class ProductRepositoryFake implements ProductRepository {
 			id: 'product-id-1',
 			name: 'product-name-1',
 			shortDescription: 'product-description-1',
-			imageSrc: 'product-image-src-1',
+			imageSrc: `${this.appUrl}/banner_1.jpg`,
 			description: 'product-description-1',
 			contact: new ProductContact({
 				email: new EmailAddress('product-contact-email-1@email.com'),
@@ -21,7 +21,7 @@ export class ProductRepositoryFake implements ProductRepository {
 			id: 'product-id-2',
 			name: 'product-name-2',
 			shortDescription: 'product-description-2',
-			imageSrc: 'product-image-src-2',
+			imageSrc: `${this.appUrl}/banner_1.jpg`,
 			description: 'product-description-2',
 			contact: new ProductContact({
 				email: new EmailAddress('product-contact-email-2@email.com'),
@@ -30,6 +30,10 @@ export class ProductRepositoryFake implements ProductRepository {
 			}),
 		}),
 	];
+
+	constructor(
+		private readonly appUrl: string,
+	) {}
 
 	async getAll(): Promise<Product[]> {
 		return this.products;

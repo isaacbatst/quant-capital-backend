@@ -5,7 +5,7 @@ import {GetLastTransactions} from './GetLastTransactions';
 
 describe('GetLastTransactions', () => {
 	it('should get client last transactions', async () => {
-		const repositoryFactory = new RepositoryFactoryFake();
+		const repositoryFactory = new RepositoryFactoryFake('http://test.url');
 		const authService = new AuthService(repositoryFactory.accountRepository);
 		const getTransactions = new GetLastTransactions(repositoryFactory, authService);
 		const transactions = await getTransactions.execute({

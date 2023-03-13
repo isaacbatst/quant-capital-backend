@@ -6,7 +6,7 @@ import {AuthService} from './AuthService';
 import {RequestContractWithdraw} from './RequestContractWithdraw';
 
 const makeSut = () => {
-	const repositoryFactory = new RepositoryFactoryFake();
+	const repositoryFactory = new RepositoryFactoryFake('http://test.url');
 	const idGenerator = new IdGeneratorFake();
 	const authService = new AuthService(repositoryFactory.accountRepository);
 	const encrypter = new EncrypterFake();

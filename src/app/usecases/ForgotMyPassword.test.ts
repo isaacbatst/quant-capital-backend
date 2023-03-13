@@ -10,7 +10,7 @@ import {ForgotMyPassword} from './ForgotMyPassword';
 const makeSut = () => {
 	const tokenGenerator = new TokenGeneratorFake();
 	const emailGateway = new EmailGatewayFake();
-	const repositoryFactory = new RepositoryFactoryFake();
+	const repositoryFactory = new RepositoryFactoryFake('http://test.url');
 	const authService = new AuthService(repositoryFactory.accountRepository);
 	const forgotMyPassword = new ForgotMyPassword({
 		repositoryFactory,

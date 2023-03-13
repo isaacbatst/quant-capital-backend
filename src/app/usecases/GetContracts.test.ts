@@ -5,7 +5,7 @@ import {AuthService} from './AuthService';
 import {GetContracts} from './GetContracts';
 
 const makeSut = () => {
-	const repositoryFactory = new RepositoryFactoryFake();
+	const repositoryFactory = new RepositoryFactoryFake('http://test.url');
 	const authService = new AuthService(repositoryFactory.accountRepository);
 	const getContracts = new GetContracts(repositoryFactory, authService);
 	return getContracts;
@@ -18,7 +18,7 @@ describe('GetContracts', () => {
 		expect(contracts).toHaveLength(2);
 		expect(contracts[0].id).toEqual('11');
 		expect(contracts[0].date).toEqual('2020-10-09T00:00:00.000Z');
-		expect(contracts[0].balance).toEqual(0);
+		expect(contracts[0].balance).toEqual(10000);
 		expect(contracts[0].clientId).toEqual('25');
 	});
 

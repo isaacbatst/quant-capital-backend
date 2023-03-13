@@ -6,7 +6,7 @@ import {GetProducts} from './GetProducts';
 
 describe('GetProducts', () => {
 	it('should return products', async () => {
-		const repository = new RepositoryFactoryFake();
+		const repository = new RepositoryFactoryFake('http://test.url');
 		const authService = new AuthService(repository.accountRepository);
 		const getProducts = new GetProducts(repository, authService);
 		const products = await getProducts.execute({sessionToken: 'session-token-25'});
@@ -15,7 +15,7 @@ describe('GetProducts', () => {
 	});
 
 	it('should not return if user is not logged in', async () => {
-		const repository = new RepositoryFactoryFake();
+		const repository = new RepositoryFactoryFake('http://test.url');
 		const authService = new AuthService(repository.accountRepository);
 		const getProducts = new GetProducts(repository, authService);
 

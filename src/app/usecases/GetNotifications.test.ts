@@ -6,7 +6,7 @@ import {GetNotifications} from './GetNotifications';
 
 describe('GetNotifications', () => {
 	it('should get client page 1 notifications', async () => {
-		const repositoryFactory = new RepositoryFactoryFake();
+		const repositoryFactory = new RepositoryFactoryFake('http://test.url');
 		const notificationRepository = new NotificationRepositoryFake();
 		const authService = new AuthService(repositoryFactory.accountRepository);
 		const getNotifications = new GetNotifications(notificationRepository, authService);
@@ -22,7 +22,7 @@ describe('GetNotifications', () => {
 	});
 
 	it('should get client page 2 notifications', async () => {
-		const repositoryFactory = new RepositoryFactoryFake();
+		const repositoryFactory = new RepositoryFactoryFake('http://test.url');
 		const notificationRepository = new NotificationRepositoryFake();
 		const authService = new AuthService(repositoryFactory.accountRepository);
 		const getNotifications = new GetNotifications(notificationRepository, authService);

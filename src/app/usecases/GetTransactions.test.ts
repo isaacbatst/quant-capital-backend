@@ -5,7 +5,7 @@ import {GetTransactions} from './GetTransactions';
 
 describe('GetTransactions', () => {
 	it('should get client page 1 transactions', async () => {
-		const repositoryFactory = new RepositoryFactoryFake();
+		const repositoryFactory = new RepositoryFactoryFake('http://test.url');
 		const authService = new AuthService(repositoryFactory.accountRepository);
 		const getTransactions = new GetTransactions(repositoryFactory, authService);
 		const transactions = await getTransactions.execute({
@@ -18,7 +18,7 @@ describe('GetTransactions', () => {
 	});
 
 	it('should get client page 2 transactions', async () => {
-		const repositoryFactory = new RepositoryFactoryFake();
+		const repositoryFactory = new RepositoryFactoryFake('http://test.url');
 		const authService = new AuthService(repositoryFactory.accountRepository);
 		const getTransactions = new GetTransactions(repositoryFactory, authService);
 		const transactions = await getTransactions.execute({

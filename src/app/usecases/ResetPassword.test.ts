@@ -6,7 +6,7 @@ import {AuthService} from './AuthService';
 import {ResetPassword} from './ResetPassword';
 
 const makeSut = () => {
-	const repositoryFactory = new RepositoryFactoryFake();
+	const repositoryFactory = new RepositoryFactoryFake('http://test.url');
 	const encrypter = new EncrypterFake();
 	const authService = new AuthService(repositoryFactory.accountRepository);
 	const resetPassword = new ResetPassword(repositoryFactory, encrypter, authService);

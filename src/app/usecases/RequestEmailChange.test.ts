@@ -7,7 +7,7 @@ import {AuthService} from './AuthService';
 import {RequestEmailChange} from './RequestEmailChange';
 
 const makeSut = () => {
-	const repositoryFactory = new RepositoryFactoryFake();
+	const repositoryFactory = new RepositoryFactoryFake('http://test.url');
 	const idGenerator = new IdGeneratorFake();
 	const authService = new AuthService(repositoryFactory.accountRepository);
 	const requestEmailChange = new RequestEmailChange(repositoryFactory, idGenerator, authService);
