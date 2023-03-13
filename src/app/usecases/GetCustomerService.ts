@@ -11,8 +11,9 @@ export class GetCustomerService {
 
 		return {
 			email: 'contato@email.com',
-			tel: '558433333333',
-			whatsapp: '558488888888',
+			tel: '84 4002-0001',
+			whatsapp: '+55 84 98740-2216',
+			address: 'Rua Seridó, 344, Petrópolis, Natal - RN, 59020-010',
 		};
 	}
 }
