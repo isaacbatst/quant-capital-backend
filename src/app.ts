@@ -6,6 +6,7 @@ import {ChangePassword} from './app/usecases/ChangePassword';
 import {ForgotMyPassword} from './app/usecases/ForgotMyPassword';
 import {GetContract} from './app/usecases/GetContract';
 import {GetContracts} from './app/usecases/GetContracts';
+import {GetContributionsWhatsapp} from './app/usecases/GetContributionsWhatsapp';
 import {GetLastTransactions} from './app/usecases/GetLastTransactions';
 import {GetNotifications} from './app/usecases/GetNotifications';
 import {GetNotificationsSettings} from './app/usecases/GetNotificationsSettings';
@@ -25,6 +26,7 @@ import {ChangePasswordController} from './infra/controllers/ChangePasswordContro
 import {ForgotMyPasswordController} from './infra/controllers/ForgotMyPasswordController';
 import {GetContractController} from './infra/controllers/GetContractController';
 import {GetContractsController} from './infra/controllers/GetContractsController';
+import {GetContributionsWhatsappController} from './infra/controllers/GetContributionsWhatsappController';
 import {GetLastTransactionsController} from './infra/controllers/GetLastTransactionsController';
 import {GetNotificationsController} from './infra/controllers/GetNotifications';
 import {GetNotificationSettingsController} from './infra/controllers/GetNotificationSettingsController';
@@ -82,6 +84,7 @@ export class App {
 		const requestContractWithdraw = new RequestContractWithdraw(repositoryFactory, idGenerator, authService, encrypter);
 		const getNotificationSettings = new GetNotificationsSettings(authService);
 		const updateNotificationSettings = new UpdateNotificationSettings(authService);
+		const getContributionsWhatsapp = new GetContributionsWhatsapp(authService);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -102,6 +105,7 @@ export class App {
 		const requestContractWithdrawController = new RequestContractWithdrawController(requestContractWithdraw);
 		const getNotificationSettingsController = new GetNotificationSettingsController(getNotificationSettings);
 		const updateNotificationSettingsController = new UpdateNotificationSettingsController(updateNotificationSettings);
+		const getContributionsWhatsappController = new GetContributionsWhatsappController(getContributionsWhatsapp);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
 		this.app.post('/forgot-password', async (req, res) => forgotMyPasswordController.handle(req, res));
@@ -124,6 +128,7 @@ export class App {
 		this.app.get('/notifications', async (req, res) => getNotificationsController.handle(req, res));
 		this.app.get('/notifications/unread/count', async (req, res) => getUnreadNotificationsCountController.handle(req, res));
 		this.app.patch('/notifications/:id/view', async (req, res) => viewNotificationController.handle(req, res));
+		this.app.get('/whatsapp/contributions', async (req, res) => getContributionsWhatsappController.handle(req, res));
 
 		this.app.use(ErrorMiddleware.handle);
 	}
