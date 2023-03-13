@@ -89,4 +89,13 @@ export class AccountRepositoryFake implements AccountRepository {
 		return this.accounts
 			.flatMap(({pushTokens}) => pushTokens ?? []);
 	}
+
+	async removeSessionToken(accountId: string, sessionToken: string): Promise<void> {
+		const account = this.accounts.find(account => account.account.getId() === accountId);
+		if (!account) {
+			throw new NotFoundError('ACCOUNT_NOT_FOUND');
+		}
+
+		account.sessionTokens = account.sessionTokens.filter(token => token !== sessionToken);
+	}
 }

@@ -20,6 +20,7 @@ import {GetTransactions} from './app/usecases/GetTransactions';
 import {GetUnreadNotificationsCount} from './app/usecases/GetUnreadNotificationsCount';
 import {GetUser} from './app/usecases/GetUser';
 import {Login} from './app/usecases/Login';
+import {Logout} from './app/usecases/Logout';
 import {RequestContractWithdraw} from './app/usecases/RequestContractWithdraw';
 import {RequestEmailChange} from './app/usecases/RequestEmailChange';
 import {ResetPassword} from './app/usecases/ResetPassword';
@@ -42,6 +43,7 @@ import {GetTransactionsController} from './infra/controllers/GetTransactionsCont
 import {GetUnreadNotificationsCountController} from './infra/controllers/GetUnreadNotificationsCountController';
 import {GetUserController} from './infra/controllers/GetUserController';
 import {LoginController} from './infra/controllers/LoginController';
+import {LogoutController} from './infra/controllers/LogoutController';
 import {RequestContractWithdrawController} from './infra/controllers/RequestContractWithdrawController';
 import {RequestEmailChangeController} from './infra/controllers/RequestEmailChangeController';
 import {ResetPasswordController} from './infra/controllers/ResetPasswordController';
@@ -93,6 +95,7 @@ export class App {
 		const getContributionsWhatsapp = new GetContributionsWhatsapp(authService);
 		const getCustomerService = new GetCustomerService(authService);
 		const getCarouselBanners = new GetCarouselBanners(authService, appUrl);
+		const logout = new Logout(authService);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -116,6 +119,7 @@ export class App {
 		const getContributionsWhatsappController = new GetContributionsWhatsappController(getContributionsWhatsapp);
 		const getCustomerServiceController = new GetCustomerServiceController(getCustomerService);
 		const getCarouselBannersController = new GetCarouselBannersController(getCarouselBanners);
+		const logoutController = new LogoutController(logout);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
 		this.app.post('/forgot-password', async (req, res) => forgotMyPasswordController.handle(req, res));
@@ -141,6 +145,7 @@ export class App {
 		this.app.get('/whatsapp/contributions', async (req, res) => getContributionsWhatsappController.handle(req, res));
 		this.app.get('/customer-service', async (req, res) => getCustomerServiceController.handle(req, res));
 		this.app.get('/banners-carousel', async (req, res) => getCarouselBannersController.handle(req, res));
+		this.app.post('/logout', async (req, res) => logoutController.handle(req, res));
 
 		this.app.use(ErrorMiddleware.handle);
 	}
