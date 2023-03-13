@@ -1,6 +1,7 @@
 import {Account} from '../../../domain/entities/Account/Account';
 import {AccountRegistrationData} from '../../../domain/entities/Account/AccountRegistrationData';
 import {EmailAddress} from '../../../domain/entities/Account/EmailAddress';
+import {type NotificationSettings} from '../../../domain/entities/NotificationSettings';
 
 export class AccountRepositoryFakeData {
 	static get accounts(): Array<{
@@ -8,6 +9,7 @@ export class AccountRepositoryFakeData {
 		sessionTokens: string[];
 		pushTokens: string[] | undefined;
 		registrationData: AccountRegistrationData;
+		notificationSettings: NotificationSettings;
 	}> {
 		return [
 			{
@@ -20,6 +22,11 @@ export class AccountRepositoryFakeData {
 				}),
 				sessionTokens: ['session-token-25'],
 				pushTokens: ['push-token-25'],
+				notificationSettings: {
+					announcements: true,
+					eventsAndActions: true,
+					newProducts: false,
+				},
 				registrationData: new AccountRegistrationData({
 					birthDate: '02/02/1990',
 					name: 'Caio de Oliveira Silva',
@@ -38,11 +45,16 @@ export class AccountRepositoryFakeData {
 					id: '62',
 					name: 'Cliente 62',
 					email: new EmailAddress('test62@email.com'),
-					passwordHash: 'password-hash',
+					passwordHash: '$2b$10$m7fi0dhDaXA9skOAnOYQ8eIa76eAlufvyWD4EKeNMVv/cdG8b2v92', // 123
 					numericPasswordHash: '$2b$10$2tFdJovvhzZTQcEJDrBqNueXjbYUXtGF0AQmksAldkG9u178PBmcO', // 120943
 				}),
 				sessionTokens: ['session-token-62'],
 				pushTokens: ['push-token-62-a', 'push-token-62-b'],
+				notificationSettings: {
+					announcements: false,
+					eventsAndActions: true,
+					newProducts: true,
+				},
 				registrationData: new AccountRegistrationData({
 					birthDate: '02/02/1991',
 					name: 'Cliente 62',
