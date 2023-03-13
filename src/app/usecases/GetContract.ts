@@ -1,6 +1,6 @@
 import {type Contract} from '../../domain/entities/Contract/Contract';
 import {type ContractRateType} from '../../domain/entities/Contract/ContractRate';
-import {type ContractTransactionType} from '../../domain/entities/Contract/ContractTransaction';
+import {type ContractTransaction, type ContractTransactionType} from '../../domain/entities/Contract/ContractTransaction';
 import {type ContractVersion, type ContractVersionTransactions, type ContractVersionType} from '../../domain/entities/Contract/ContractVersion';
 import {NotFoundError} from '../../domain/errors/NotFoundError';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
@@ -30,10 +30,7 @@ type OutputVersion = {
 		type: ContractRateType;
 	};
 	balance: number;
-	transactions: {
-		initial: OutputTransaction;
-		others: OutputTransaction[];
-	};
+	transactions: OutputTransaction[];
 };
 
 type Output = {
@@ -84,7 +81,6 @@ export class GetContract {
 	}
 
 	private toOutputVersion(version: ContractVersion): OutputVersion {
-		const outputTransactions = this.toOutputTransactions(version.getTransactions());
 		return {
 			id: version.getId(),
 			balance: version.getBalance(),
@@ -95,29 +91,16 @@ export class GetContract {
 				type: version.getRate().type,
 				value: version.getRate().value,
 			},
-			transactions: outputTransactions,
+			transactions: this.toOutputTransactions(version.getOrderedTransactions()),
 		};
 	}
 
-	private toOutputTransactions(transactions: ContractVersionTransactions): {
-		initial: OutputTransaction;
-		others: OutputTransaction[];
-	} {
-		const initialTransaction = {
-			id: transactions.initial.getId(),
-			date: transactions.initial.getDate().toISOString(),
-			value: transactions.initial.getValue(),
-			type: transactions.initial.getType(),
-		};
-		const otherTransactions = transactions.others.map(transaction => ({
+	private toOutputTransactions(transactions: ContractTransaction[]): OutputTransaction[] {
+		return transactions.map(transaction => ({
 			id: transaction.getId(),
 			date: transaction.getDate().toISOString(),
 			value: transaction.getValue(),
 			type: transaction.getType(),
 		}));
-		return {
-			initial: initialTransaction,
-			others: otherTransactions,
-		};
 	}
 }

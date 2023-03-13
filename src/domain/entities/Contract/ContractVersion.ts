@@ -1,6 +1,7 @@
 import {type ContractRate} from './ContractRate';
 import {type ContractTransaction} from './ContractTransaction';
 import {type ContractTransactionInitial} from './ContractTransactionInitial';
+import {ContractTransactionsList} from './ContractTransactionsList';
 
 export type ContractVersionType = 'contract' | 'additive';
 
@@ -74,5 +75,14 @@ export class ContractVersion {
 
 	getTransactions(): ContractVersionTransactions {
 		return this.transactions;
+	}
+
+	getOrderedTransactions(): ContractTransaction[] {
+		const list = new ContractTransactionsList([
+			this.transactions.initial,
+			...this.transactions.others,
+		]);
+
+		return list.getTransactionsSortedByDate('desc');
 	}
 }

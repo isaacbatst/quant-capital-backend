@@ -68,4 +68,41 @@ describe('ContractVersion', () => {
 		expect(transactions.others).toContainEqual(additiveContribution);
 		expect(transactions.others).toContainEqual(additiveWithdraw);
 	});
+
+	it('get ordered by most recent transactions', () => {
+		const initialTransaction = new ContractTransactionInitial({
+			id: '112',
+			date: new Date('2022-08-15'),
+			value: 27600,
+		});
+		const additiveVersion = new ContractVersionAdditive({
+			id: '200',
+			startDate: new Date('2022-08-15'),
+			dueDate: new Date('2023-02-15'),
+			readjustmentDate: new Date('2022-09-20'),
+			rate: new ContractRate(100, 'perYear'),
+			initialTransaction,
+			balance: 0,
+		});
+
+		const additiveContribution = new ContractTransaction({
+			id: '200',
+			type: 'contribution',
+			date: new Date('2023-01-15'),
+			value: 2400,
+		});
+		const additiveWithdraw = new ContractTransaction({
+			id: '325',
+			type: 'withdraw',
+			date: new Date('2023-01-13'),
+			value: 30000,
+		});
+		additiveVersion.addTransaction(additiveContribution);
+		additiveVersion.addTransaction(additiveWithdraw);
+
+		const transactions = additiveVersion.getOrderedTransactions();
+		expect(transactions[0].getId()).toBe('200');
+		expect(transactions[1].getId()).toBe('325');
+		expect(transactions[2].getId()).toBe('112');
+	});
 });
