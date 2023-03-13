@@ -11,6 +11,7 @@ export type AccountRepository = {
 	getAllPushTokens(): Promise<string[]>;
 	getAccountPushTokens(accountId: string): Promise<string[]>;
 	update(account: Account): Promise<void>;
+	updateNotificationSettings(accountId: string, settings: Partial<NotificationSettings>): Promise<void>;
 	save(account: Account): Promise<void>;
 	saveSessionToken(sessionToken: string, accountId: string): Promise<void>;
 };

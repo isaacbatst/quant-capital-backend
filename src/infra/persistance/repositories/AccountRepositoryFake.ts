@@ -33,6 +33,16 @@ export class AccountRepositoryFake implements AccountRepository {
 		this.accounts[foundIndex].account = updatedAccount;
 	}
 
+	async updateNotificationSettings(accountId: string, settings: Partial<NotificationSettings>): Promise<void> {
+		const foundIndex = this.accounts.findIndex(({account}) => account.getId() === accountId);
+
+		this.accounts[foundIndex].notificationSettings = {
+			announcements: settings.announcements ?? this.accounts[foundIndex].notificationSettings.announcements,
+			eventsAndActions: settings.eventsAndActions ?? this.accounts[foundIndex].notificationSettings.eventsAndActions,
+			newProducts: settings.newProducts ?? this.accounts[foundIndex].notificationSettings.newProducts,
+		};
+	}
+
 	async getAccountPushTokens(accountId: string): Promise<string[]> {
 		return this.accounts.find(({account}) => account.getId() === accountId)?.pushTokens ?? [];
 	}

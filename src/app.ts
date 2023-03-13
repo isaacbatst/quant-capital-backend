@@ -19,6 +19,7 @@ import {Login} from './app/usecases/Login';
 import {RequestContractWithdraw} from './app/usecases/RequestContractWithdraw';
 import {RequestEmailChange} from './app/usecases/RequestEmailChange';
 import {ResetPassword} from './app/usecases/ResetPassword';
+import {UpdateNotificationSettings} from './app/usecases/UpdateNotificationSettings';
 import {ViewNotification} from './app/usecases/ViewNotification';
 import {ChangePasswordController} from './infra/controllers/ChangePasswordController';
 import {ForgotMyPasswordController} from './infra/controllers/ForgotMyPasswordController';
@@ -37,6 +38,7 @@ import {LoginController} from './infra/controllers/LoginController';
 import {RequestContractWithdrawController} from './infra/controllers/RequestContractWithdrawController';
 import {RequestEmailChangeController} from './infra/controllers/RequestEmailChangeController';
 import {ResetPasswordController} from './infra/controllers/ResetPasswordController';
+import {UpdateNotificationSettingsController} from './infra/controllers/UpdateNotificationSettingsController';
 import {ViewNotificationController} from './infra/controllers/ViewNotification';
 import {type EmailGateway} from './infra/gateways/EmailGateway/EmailGateway';
 import {AuthMiddleware} from './infra/middlewares/AuthMiddleware';
@@ -79,6 +81,7 @@ export class App {
 		const requestEmailChange = new RequestEmailChange(repositoryFactory, idGenerator, authService);
 		const requestContractWithdraw = new RequestContractWithdraw(repositoryFactory, idGenerator, authService, encrypter);
 		const getNotificationSettings = new GetNotificationsSettings(authService);
+		const updateNotificationSettings = new UpdateNotificationSettings(authService);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -97,7 +100,8 @@ export class App {
 		const getRegistrationDataController = new GetRegistrationDataController(getRegistrationData);
 		const requestEmailChangeController = new RequestEmailChangeController(requestEmailChange);
 		const requestContractWithdrawController = new RequestContractWithdrawController(requestContractWithdraw);
-		const notificationSettingsController = new GetNotificationSettingsController(getNotificationSettings);
+		const getNotificationSettingsController = new GetNotificationSettingsController(getNotificationSettings);
+		const updateNotificationSettingsController = new UpdateNotificationSettingsController(updateNotificationSettings);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
 		this.app.post('/forgot-password', async (req, res) => forgotMyPasswordController.handle(req, res));
@@ -107,7 +111,8 @@ export class App {
 		this.app.get('/user', async (req, res) => getUserController.handle(req, res));
 		this.app.patch('/user/change-password', async (req, res) => changePasswordController.handle(req, res));
 		this.app.get('/user/registration-data', async (req, res) => getRegistrationDataController.handle(req, res));
-		this.app.get('/user/notification-settings', async (req, res) => notificationSettingsController.handle(req, res));
+		this.app.get('/user/notification-settings', async (req, res) => getNotificationSettingsController.handle(req, res));
+		this.app.patch('/user/notification-settings', async (req, res) => updateNotificationSettingsController.handle(req, res));
 		this.app.post('/user/request-email-change', async (req, res) => requestEmailChangeController.handle(req, res));
 		this.app.get('/contracts', async (req, res) => getContractsController.handle(req, res));
 		this.app.get('/contract/:id', async (req, res) => getContractController.handle(req, res));
