@@ -1,4 +1,4 @@
-import {EmailChangeRequest} from '../../domain/entities/Account/EmailChangeRequest.';
+import {EmailChangeRequest} from '../../domain/entities/Account/EmailChangeRequest';
 import {EmailChangeRequestStatus} from '../../domain/entities/Account/EmailChangeRequestStatus';
 import {ConflictError} from '../../domain/errors/ConflictError';
 import {type EmailChangeRequestRepository} from '../../infra/persistance/repositories/EmailChangeRequestRepository';

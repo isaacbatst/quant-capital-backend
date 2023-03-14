@@ -1,4 +1,4 @@
-import {type EmailChangeRequest} from '../../../domain/entities/Account/EmailChangeRequest.';
+import {type EmailChangeRequest} from '../../../domain/entities/Account/EmailChangeRequest';
 
 export type EmailChangeRequestRepository = {
 	create(request: EmailChangeRequest): Promise<void>;

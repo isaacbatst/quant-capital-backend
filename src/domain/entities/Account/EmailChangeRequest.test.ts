@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {EmailChangeRequest} from './EmailChangeRequest.';
+import {EmailChangeRequest} from './EmailChangeRequest';
 import {EmailChangeRequestStatus} from './EmailChangeRequestStatus';
 
 describe('EmailChangeRequest', () => {

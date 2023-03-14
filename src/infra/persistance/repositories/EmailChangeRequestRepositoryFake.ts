@@ -1,4 +1,4 @@
-import {type EmailChangeRequest} from '../../../domain/entities/Account/EmailChangeRequest.';
+import {type EmailChangeRequest} from '../../../domain/entities/Account/EmailChangeRequest';
 import {EmailChangeRequestStatus} from '../../../domain/entities/Account/EmailChangeRequestStatus';
 import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository';
 

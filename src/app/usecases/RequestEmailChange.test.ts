@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {EmailChangeRequest} from '../../domain/entities/Account/EmailChangeRequest.';
+import {EmailChangeRequest} from '../../domain/entities/Account/EmailChangeRequest';
 import {EmailChangeRequestStatus} from '../../domain/entities/Account/EmailChangeRequestStatus';
 import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
 import {IdGeneratorFake} from '../../infra/util/IdGenerator/IdGeneratorFake';
