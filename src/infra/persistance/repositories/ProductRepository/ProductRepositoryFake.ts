@@ -1,6 +1,6 @@
-import {EmailAddress} from '../../../domain/entities/Account/EmailAddress';
-import {Product} from '../../../domain/entities/Product/Product';
-import {ProductContact} from '../../../domain/entities/Product/ProductContact';
+import {EmailAddress} from '../../../../domain/entities/Account/EmailAddress';
+import {Product} from '../../../../domain/entities/Product/Product';
+import {ProductContact} from '../../../../domain/entities/Product/ProductContact';
 import {type ProductRepository} from './ProductRepository';
 
 export class ProductRepositoryFake implements ProductRepository {

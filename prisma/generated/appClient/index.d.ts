@@ -147,6 +147,8 @@ export type Product = {
   name: string
   shortDescription: string
   imageSrc: string
+  order: number
+  show: boolean
 }
 
 
@@ -11523,8 +11525,18 @@ export namespace Prisma {
 
   export type AggregateProduct = {
     _count: ProductCountAggregateOutputType | null
+    _avg: ProductAvgAggregateOutputType | null
+    _sum: ProductSumAggregateOutputType | null
     _min: ProductMinAggregateOutputType | null
     _max: ProductMaxAggregateOutputType | null
+  }
+
+  export type ProductAvgAggregateOutputType = {
+    order: number | null
+  }
+
+  export type ProductSumAggregateOutputType = {
+    order: number | null
   }
 
   export type ProductMinAggregateOutputType = {
@@ -11536,6 +11548,8 @@ export namespace Prisma {
     name: string | null
     shortDescription: string | null
     imageSrc: string | null
+    order: number | null
+    show: boolean | null
   }
 
   export type ProductMaxAggregateOutputType = {
@@ -11547,6 +11561,8 @@ export namespace Prisma {
     name: string | null
     shortDescription: string | null
     imageSrc: string | null
+    order: number | null
+    show: boolean | null
   }
 
   export type ProductCountAggregateOutputType = {
@@ -11558,9 +11574,19 @@ export namespace Prisma {
     name: number
     shortDescription: number
     imageSrc: number
+    order: number
+    show: number
     _all: number
   }
 
+
+  export type ProductAvgAggregateInputType = {
+    order?: true
+  }
+
+  export type ProductSumAggregateInputType = {
+    order?: true
+  }
 
   export type ProductMinAggregateInputType = {
     id?: true
@@ -11571,6 +11597,8 @@ export namespace Prisma {
     name?: true
     shortDescription?: true
     imageSrc?: true
+    order?: true
+    show?: true
   }
 
   export type ProductMaxAggregateInputType = {
@@ -11582,6 +11610,8 @@ export namespace Prisma {
     name?: true
     shortDescription?: true
     imageSrc?: true
+    order?: true
+    show?: true
   }
 
   export type ProductCountAggregateInputType = {
@@ -11593,6 +11623,8 @@ export namespace Prisma {
     name?: true
     shortDescription?: true
     imageSrc?: true
+    order?: true
+    show?: true
     _all?: true
   }
 
@@ -11634,6 +11666,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ProductAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProductSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ProductMinAggregateInputType
@@ -11664,6 +11708,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ProductCountAggregateInputType | true
+    _avg?: ProductAvgAggregateInputType
+    _sum?: ProductSumAggregateInputType
     _min?: ProductMinAggregateInputType
     _max?: ProductMaxAggregateInputType
   }
@@ -11678,7 +11724,11 @@ export namespace Prisma {
     name: string
     shortDescription: string
     imageSrc: string
+    order: number
+    show: boolean
     _count: ProductCountAggregateOutputType | null
+    _avg: ProductAvgAggregateOutputType | null
+    _sum: ProductSumAggregateOutputType | null
     _min: ProductMinAggregateOutputType | null
     _max: ProductMaxAggregateOutputType | null
   }
@@ -11706,6 +11756,8 @@ export namespace Prisma {
     name?: boolean
     shortDescription?: boolean
     imageSrc?: boolean
+    order?: boolean
+    show?: boolean
   }
 
 
@@ -12567,7 +12619,9 @@ export namespace Prisma {
     email: 'email',
     name: 'name',
     shortDescription: 'shortDescription',
-    imageSrc: 'imageSrc'
+    imageSrc: 'imageSrc',
+    order: 'order',
+    show: 'show'
   };
 
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
@@ -13095,6 +13149,8 @@ export namespace Prisma {
     name?: StringFilter | string
     shortDescription?: StringFilter | string
     imageSrc?: StringFilter | string
+    order?: IntFilter | number
+    show?: BoolFilter | boolean
   }
 
   export type ProductOrderByWithRelationInput = {
@@ -13106,6 +13162,8 @@ export namespace Prisma {
     name?: SortOrder
     shortDescription?: SortOrder
     imageSrc?: SortOrder
+    order?: SortOrder
+    show?: SortOrder
   }
 
   export type ProductWhereUniqueInput = {
@@ -13121,9 +13179,13 @@ export namespace Prisma {
     name?: SortOrder
     shortDescription?: SortOrder
     imageSrc?: SortOrder
+    order?: SortOrder
+    show?: SortOrder
     _count?: ProductCountOrderByAggregateInput
+    _avg?: ProductAvgOrderByAggregateInput
     _max?: ProductMaxOrderByAggregateInput
     _min?: ProductMinOrderByAggregateInput
+    _sum?: ProductSumOrderByAggregateInput
   }
 
   export type ProductScalarWhereWithAggregatesInput = {
@@ -13138,6 +13200,8 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter | string
     shortDescription?: StringWithAggregatesFilter | string
     imageSrc?: StringWithAggregatesFilter | string
+    order?: IntWithAggregatesFilter | number
+    show?: BoolWithAggregatesFilter | boolean
   }
 
   export type PanelUserCreateInput = {
@@ -13716,6 +13780,8 @@ export namespace Prisma {
     name: string
     shortDescription: string
     imageSrc: string
+    order: number
+    show: boolean
   }
 
   export type ProductUncheckedCreateInput = {
@@ -13727,6 +13793,8 @@ export namespace Prisma {
     name: string
     shortDescription: string
     imageSrc: string
+    order: number
+    show: boolean
   }
 
   export type ProductUpdateInput = {
@@ -13738,6 +13806,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     shortDescription?: StringFieldUpdateOperationsInput | string
     imageSrc?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    show?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProductUncheckedUpdateInput = {
@@ -13749,6 +13819,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     shortDescription?: StringFieldUpdateOperationsInput | string
     imageSrc?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    show?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProductCreateManyInput = {
@@ -13760,6 +13832,8 @@ export namespace Prisma {
     name: string
     shortDescription: string
     imageSrc: string
+    order: number
+    show: boolean
   }
 
   export type ProductUpdateManyMutationInput = {
@@ -13771,6 +13845,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     shortDescription?: StringFieldUpdateOperationsInput | string
     imageSrc?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    show?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProductUncheckedUpdateManyInput = {
@@ -13782,6 +13858,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     shortDescription?: StringFieldUpdateOperationsInput | string
     imageSrc?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    show?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StringFilter = {
@@ -14298,6 +14376,17 @@ export namespace Prisma {
     address?: SortOrder
   }
 
+  export type IntFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntFilter | number
+  }
+
   export type ProductCountOrderByAggregateInput = {
     id?: SortOrder
     description?: SortOrder
@@ -14307,6 +14396,12 @@ export namespace Prisma {
     name?: SortOrder
     shortDescription?: SortOrder
     imageSrc?: SortOrder
+    order?: SortOrder
+    show?: SortOrder
+  }
+
+  export type ProductAvgOrderByAggregateInput = {
+    order?: SortOrder
   }
 
   export type ProductMaxOrderByAggregateInput = {
@@ -14318,6 +14413,8 @@ export namespace Prisma {
     name?: SortOrder
     shortDescription?: SortOrder
     imageSrc?: SortOrder
+    order?: SortOrder
+    show?: SortOrder
   }
 
   export type ProductMinOrderByAggregateInput = {
@@ -14329,6 +14426,28 @@ export namespace Prisma {
     name?: SortOrder
     shortDescription?: SortOrder
     imageSrc?: SortOrder
+    order?: SortOrder
+    show?: SortOrder
+  }
+
+  export type ProductSumOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntWithAggregatesFilter | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedIntFilter
+    _min?: NestedIntFilter
+    _max?: NestedIntFilter
   }
 
   export type PanelUserSessionCreateNestedManyWithoutPanelUserInput = {
@@ -14755,6 +14874,14 @@ export namespace Prisma {
     update?: XOR<ClientUpdateWithoutNotificationsInput, ClientUncheckedUpdateWithoutNotificationsInput>
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type NestedStringFilter = {
     equals?: string
     in?: Enumerable<string>
@@ -14944,6 +15071,33 @@ export namespace Prisma {
     gt?: InputJsonValue
     gte?: InputJsonValue
     not?: InputJsonValue | JsonNullValueFilter
+  }
+
+  export type NestedIntWithAggregatesFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntWithAggregatesFilter | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedIntFilter
+    _min?: NestedIntFilter
+    _max?: NestedIntFilter
+  }
+
+  export type NestedFloatFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatFilter | number
   }
 
   export type PanelUserSessionCreateWithoutPanelUserInput = {

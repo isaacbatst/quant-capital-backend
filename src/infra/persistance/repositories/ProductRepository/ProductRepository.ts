@@ -1,4 +1,4 @@
-import {type Product} from '../../../domain/entities/Product/Product';
+import {type Product} from '../../../../domain/entities/Product/Product';
 
 export type ProductRepository = {
 	getAll: () => Promise<Product[]>;

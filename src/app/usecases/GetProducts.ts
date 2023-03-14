@@ -1,6 +1,5 @@
-import {type ProductRepository} from '../../infra/persistance/repositories/ProductRepository';
+import {type ProductRepository} from '../../infra/persistance/repositories/ProductRepository/ProductRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
-import {type EncrypterFake} from '../../infra/util/Encrypter/EncrypterFake';
 import {type AuthService} from './AuthService';
 
 type Output = {
@@ -8,6 +7,7 @@ type Output = {
 	name: string;
 	shortDescription: string;
 	imageSrc: string;
+	order: number;
 };
 
 type Input = {
@@ -33,6 +33,7 @@ export class GetProducts {
 			name: product.getName(),
 			shortDescription: product.getShortDescription(),
 			imageSrc: product.getImageSrc(),
+			order: product.getOrder(),
 		}));
 	}
 }

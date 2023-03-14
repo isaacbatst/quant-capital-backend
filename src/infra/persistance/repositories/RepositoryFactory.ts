@@ -4,7 +4,7 @@ import {type ContractWithdrawRequestRepository} from './ContractWithdrawRequestR
 import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository/EmailChangeRequestRepository';
 import {type NotificationRepository} from './NotificationRepository/NotificationRepository';
 import {type PasswordResetRequestRepository} from './PasswordResetRequestRepository/PasswordResetRequestRepository';
-import {type ProductRepository} from './ProductRepository';
+import {type ProductRepository} from './ProductRepository/ProductRepository';
 
 export type RepositoryFactory = {
 	passwordResetRequestRepository: PasswordResetRequestRepository;

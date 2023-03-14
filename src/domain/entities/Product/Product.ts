@@ -7,6 +7,7 @@ type ProductParams = {
 	name: string;
 	shortDescription: string;
 	imageSrc: string;
+	order: number;
 };
 
 export class Product {
@@ -16,6 +17,8 @@ export class Product {
 	private readonly imageSrc: string;
 	private readonly description: string;
 	private readonly contact: ProductContact;
+	private readonly order: number;
+
 	constructor(
 		params: ProductParams,
 	) {
@@ -25,6 +28,7 @@ export class Product {
 		this.imageSrc = params.imageSrc;
 		this.description = params.description;
 		this.contact = params.contact;
+		this.order = params.order;
 	}
 
 	getId(): string {
@@ -49,5 +53,9 @@ export class Product {
 
 	getContact(): ProductContact {
 		return this.contact;
+	}
+
+	getOrder(): number {
+		return this.order;
 	}
 }

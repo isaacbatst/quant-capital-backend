@@ -1,5 +1,5 @@
 import {NotFoundError} from '../../domain/errors/NotFoundError';
-import {type ProductRepository} from '../../infra/persistance/repositories/ProductRepository';
+import {type ProductRepository} from '../../infra/persistance/repositories/ProductRepository/ProductRepository';
 import {type AuthService} from './AuthService';
 
 type Input = {
@@ -16,6 +16,7 @@ type Output = {
 	tel: string;
 	whatsapp: string;
 	email: string;
+	order: number;
 };
 
 export class GetProduct {
@@ -41,6 +42,7 @@ export class GetProduct {
 			description: product.getDescription(),
 			tel: productContact.getTel(),
 			whatsapp: productContact.getWhatsapp(),
+			order: product.getOrder(),
 			email: productContact.getEmail().value,
 		};
 	}

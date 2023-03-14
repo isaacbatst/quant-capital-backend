@@ -186,7 +186,9 @@ exports.Prisma.ProductScalarFieldEnum = makeEnum({
   email: 'email',
   name: 'name',
   shortDescription: 'shortDescription',
-  imageSrc: 'imageSrc'
+  imageSrc: 'imageSrc',
+  order: 'order',
+  show: 'show'
 });
 
 exports.Prisma.SortOrder = makeEnum({

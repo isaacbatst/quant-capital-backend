@@ -121,7 +121,7 @@ model CustomerService {
 }
 
 model Product {
-  id               String @id
+  id               String  @id
   description      String
   tel              String
   whatsapp         String
@@ -129,4 +129,6 @@ model Product {
   name             String
   shortDescription String
   imageSrc         String
+  order            Int
+  show             Boolean
 }

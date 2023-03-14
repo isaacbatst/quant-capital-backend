@@ -5,7 +5,7 @@ import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository/
 import {EmailChangeRequestRepositoryFake} from './EmailChangeRequestRepository/EmailChangeRequestRepositoryFake';
 import {NotificationRepositoryFake} from './NotificationRepository/NotificationRepositoryFake';
 import {PasswordResetRequestRepositoryFake} from './PasswordResetRequestRepository/PasswordResetRequestRepositoryFake';
-import {ProductRepositoryFake} from './ProductRepositoryFake';
+import {ProductRepositoryFake} from './ProductRepository/ProductRepositoryFake';
 import {type RepositoryFactory} from './RepositoryFactory';
 
 export class RepositoryFactoryFake implements RepositoryFactory {
