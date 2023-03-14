@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {NotFoundError} from '../../domain/errors/NotFoundError';
-import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
+import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactory/RepositoryFactoryFake';
 import {AuthService} from './AuthService';
 import {GetContract} from './GetContract';
 

@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
-import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
+import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactory/RepositoryFactoryFake';
 import {EncrypterFake} from '../../infra/util/Encrypter/EncrypterFake';
 import {AuthService} from './AuthService';
 import {ResetPassword} from './ResetPassword';

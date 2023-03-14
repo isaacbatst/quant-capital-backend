@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {NotificationRepositoryFake} from '../../infra/persistance/repositories/NotificationRepository/NotificationRepositoryFake';
-import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
+import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactory/RepositoryFactoryFake';
 import {AuthService} from './AuthService';
 import {GetNotifications} from './GetNotifications';
 

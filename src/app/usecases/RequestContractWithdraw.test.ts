@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
+import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactory/RepositoryFactoryFake';
 import {EncrypterFake} from '../../infra/util/Encrypter/EncrypterFake';
 import {IdGeneratorFake} from '../../infra/util/IdGenerator/IdGeneratorFake';
 import {AuthService} from './AuthService';

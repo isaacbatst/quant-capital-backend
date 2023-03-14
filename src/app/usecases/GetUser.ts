@@ -1,6 +1,6 @@
 import {AccountBalanceCalculator} from '../../domain/entities/Account/AccountBalanceCalculator';
 import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository/ContractRepository';
-import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
+import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory/RepositoryFactory';
 import {type AuthService} from './AuthService';
 
 type Input = {

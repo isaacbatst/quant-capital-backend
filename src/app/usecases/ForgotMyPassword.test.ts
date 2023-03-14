@@ -2,7 +2,7 @@ import {describe, expect, it} from 'vitest';
 import {Account} from '../../domain/entities/Account/Account';
 import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
 import {EmailGatewayFake} from '../../infra/gateways/EmailGateway/EmailGatewayFake';
-import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactoryFake';
+import {RepositoryFactoryFake} from '../../infra/persistance/repositories/RepositoryFactory/RepositoryFactoryFake';
 import {TokenGeneratorFake} from '../../infra/util/TokenGenerator/TokenGeneratorFake';
 import {AuthService} from './AuthService';
 import {ForgotMyPassword} from './ForgotMyPassword';

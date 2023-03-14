@@ -3,7 +3,7 @@ import {PasswordResetRequest} from '../../domain/entities/Account/PasswordResetR
 import {PasswordResetRequestEmailGenerator} from '../../domain/entities/Account/PasswordResetRequestEmailGenerator';
 import {type EmailGateway} from '../../infra/gateways/EmailGateway/EmailGateway';
 import {type PasswordResetRequestRepository} from '../../infra/persistance/repositories/PasswordResetRequestRepository/PasswordResetRequestRepository';
-import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
+import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory/RepositoryFactory';
 import {type TokenGenerator} from '../../infra/util/TokenGenerator/TokenGenerator';
 import {type AuthService} from './AuthService';
 

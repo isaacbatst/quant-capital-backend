@@ -80,9 +80,23 @@ export class AccountRepositoryPrisma implements AccountRepository {
 		});
 	}
 
-	async getAllWithPushTokens(): Promise<string[]> {
-		const tokens = await this.appPrisma.clientPushToken.findMany();
-		return tokens.map(({token}) => token);
+	async getAllWithPushTokens(): Promise<Array<{account: Account; pushTokens: string[]}>> {
+		const accounts = await this.appPrisma.client.findMany({
+			include: {
+				pushTokens: true,
+			},
+		});
+
+		return accounts.map(account => ({
+			account: new Account({
+				email: new EmailAddress(account.email),
+				id: account.id,
+				name: account.name,
+				numericPasswordHash: account.numericPasswordHash,
+				passwordHash: account.passwordHash,
+			}),
+			pushTokens: account.pushTokens.map(pushToken => pushToken.token),
+		}));
 	}
 
 	async getAccountPushTokens(accountId: string): Promise<string[]> {

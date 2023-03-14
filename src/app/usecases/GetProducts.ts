@@ -1,5 +1,5 @@
 import {type ProductRepository} from '../../infra/persistance/repositories/ProductRepository/ProductRepository';
-import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
+import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory/RepositoryFactory';
 import {type AuthService} from './AuthService';
 
 type Output = {

@@ -1,11 +1,11 @@
-import {AccountRepositoryFake} from './AccountRepository/AccountRepositoryFake';
-import {ContractRepositoryFake} from './ContractRepository/ContractRepositoryFake';
-import {ContractWithdrawRequestRepositoryFake} from './ContractWithdrawRequestRepository/ContractWithdrawRequestRepositoryFake';
-import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository/EmailChangeRequestRepository';
-import {EmailChangeRequestRepositoryFake} from './EmailChangeRequestRepository/EmailChangeRequestRepositoryFake';
-import {NotificationRepositoryFake} from './NotificationRepository/NotificationRepositoryFake';
-import {PasswordResetRequestRepositoryFake} from './PasswordResetRequestRepository/PasswordResetRequestRepositoryFake';
-import {ProductRepositoryFake} from './ProductRepository/ProductRepositoryFake';
+import {AccountRepositoryFake} from '../AccountRepository/AccountRepositoryFake';
+import {ContractRepositoryFake} from '../ContractRepository/ContractRepositoryFake';
+import {ContractWithdrawRequestRepositoryFake} from '../ContractWithdrawRequestRepository/ContractWithdrawRequestRepositoryFake';
+import {type EmailChangeRequestRepository} from '../EmailChangeRequestRepository/EmailChangeRequestRepository';
+import {EmailChangeRequestRepositoryFake} from '../EmailChangeRequestRepository/EmailChangeRequestRepositoryFake';
+import {NotificationRepositoryFake} from '../NotificationRepository/NotificationRepositoryFake';
+import {PasswordResetRequestRepositoryFake} from '../PasswordResetRequestRepository/PasswordResetRequestRepositoryFake';
+import {ProductRepositoryFake} from '../ProductRepository/ProductRepositoryFake';
 import {type RepositoryFactory} from './RepositoryFactory';
 
 export class RepositoryFactoryFake implements RepositoryFactory {

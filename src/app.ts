@@ -54,7 +54,7 @@ import {ViewNotificationController} from './infra/controllers/ViewNotification';
 import {type EmailGateway} from './infra/gateways/EmailGateway/EmailGateway';
 import {AuthMiddleware} from './infra/middlewares/AuthMiddleware';
 import {ErrorMiddleware} from './infra/middlewares/ErrorMiddleware';
-import {RepositoryFactoryFake} from './infra/persistance/repositories/RepositoryFactoryFake';
+import {RepositoryFactoryFake} from './infra/persistance/repositories/RepositoryFactory/RepositoryFactoryFake';
 import {EncrypterBcrypt} from './infra/util/Encrypter/EncrypterBcrypt';
 import {IdGeneratorCrypto} from './infra/util/IdGenerator/IdGeneratorCrypto';
 import {TokenGeneratorCrypto} from './infra/util/TokenGenerator/TokenGeneratorCrypto';
