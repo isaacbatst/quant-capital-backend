@@ -1,4 +1,4 @@
-import {type ContractWithdrawRequest} from '../../../domain/entities/Contract/ContractWithdrawRequest';
+import {type ContractWithdrawRequest} from '../../../../domain/entities/Contract/ContractWithdrawRequest';
 import {type ContractWithdrawRequestRepository} from './ContractWithdrawRequestRepository';
 
 export class ContractWithdrawRequestRepositoryFake implements ContractWithdrawRequestRepository {

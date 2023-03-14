@@ -1,6 +1,6 @@
 import {type AccountRepository} from './AccountRepository/AccountRepository';
 import {type ContractRepository} from './ContractRepository/ContractRepository';
-import {type ContractWithdrawRequestRepository} from './ContractWithdrawRequestRepository';
+import {type ContractWithdrawRequestRepository} from './ContractWithdrawRequestRepository/ContractWithdrawRequestRepository';
 import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository';
 import {type NotificationRepository} from './NotificationRepository';
 import {type PasswordResetRequestRepository} from './PasswordResetRequestRepository';

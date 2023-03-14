@@ -3,7 +3,7 @@ import {AuthError} from '../../domain/errors/AuthError';
 import {NotFoundError} from '../../domain/errors/NotFoundError';
 import {ValidationError} from '../../domain/errors/ValidationError';
 import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository/ContractRepository';
-import {type ContractWithdrawRequestRepository} from '../../infra/persistance/repositories/ContractWithdrawRequestRepository';
+import {type ContractWithdrawRequestRepository} from '../../infra/persistance/repositories/ContractWithdrawRequestRepository/ContractWithdrawRequestRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type Encrypter} from '../../infra/util/Encrypter/Encrypter';
 import {type IdGenerator} from '../../infra/util/IdGenerator/IdGenerator';
@@ -60,6 +60,7 @@ export class RequestContractWithdraw {
 			id,
 			contractId: input.contractId,
 			value: input.value,
+			createdAt: new Date(),
 		});
 		await this.contractWithdrawRequestRepository.save(contractWithdrawRequest);
 	}

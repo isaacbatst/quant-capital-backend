@@ -1,4 +1,4 @@
-import {type ContractWithdrawRequest} from '../../../domain/entities/Contract/ContractWithdrawRequest';
+import {type ContractWithdrawRequest} from '../../../../domain/entities/Contract/ContractWithdrawRequest';
 
 export type ContractWithdrawRequestRepository = {
 	save: (contractWithdrawRequest: ContractWithdrawRequest) => Promise<void>;

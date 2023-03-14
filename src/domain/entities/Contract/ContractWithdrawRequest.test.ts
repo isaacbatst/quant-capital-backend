@@ -10,6 +10,7 @@ describe('ContractWithdrawRequest', () => {
 			id,
 			contractId,
 			value,
+			createdAt: new Date(),
 		});
 		expect(contractWithdrawRequest.id).toBe(id);
 		expect(contractWithdrawRequest.contractId).toBe(contractId);
@@ -26,6 +27,7 @@ describe('ContractWithdrawRequest', () => {
 				id,
 				contractId,
 				value,
+				createdAt: new Date(),
 			});
 		}).toThrow('INVALID_ZERO_VALUE');
 	});
