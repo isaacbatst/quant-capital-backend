@@ -6,14 +6,15 @@ import {NotificationBasic} from './NotificationBasic';
 describe('ClientNotification', () => {
 	it('should create a client notification', () => {
 		const now = new Date();
-		const clientNotification = new ClientNotification({
+		const notificationData = {
 			id: 'id',
 			body: 'body',
 			title: 'title',
 			createdAt: now,
 			type: NotificationType.basic,
-		}, false, '25');
-		expect(clientNotification.getNotification()).toEqual(clientNotification);
+		};
+		const clientNotification = new ClientNotification(notificationData, false, '25');
+		expect(clientNotification.getNotification()).toEqual(notificationData);
 		expect(clientNotification.getIsViewed()).toBe(false);
 	});
 
