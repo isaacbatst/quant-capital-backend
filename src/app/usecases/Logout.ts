@@ -8,5 +8,6 @@ export class Logout {
 	async execute(sessionToken: string) {
 		const account = await this.authService.getAccountBySessionToken(sessionToken);
 		await this.authService.accountRepository.removeSessionToken(account.getId(), sessionToken);
+		await this.authService.accountRepository.removePushToken(account.getId(), sessionToken);
 	}
 }

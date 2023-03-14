@@ -29,7 +29,6 @@ export class Login {
 
 		const sessionToken = await this.tokenGenerator.generate();
 		await this.accountRepository.saveSessionToken(sessionToken, account.getId());
-
 		return sessionToken;
 	}
 }

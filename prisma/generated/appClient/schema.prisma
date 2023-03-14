@@ -1,0 +1,131 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL_APP")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/appClient"
+}
+
+model PanelUser {
+  id           String             @id
+  email        String             @unique
+  passwordHash String
+  name         String
+  sessions     PanelUserSession[]
+}
+
+model PanelUserSession {
+  token       String    @id
+  panelUser   PanelUser @relation(fields: [panelUserId], references: [id])
+  panelUserId String
+}
+
+model Client {
+  id                     String                       @id
+  email                  String                       @unique
+  passwordHash           String
+  numericPasswordHash    String
+  name                   String
+  passwordResetRequests  ClientPasswordResetRequest[]
+  emailChangeRequests    ClientEmailChangeRequest[]
+  pushTokens             ClientPushToken[]
+  sessions               ClientSession[]
+  notifyAnnouncements    Boolean
+  notifyNewProducts      Boolean
+  notifyEventsAndActions Boolean
+}
+
+model ClientSession {
+  token    String @id
+  client   Client @relation(fields: [clientId], references: [id])
+  clientId String
+}
+
+model ClientPasswordResetRequest {
+  token     String   @id
+  createdAt DateTime
+  email     String
+  wasUsed   Boolean
+  client    Client   @relation(fields: [clientId], references: [id])
+  clientId  String
+}
+
+enum ClientEmailChangeRequestStatus {
+  open
+  finished
+  cancelled
+}
+
+model ClientEmailChangeRequest {
+  id       String                         @id
+  status   ClientEmailChangeRequestStatus
+  client   Client                         @relation(fields: [clientId], references: [id])
+  clientId String
+}
+
+model ClientPushToken {
+  token                         String                          @id
+  client                        Client                          @relation(fields: [clientId], references: [id])
+  clientId                      String
+  notificationsClientPushTokens NotificationsClientPushTokens[]
+}
+
+enum ContractWithdrawRequestStatus {
+  open
+  finished
+  cancelled
+}
+
+model ContractWithdrawRequest {
+  id         String                        @id
+  createdAt  DateTime
+  contractId String
+  value      Decimal
+  status     ContractWithdrawRequestStatus
+}
+
+enum NotificationType {
+  basic
+  navigator
+}
+
+model Notification {
+  id                            String                          @id
+  type                          NotificationType
+  title                         String
+  body                          String
+  createdAt                     DateTime
+  payload                       Json?
+  notificationsClientPushTokens NotificationsClientPushTokens[]
+}
+
+model NotificationsClientPushTokens {
+  isViewed             Boolean
+  notification         Notification    @relation(fields: [notificationId], references: [id])
+  clientPushToken      ClientPushToken @relation(fields: [clientPushTokenToken], references: [token])
+  notificationId       String
+  clientPushTokenToken String
+
+  @@id([notificationId, clientPushTokenToken])
+}
+
+model CustomerService {
+  id       String @id
+  tel      String
+  email    String
+  whatsapp String
+  address  String
+}
+
+model Product {
+  id               String @id
+  description      String
+  tel              String
+  whatsapp         String
+  email            String
+  name             String
+  shortDescription String
+  imageSrc         String
+}

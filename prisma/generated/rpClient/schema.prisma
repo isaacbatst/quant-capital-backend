@@ -1,0 +1,3360 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/rpClient"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL_RP")
+}
+
+model api_integracao {
+  id         Int       @id @default(autoincrement())
+  unit_id    Int
+  gatway     Int
+  sandbox    String    @db.VarChar(500)
+  producao   String    @db.VarChar(500)
+  chave      String    @db.VarChar(500)
+  credencial String    @db.VarChar(500)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+
+  @@unique([unit_id, gatway], map: "gatway_unico_pk")
+}
+
+model banco {
+  id          Int         @id @default(autoincrement())
+  num_banco   String      @db.VarChar(11)
+  nome_banco  String      @db.VarChar(55)
+  unit_id     Int
+  created_at  DateTime    @default(now()) @db.Timestamp(0)
+  updated_at  DateTime    @default(now()) @db.Timestamp(0)
+  deleted_at  DateTime?   @db.Timestamp(0)
+  system_unit system_unit @relation(fields: [unit_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Registro possui movimentação")
+
+  @@index([unit_id], map: "unit_id")
+}
+
+model boleto {
+  id                  Int       @id @default(autoincrement())
+  dataVencimento      DateTime? @db.Date
+  valor               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  multa               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  juros               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  numero              String?   @default("1") @db.VarChar(20)
+  numeroDocumento     String?   @db.VarChar(20)
+  carteira            String?   @db.VarChar(20)
+  conta_bancaria_id   Int?
+  agencia             String?   @db.VarChar(10)
+  convenio            String?   @db.VarChar(20)
+  conta               String?   @db.VarChar(10)
+  instrucao1          String?   @db.VarChar(200)
+  instrucao2          String?   @db.VarChar(200)
+  instrucao3          String?   @db.VarChar(200)
+  instrucao4          String?   @db.VarChar(200)
+  cliente_id          Int
+  conta_receber_id    Int?      @default(0)
+  cliente_conrato_id  Int?      @default(0)
+  unit_id             Int
+  num_parcela         String?   @db.VarChar(10)
+  remessa             String    @default("N") @db.VarChar(1)
+  cod_banco           String?   @db.VarChar(10)
+  aceite              String?   @db.VarChar(1)
+  especieDoc          String?   @db.VarChar(2)
+  codigoCliente       String?   @db.VarChar(20)
+  codigo_cooperativa  String?   @db.VarChar(45)
+  variacaocarteira    String?   @db.VarChar(3)
+  cip                 String?   @db.VarChar(3)
+  campo_range         String?   @db.VarChar(5)
+  contaDv             String?   @db.VarChar(1)
+  posto               String?   @db.VarChar(2)
+  byte                String?   @db.VarChar(1)
+  dataDesconto        DateTime? @db.Date
+  dataDocumento       DateTime? @db.Date
+  dataProcessamento   DateTime? @db.Date
+  desconto            Decimal?  @db.Decimal(15, 2)
+  jurosApos           Int?
+  diasProtesto        Int?
+  ativo               Boolean   @default(true)
+  ben_documento       String?   @db.VarChar(45)
+  ben_nome            String?   @db.VarChar(255)
+  ben_cep             String?   @db.VarChar(20)
+  ben_endereco        String?   @db.VarChar(255)
+  ben_bairro          String?   @db.VarChar(255)
+  ben_uf              String?   @db.VarChar(255)
+  ben_cidade          String?   @db.VarChar(255)
+  pag_documento       String?   @db.VarChar(45)
+  pag_nome            String?   @db.VarChar(255)
+  pag_cep             String?   @db.VarChar(20)
+  pag_endereco        String?   @db.VarChar(255)
+  pag_bairro          String?   @db.VarChar(255)
+  pag_uf              String?   @db.VarChar(255)
+  pag_cidade          String?   @db.VarChar(255)
+  path_pdf            String?   @db.VarChar(255)
+  cliente_contrato_id Int?
+  created_at          DateTime? @default(now()) @db.DateTime(0)
+  updated_at          DateTime? @default(now()) @db.DateTime(0)
+  deleted_at          DateTime? @db.Timestamp(0)
+}
+
+model boleto_api {
+  id                        Int       @id @default(autoincrement())
+  unit_id                   Int
+  user_id                   Int
+  vencimento                DateTime  @db.Date
+  valor                     Decimal   @default(0.00) @db.Decimal(15, 2)
+  valor_pago                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  valor_tarifa              Decimal?  @default(0.00) @db.Decimal(15, 2)
+  valor_liquido             Decimal?  @default(0.00) @db.Decimal(15, 2)
+  data_pagamento            DateTime? @db.Date
+  data_credito              DateTime? @db.Date
+  juros                     Decimal?  @default(0.00) @db.Decimal(15, 2)
+  multa                     Decimal?  @default(0.00) @db.Decimal(15, 2)
+  desconto                  Decimal?  @default(0.00) @db.Decimal(15, 2)
+  cliente_id                Int
+  nome_cliente              String    @db.VarChar(255)
+  cpf_cliente               String    @db.VarChar(20)
+  endereco_cliente          String    @db.VarChar(200)
+  numero_cliente            String    @db.VarChar(20)
+  complemento_cliente       String?   @db.VarChar(200)
+  bairro_cliente            String    @db.VarChar(200)
+  cidade_cliente            String    @db.VarChar(100)
+  estado_cliente            String    @db.Char(2)
+  cep_cliente               String    @db.VarChar(20)
+  email_cliente             String?   @db.VarChar(200)
+  telefone_cliente          String?   @db.VarChar(20)
+  texto                     String?   @db.Text
+  grupo                     String?   @db.VarChar(100)
+  pedido_numero             Int
+  juros_fixo                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  multa_fixo                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  diasdesconto1             Int?
+  desconto2                 Decimal?  @default(0.00) @db.Decimal(15, 2)
+  diasdesconto2             Int?
+  desconto3                 Decimal?  @default(0.00) @db.Decimal(15, 2)
+  diasdesconto3             Int?
+  nunca_atualizar_boleto    Int?      @default(0)
+  instrucao_adicional       String?   @db.Text
+  especie_documento         String?   @default("DS") @db.Char(3)
+  status                    Int?
+  msg                       String?   @db.VarChar(200)
+  nossonumero               Int?
+  id_unico                  Int?
+  banco_numero              String?   @db.VarChar(5)
+  token_facilitador         String?   @db.VarChar(500)
+  credencial                String?   @db.VarChar(500)
+  linkBoleto                String?   @db.VarChar(1000)
+  linkGrupo                 String?   @db.VarChar(1000)
+  linhaDigitavel            String?   @db.VarChar(200)
+  registro_sistema_bancario String?   @db.VarChar(100)
+  registro_rejeicao_motivo  String?   @db.VarChar(200)
+  created_at                DateTime  @default(now()) @db.Timestamp(0)
+  updated_at                DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at                DateTime? @db.Timestamp(0)
+}
+
+model boleto_regra {
+  id                Int       @id @default(autoincrement())
+  valor_juros       Float     @default(0.00)
+  valor_multa       Float     @default(0.00)
+  conta_bancaria_id Int
+  created_at        DateTime  @default(now()) @db.Timestamp(0)
+  updated_at        DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at        DateTime? @db.Timestamp(0)
+}
+
+model boleto_retorno {
+  id                  Int       @id @default(autoincrement())
+  banco_nome          String?   @db.VarChar(200)
+  carteira            String?   @db.VarChar(50)
+  nossoNumero         String?   @db.VarChar(50)
+  numeroDocumento     String?   @db.VarChar(50)
+  numeroControle      String?   @db.VarChar(50)
+  ocorrencia          String?   @db.VarChar(50)
+  ocorrenciaTipo      String?   @db.VarChar(50)
+  ocorrenciaDescricao String?   @db.VarChar(50)
+  dataOcorrencia      DateTime? @db.Date
+  dataVencimento      DateTime? @db.Date
+  dataCredito         DateTime? @db.Date
+  valor               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  valorTarifa         Decimal?  @default(0.00) @db.Decimal(15, 2)
+  valorIOF            Decimal?  @default(0.00) @db.Decimal(15, 2)
+  valorAbatimento     Decimal?  @default(0.00) @db.Decimal(15, 2)
+  valorDesconto       Decimal?  @default(0.00) @db.Decimal(15, 2)
+  valorRecebido       Decimal?  @default(0.00) @db.Decimal(15, 2)
+  valorMora           Decimal?  @default(0.00) @db.Decimal(15, 2)
+  valorMulta          Decimal?  @default(0.00) @db.Decimal(15, 2)
+  error               String?   @db.VarChar(55)
+  trash               String?   @db.VarChar(55)
+  created_at          DateTime  @default(now()) @db.Timestamp(0)
+  updated_at          DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at          DateTime? @db.Timestamp(0)
+}
+
+model cfop {
+  codigo    Int @id @db.TinyInt
+  descricao Int @db.TinyInt
+}
+
+model cliente {
+  id                          Int                @id @default(autoincrement())
+  tipo                        String?            @db.Char(1)
+  cliente_grupo_id            Int?               @default(1)
+  razao_social                String?            @db.VarChar(250)
+  nome_fantasia               String?            @db.VarChar(250)
+  cpf_cnpj                    String?            @db.VarChar(20)
+  rg_ie                       String?            @db.VarChar(20)
+  im                          String?            @db.VarChar(20)
+  nascimento                  DateTime?          @db.Date
+  sexo                        String?            @db.Char(1)
+  indicador_ie                String?            @db.Char(1)
+  cep                         String?            @db.VarChar(20)
+  logradouro                  String?            @db.VarChar(250)
+  numero                      String?            @db.VarChar(10)
+  bairro                      String?            @db.VarChar(150)
+  complemento                 String?            @db.VarChar(100)
+  cidade                      String?            @db.VarChar(100)
+  uf                          String?            @db.Char(2)
+  codMuni                     String?            @db.VarChar(20)
+  site                        String?            @db.VarChar(200)
+  fornecedor_id               Int?
+  comissao_parceiro           Int?
+  vendedor_user_id            Int?
+  comissao_vendedor           Int?
+  vendedor_externo_user_id    Int?
+  comissao_vendedor_externo   Int?
+  unit_id                     Int
+  user_id                     Int?
+  tabela_precos_id            Int?
+  relatorio_customizado_id    Int?
+  representante_nome          String?            @db.VarChar(200)
+  representante_nacionalidade String?            @db.VarChar(55)
+  representante_naturalidade  String?            @db.VarChar(100)
+  representante_profissao     String?            @db.VarChar(55)
+  representante_estado_civil  String?            @db.VarChar(55)
+  representante_rg            String?            @db.VarChar(20)
+  representante_cpf           String?            @db.VarChar(20)
+  representante_cep           String?            @db.VarChar(15)
+  representante_logradouro    String?            @db.VarChar(200)
+  representante_bairro        String?            @db.VarChar(100)
+  representante_numero        String?            @db.VarChar(10)
+  representante_complemento   String?            @db.VarChar(100)
+  representante_cidade        String?            @db.VarChar(100)
+  representante_uf            String?            @db.Char(2)
+  lat                         String?            @db.VarChar(100)
+  lon                         String?            @db.VarChar(100)
+  prazo_atendimento           String?            @db.VarChar(20)
+  data_cobranca               DateTime?          @db.Date
+  juridico                    String?            @default("N") @db.Char(1)
+  ativo                       String             @default("S") @db.Char(1)
+  gera_nfse                   String             @default("S") @db.Char(1)
+  enquadramento_tributario    String             @default("S") @db.Char(1)
+  cliente_origem_id           Int?
+  estado_civil                String?            @db.VarChar(100)
+  orgao_emissor               String?            @db.VarChar(100)
+  beneficiario_mutuante       String?            @db.VarChar(250)
+  cpf_beneficiario_mutuante   String?            @db.VarChar(20)
+  codigo_parceiro             String?            @db.VarChar(100)
+  telefone_principal          String?            @db.VarChar(55)
+  email_principal             String?            @db.VarChar(255)
+  profissao_id                Int?
+  filhos                      String?            @db.Char(1)
+  created_at                  DateTime           @default(now()) @db.Timestamp(0)
+  updated_at                  DateTime?          @default(now()) @db.Timestamp(0)
+  deleted_at                  DateTime?          @db.Timestamp(0)
+  fornecedor                  fornecedor?        @relation(fields: [fornecedor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cliente_ibfk_1")
+  system_unit                 system_unit        @relation(fields: [unit_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cliente_ibfk_2")
+  system_user                 system_user?       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cliente_ibfk_3")
+  cliente_endereco            cliente_endereco[]
+  emails_cliente              emails_cliente[]
+
+  @@index([fornecedor_id], map: "fornecedor_id")
+  @@index([tabela_precos_id], map: "tabelas_preco_cab_id")
+  @@index([unit_id], map: "unit_id")
+  @@index([user_id], map: "user_id")
+}
+
+model cliente_contrato {
+  id                              Int       @id @default(autoincrement())
+  data_contrato                   DateTime? @db.Date
+  nome                            String    @db.VarChar(200)
+  cliente_id                      Int
+  tipo_endereco_id                Int
+  relatorio_customizado_id        Int
+  tipo_forma_pgto_id              Int
+  tipo_pgto_id                    Int
+  plano_id                        Int
+  conta_bancaria_id               Int
+  conta_bancaria_entrada_id       Int?
+  unit_id                         Int       @default(1)
+  user_id                         Int
+  inicio_vigencia                 DateTime  @db.Date
+  fim_vigencia                    DateTime  @db.Date
+  data_vencimento_unico           DateTime? @db.Date
+  entrada                         Decimal   @default(0.00) @db.Decimal(15, 2)
+  desconto                        Decimal?  @default(0.00) @db.Decimal(15, 2)
+  total                           Decimal   @default(0.00) @db.Decimal(15, 2)
+  parcela                         String    @default("N") @db.Char(1)
+  qtd_parcelas                    Int
+  valor_parcelado                 Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vencimento_primeira_parcela     DateTime? @db.Date
+  valor                           Decimal   @default(0.00) @db.Decimal(15, 2)
+  status                          String    @default("A") @db.Char(1)
+  carne_path_pdf                  String?   @db.VarChar(200)
+  data_base                       Int?
+  prazo                           Int?
+  percentual_de_juros             Decimal?  @default(0.00) @db.Decimal(15, 2)
+  taxa_do_contrato                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  mutuario_id                     Int
+  tipo                            String?   @default("A") @db.Char(1)
+  arquivo                         String?   @db.VarChar(255)
+  cliente_contrato_status_id      Int?      @default(1)
+  status_relatorio_customizado_id Int?      @default(1)
+  data_procedimento_status        DateTime? @db.Date
+  fornecedor_id                   Int?
+  observacao                      String?   @db.LongText
+  situacao_id                     Int?
+  created_at                      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at                      DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at                      DateTime? @db.Timestamp(0)
+}
+
+model cliente_contrato_aditivo {
+  id                       Int       @unique(map: "cliente_contrato_aditivo_id_IDX") @default(autoincrement())
+  mutuario_id              Int?
+  cliente_contrato_id      Int?
+  relatorio_customizado_id Int?
+  nome                     String?   @db.VarChar(500)
+  aditivo                  String?   @db.LongText
+  valor_anterior           Decimal?  @db.Decimal(15, 2)
+  valor_reajustado         Decimal?  @db.Decimal(15, 2)
+  valor_saldo              Decimal?  @db.Decimal(15, 2)
+  data_reajuste            DateTime? @db.Date
+  data_vencimento_unico    DateTime? @db.Date
+  inicio_vigencia          DateTime? @db.Date
+  fim_vigencia_anterior    DateTime? @db.Date
+  fim_vigencia             DateTime? @db.Date
+  taxa_do_contrato         Decimal?  @db.Decimal(15, 2)
+  percentual_de_juros      Decimal?  @db.Decimal(15, 2)
+  arquivo                  String?   @db.VarChar(255)
+  prazo                    Int?
+  data_base                Int?
+  observacao               String?   @db.LongText
+  updated_at               DateTime? @default(now()) @db.DateTime(0)
+  created_at               DateTime? @default(now()) @db.DateTime(0)
+  deleted_at               DateTime? @db.DateTime(0)
+
+  @@index([cliente_contrato_id], map: "cliente_contrato_aditivo_cliente_contrato_id_IDX")
+  @@index([relatorio_customizado_id], map: "cliente_contrato_aditivo_relatorio_customizado_id_IDX")
+}
+
+model cliente_contrato_aprovacao_financeiro {
+  id                          Int       @unique(map: "cliente_contrato_aprovacao_financeiro_id_IDX") @default(autoincrement())
+  data_vencimento             DateTime? @db.Date
+  aprovado                    String?   @default("N") @db.Char(1)
+  data_aprovado               DateTime? @db.Date
+  cliente_contrato_id         Int?
+  cliente_contrato_aditivo_id Int?
+  status                      Int?
+  valor                       Decimal?  @db.Decimal(15, 2)
+  relatorio_customizado_id    Int?
+  fornecedor_id               Int?
+  created_at                  DateTime? @default(now()) @db.DateTime(0)
+  updated_at                  DateTime? @default(now()) @db.DateTime(0)
+  deleted_at                  DateTime? @db.DateTime(0)
+
+  @@index([cliente_contrato_aditivo_id], map: "cliente_contrato_aditivo_id_IDX")
+  @@index([cliente_contrato_id], map: "cliente_contrato_id_IDX")
+  @@index([fornecedor_id], map: "fornecedor_id_IDX")
+  @@index([relatorio_customizado_id], map: "relatorio_customizado_id_IDX")
+}
+
+model cliente_contrato_historico {
+  id                              Int       @id @default(autoincrement())
+  cliente_contrato_id             Int?
+  data_contrato                   DateTime? @db.Date
+  nome                            String    @db.VarChar(200)
+  cliente_id                      Int
+  tipo_endereco_id                Int
+  relatorio_customizado_id        Int
+  tipo_forma_pgto_id              Int
+  tipo_pgto_id                    Int
+  plano_id                        Int
+  conta_bancaria_id               Int
+  conta_bancaria_entrada_id       Int?
+  unit_id                         Int       @default(1)
+  user_id                         Int
+  inicio_vigencia                 DateTime  @db.Date
+  fim_vigencia                    DateTime  @db.Date
+  entrada                         Decimal   @default(0.00) @db.Decimal(15, 2)
+  desconto                        Decimal?  @default(0.00) @db.Decimal(15, 2)
+  total                           Decimal   @default(0.00) @db.Decimal(15, 2)
+  parcela                         String    @default("N") @db.Char(1)
+  qtd_parcelas                    Int
+  valor_parcelado                 Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vencimento_primeira_parcela     DateTime? @db.Date
+  valor                           Decimal   @default(0.00) @db.Decimal(15, 2)
+  status                          String    @default("A") @db.Char(1)
+  carne_path_pdf                  String?   @db.VarChar(200)
+  data_base                       Int?
+  prazo                           Int?
+  percentual_de_juros             Decimal?  @default(0.00) @db.Decimal(15, 2)
+  taxa_do_contrato                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  mutuario_id                     Int
+  tipo                            String?   @default("A") @db.Char(1)
+  arquivo                         String?   @db.VarChar(255)
+  cliente_contrato_status_id      Int?      @default(1)
+  status_relatorio_customizado_id Int?      @default(1)
+  data_procedimento_status        DateTime? @db.Date
+  fornecedor_id                   Int?
+  created_at                      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at                      DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at                      DateTime? @db.Timestamp(0)
+}
+
+model cliente_contrato_status {
+  id         Int       @unique(map: "cliente_contrato_status_id_IDX") @default(autoincrement())
+  nome       String?   @db.VarChar(100)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model cliente_endereco {
+  id                Int       @id @default(autoincrement())
+  cliente_id        Int
+  tipo_endereco_id  Int
+  cep               String    @db.VarChar(20)
+  logradouro        String    @db.VarChar(200)
+  numero            String?   @db.VarChar(20)
+  complemento       String?   @db.VarChar(200)
+  bairro            String?   @db.VarChar(100)
+  cidade            String    @db.VarChar(100)
+  uf                String    @db.Char(2)
+  codMuni           String    @db.VarChar(20)
+  lat               String?   @db.VarChar(100)
+  lon               String?   @db.VarChar(100)
+  horario_permitido String?   @db.VarChar(100)
+  regiao            String?   @db.VarChar(55)
+  created_at        DateTime  @default(now()) @db.Timestamp(0)
+  updated_at        DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at        DateTime? @db.Timestamp(0)
+  ponto_referencia  String?   @db.VarChar(500)
+  cliente           cliente   @relation(fields: [cliente_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cliente_endereco_ibfk_1")
+
+  @@index([cliente_id], map: "cliente_id")
+}
+
+model cliente_equipamento {
+  id                       Int       @id @default(autoincrement())
+  cliente_id               Int
+  cliente_endereco_id      Int?
+  pmoc_tipo_atividade_id   Int?
+  ocupantes_fixos          Int?
+  ocupantes_flutuantes     Int?
+  pmoc_ambiente_id         Int?
+  area_climatizada         String?   @db.VarChar(10)
+  carga_termica            String?   @db.VarChar(10)
+  identificacao_tag        String?   @db.VarChar(10)
+  pmoc_tipo_equipamento_id Int?
+  produto_fabricante_id    Int?
+  capacidade               String?   @db.VarChar(10)
+  modelo_evaporador        Int?
+  n_serie_evaporador       String?   @db.VarChar(55)
+  modelo_condensador       Int?
+  n_serie_condensador      String?   @db.VarChar(55)
+  pmoc_tensao_id           Int?
+  andar                    String?   @db.VarChar(20)
+  n_contrato               String?   @db.VarChar(100)
+  patrimonio               String?   @db.Char(1)
+  fluido_refrigerante_id   Int?
+  aquisicao                DateTime? @db.Date
+  valor_aquisicao          Decimal?  @default(0.00) @db.Decimal(15, 2)
+  created_at               DateTime  @default(now()) @db.Timestamp(0)
+  updated_at               DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at               DateTime? @db.Timestamp(0)
+  tombo_evaporador         String?   @db.VarChar(20)
+  tombo_condensador        String?   @db.VarChar(20)
+}
+
+model cliente_grupo {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model codigo_servico {
+  codigo    Int @id @db.TinyInt
+  descricao Int @db.TinyInt
+}
+
+model comissao_fornecedor {
+  id                Int         @id @default(autoincrement())
+  data_faturamento  DateTime?   @db.Date
+  valor_faturamento Decimal?    @db.Decimal(12, 2)
+  taxa_comissao     Float?      @db.Float
+  valor_comissao    Decimal?    @db.Decimal(12, 2)
+  descricao         String?     @db.VarChar(200)
+  pago              String?     @db.Char(1)
+  tipo              String      @db.Char(1)
+  unit_id           Int
+  fornecedor_id     Int?
+  cliente_id        Int
+  created_at        DateTime    @default(now()) @db.Timestamp(0)
+  updated_at        DateTime    @default(now()) @db.Timestamp(0)
+  deleted_at        DateTime?   @db.Timestamp(0)
+  fornecedor        fornecedor? @relation(fields: [fornecedor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "comissao_fornecedor_ibfk_1")
+  system_unit       system_unit @relation(fields: [unit_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "unit")
+
+  @@index([fornecedor_id], map: "fornecedor_id")
+  @@index([unit_id], map: "unit_id")
+}
+
+model comissao_tabela {
+  id             Int       @id @default(autoincrement())
+  descricao      String    @db.VarChar(55)
+  forma_comissao String    @db.Char(1)
+  valor_comissao Float
+  observacao     String?   @db.VarChar(100)
+  created_at     DateTime  @default(now()) @db.Timestamp(0)
+  updated_at     DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at     DateTime? @db.Timestamp(0)
+}
+
+model comissao_user {
+  id                Int         @id @default(autoincrement())
+  data_faturamento  DateTime?   @db.Date
+  valor_faturamento Decimal?    @db.Decimal(12, 2)
+  taxa_comissao     Float?      @db.Float
+  valor_comissao    Decimal?    @db.Decimal(12, 2)
+  descricao         String?     @db.VarChar(200)
+  pago              String?     @db.Char(1)
+  tipo              String      @db.Char(1)
+  cliente_id        Int
+  unit_id           Int
+  user_id           Int
+  created_at        DateTime    @default(now()) @db.Timestamp(0)
+  updated_at        DateTime    @default(now()) @db.Timestamp(0)
+  deleted_at        DateTime?   @db.Timestamp(0)
+  system_unit       system_unit @relation(fields: [unit_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "comissao_user_ibfk_1")
+  system_user       system_user @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "comissao_user_ibfk_4")
+
+  @@index([unit_id], map: "unit_id")
+  @@index([user_id], map: "user_id")
+}
+
+model compras_cotacao {
+  id                     Int       @id @default(autoincrement())
+  fornecedor_id          Int
+  compras_solicitacao_id Int
+  email                  String    @db.VarChar(300)
+  created_at             DateTime  @default(now()) @db.Timestamp(0)
+  updated_at             DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at             DateTime? @db.Timestamp(0)
+}
+
+model compras_demanda {
+  id                     Int       @id @default(autoincrement())
+  compras_solicitacao_id Int
+  compras_projeto_id     Int
+  created_at             DateTime  @default(now()) @db.Timestamp(0)
+  updated_at             DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at             DateTime? @db.Timestamp(0)
+}
+
+model compras_projeto {
+  id           Int       @id @default(autoincrement())
+  nome_projeto String    @db.VarChar(200)
+  contrato     String?   @db.VarChar(100)
+  data_inicio  DateTime? @db.Date
+  data_fim     DateTime? @db.Date
+  cliente_id   Int
+  cidade       String?   @db.VarChar(200)
+  uf           String?   @db.Char(2)
+  created_at   DateTime  @default(now()) @db.Timestamp(0)
+  updated_at   DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at   DateTime? @db.Timestamp(0)
+}
+
+model compras_solicitacao {
+  id                        Int       @id @default(autoincrement())
+  unit_id                   Int
+  nivel_prioridade          String    @db.Char(1)
+  data_necessidade          DateTime  @db.Date
+  data_solicitacao          DateTime  @db.Date
+  data_validade             DateTime? @db.Date
+  user_id                   Int
+  tipo_forma_pgto_id        Int?
+  tipo_pgto_id              Int?
+  fornecedor_id             Int?
+  observacao                String?   @db.Text
+  observacao_requisicao     String?   @db.Text
+  total_itens               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  total_desconto            Decimal?  @default(0) @db.Decimal(10, 0)
+  total_pedido              Decimal?  @default(0) @db.Decimal(10, 0)
+  compras_aprovador_id      Int?
+  status_pedido             Int?      @default(1)
+  data_aprovacao            DateTime? @db.DateTime(0)
+  data_aprovacao_requisicao DateTime? @db.DateTime(0)
+  aprovador_requisicao      Int?
+  status_requisicao         Int?      @default(1)
+  compras_projeto_id        Int?
+  almoxarife                String?   @default("N") @db.Char(1)
+  created_at                DateTime  @default(now()) @db.Timestamp(0)
+  updated_at                DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at                DateTime? @db.Timestamp(0)
+
+  @@index([aprovador_requisicao], map: "aprovador_requisicao")
+  @@index([compras_aprovador_id], map: "compras_aprovador_id")
+  @@index([status_pedido], map: "status_pedido")
+  @@index([status_requisicao], map: "status_requisicao")
+  @@index([tipo_forma_pgto_id, tipo_pgto_id, fornecedor_id], map: "tipo_forma_pgto_id")
+  @@index([unit_id], map: "unit_id")
+  @@index([user_id], map: "user_id")
+}
+
+model compras_solicitacao_iten {
+  id                     Int       @id
+  compras_solicitacao_id Int
+  sequencia              Int?
+  produto_id             Int
+  preco                  Decimal?  @db.Decimal(15, 4)
+  und                    String?   @db.VarChar(30)
+  quantidade_solicitado  Float?
+  quantidade             Float?
+  desconto               Decimal?  @db.Decimal(15, 4)
+  total_item             Decimal?  @db.Decimal(15, 4)
+  total                  Decimal?  @db.Decimal(15, 4)
+  observacao             String?   @db.VarChar(200)
+  fornecedor_id          Int?
+  atende                 String?   @default("N") @db.Char(1)
+  created_at             DateTime  @default(now()) @db.Timestamp(0)
+  updated_at             DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at             DateTime? @db.Timestamp(0)
+
+  @@index([produto_id], map: "produto_id")
+}
+
+model compras_status {
+  id         Int       @id
+  nome       String    @db.VarChar(200)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model conta_bancaria {
+  id                                                                                      Int                      @id @unique(map: "id")
+  cod_banco                                                                               String?                  @db.VarChar(10)
+  agencia                                                                                 String?                  @db.VarChar(10)
+  agencia_dv                                                                              String?                  @db.Char(4)
+  conta                                                                                   String?                  @db.VarChar(10)
+  conta_dv                                                                                String?                  @db.Char(4)
+  tipo                                                                                    String?                  @db.Char(2)
+  cep                                                                                     String?                  @db.VarChar(10)
+  logradouro                                                                              String?                  @db.VarChar(55)
+  numero                                                                                  String?                  @db.VarChar(10)
+  bairro                                                                                  String?                  @db.VarChar(55)
+  complemento                                                                             String?                  @db.VarChar(55)
+  cidade                                                                                  String?                  @db.VarChar(55)
+  uf                                                                                      String?                  @db.Char(2)
+  codMuni                                                                                 String?                  @db.VarChar(20)
+  tel_gerente                                                                             String?                  @db.VarChar(15)
+  tel_banco                                                                               String?                  @db.VarChar(15)
+  gerente                                                                                 String?                  @db.VarChar(55)
+  data_abaertura                                                                          DateTime?                @db.Date
+  banco_id                                                                                Int
+  aceite                                                                                  String?                  @db.Char(1)
+  especieDoc                                                                              String?                  @db.Char(2)
+  carteira                                                                                String?                  @db.VarChar(10)
+  convenio                                                                                String?                  @db.VarChar(20)
+  codigoCliente                                                                           String?                  @db.VarChar(20)
+  instrucoes1                                                                             String?                  @db.VarChar(100)
+  instrucoes2                                                                             String?                  @db.VarChar(100)
+  instrucoes3                                                                             String?                  @db.VarChar(100)
+  instrucoes4                                                                             String?                  @db.VarChar(100)
+  unit_id                                                                                 Int
+  codigo_cooperativa                                                                      String?                  @db.VarChar(45)
+  tipo_remessa                                                                            String?                  @db.VarChar(45)
+  variacaoCarteira                                                                        String?                  @db.VarChar(3)
+  cip                                                                                     String?                  @db.VarChar(3)
+  campo_range                                                                             String?                  @db.VarChar(5)
+  contaDv                                                                                 String?                  @db.VarChar(1)
+  posto                                                                                   String?                  @db.VarChar(2)
+  byte                                                                                    String?                  @db.VarChar(1)
+  beneficiario                                                                            String?                  @db.VarChar(20)
+  ultimo_nossonumero                                                                      Int?                     @db.UnsignedInt
+  ultima_remessa                                                                          Int?                     @db.UnsignedInt
+  representante                                                                           String?                  @db.VarChar(250)
+  conta_moeda_id                                                                          Int?                     @default(1)
+  pix                                                                                     String?                  @db.VarChar(500)
+  created_at                                                                              DateTime                 @default(now()) @db.Timestamp(0)
+  updated_at                                                                              DateTime                 @default(now()) @db.Timestamp(0)
+  deleted_at                                                                              DateTime?                @db.Timestamp(0)
+  transferencia_bancaria_transferencia_bancaria_conta_bancaria_credito_idToconta_bancaria transferencia_bancaria[] @relation("transferencia_bancaria_conta_bancaria_credito_idToconta_bancaria")
+  transferencia_bancaria_transferencia_bancaria_conta_bancaria_debito_idToconta_bancaria  transferencia_bancaria[] @relation("transferencia_bancaria_conta_bancaria_debito_idToconta_bancaria")
+}
+
+model conta_moeda {
+  id         Int       @unique(map: "conta_moeda_id_IDX") @default(autoincrement())
+  moeda      String?   @db.VarChar(100)
+  simbolo    String?   @db.Char(5)
+  created_at DateTime? @default(now()) @db.DateTime(0)
+  updated_at DateTime? @default(now()) @db.DateTime(0)
+  deleted_at DateTime? @db.DateTime(0)
+}
+
+model conta_pagar {
+  id                        Int       @id @default(autoincrement())
+  data_conta                DateTime? @db.Date
+  descricao                 String?   @db.VarChar(1000)
+  documento                 String?   @db.VarChar(55)
+  previsao                  String?   @db.Char(1)
+  data_vencimento           DateTime? @db.Date
+  multa                     Decimal   @default(0.00) @db.Decimal(12, 2)
+  juros                     Decimal   @default(0.00) @db.Decimal(12, 2)
+  taxas                     Decimal?  @default(0.00) @db.Decimal(15, 2)
+  valor                     Decimal   @default(0.00) @db.Decimal(12, 2)
+  desconto                  Decimal   @default(0.00) @db.Decimal(12, 2)
+  portador                  String?   @db.VarChar(55)
+  observacao                String?   @db.MediumText
+  baixa                     String    @default("N") @db.Char(1)
+  data_baixa                DateTime? @db.Date
+  valor_pago                Decimal   @default(0.00) @db.Decimal(12, 2)
+  valor_parcial             Decimal   @default(0.00) @db.Decimal(12, 2)
+  valor_real                Decimal   @default(0.00) @db.Decimal(12, 2)
+  replica                   String?   @db.Char(1)
+  parcelas                  Int?
+  nparcelas                 Int?
+  intervalo                 Int?
+  responsavel               String?   @db.VarChar(100)
+  unit_id                   Int?
+  user_id                   Int
+  tipo_pgto_id              Int
+  tipo_forma_pgto_id        Int
+  fornecedor_id             Int
+  pc_despesa_id             Int?
+  pc_despesa_nome           String    @db.VarChar(200)
+  departamento_id           Int?
+  conta_bancaria_id         Int?
+  split                     String?   @default("N") @db.Char(1)
+  relatorio_customizado_id  Int?
+  compras_projeto_id        Int?
+  solicitacao_financeiro_id Int?
+  arquivo                   String?   @db.VarChar(500)
+  cliente_contrato_id       Int?
+  created_at                DateTime  @default(now()) @db.Timestamp(0)
+  updated_at                DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at                DateTime? @db.Timestamp(0)
+}
+
+model conta_pagar_arquivo {
+  id             Int     @unique(map: "conta_pagar_arquivo_id_IDX") @default(autoincrement())
+  conta_pagar_id Int?
+  arquivo        String? @db.VarChar(500)
+}
+
+model conta_receber {
+  id                       Int       @id @default(autoincrement())
+  data_conta               DateTime? @db.Date
+  descricao                String?   @db.VarChar(60)
+  documento                String?   @db.VarChar(55)
+  data_vencimento          DateTime? @db.Date
+  data_pagamento           DateTime? @db.Date
+  previsao                 String?   @db.Char(1)
+  multa                    Decimal?  @default(0.00) @db.Decimal(12, 2)
+  juros                    Decimal?  @default(0.00) @db.Decimal(12, 2)
+  taxas                    Decimal?  @default(0.00) @db.Decimal(15, 2)
+  valor                    Decimal   @default(0.00) @db.Decimal(12, 2)
+  desconto                 Decimal   @default(0.00) @db.Decimal(12, 2)
+  portador                 String?   @db.VarChar(55)
+  observacao               String?   @db.MediumText
+  baixa                    String    @default("N") @db.Char(1)
+  data_baixa               DateTime? @db.Date
+  valor_pago               Decimal   @default(0.00) @db.Decimal(12, 2)
+  valor_parcial            Decimal   @default(0.00) @db.Decimal(12, 2)
+  valor_real               Decimal   @default(0.00) @db.Decimal(12, 2)
+  tipo_forma_pgto_id       Int
+  replica                  String    @default("N") @db.Char(1)
+  parcelas                 Int?
+  nparcelas                Int?
+  intervalo                Int?
+  responsavel              String?   @db.VarChar(100)
+  boleto_status            String?   @db.VarChar(20)
+  boleto_emitido           String    @default("N") @db.Char(1)
+  unit_id                  Int
+  user_id                  Int
+  boleto_id                String?   @db.VarChar(100)
+  cliente_id               Int
+  cliente_contrato_id      Int?
+  tipo_pgto_id             Int
+  pc_receita_id            Int?
+  pc_receita_nome          String    @db.VarChar(200)
+  conta_bancaria_id        Int?
+  split                    String?   @default("N") @db.Char(1)
+  boleto_account_id        String?   @db.VarChar(150)
+  gerar_boleto             String?   @default("N") @db.VarChar(1)
+  nfse                     String    @default("N") @db.Char(1)
+  gera_nfse                String?   @default("N") @db.Char(1)
+  relatorio_customizado_id Int?
+  recibo                   String?   @db.Char(1)
+  juridico                 String    @default("N") @db.Char(1)
+  pedido_numero            Int?
+  compras_projeto_id       Int?
+  fornecedor_id            Int?
+  arquivo                  String?   @db.VarChar(500)
+  departamento_id          Int?
+  created_at               DateTime  @default(now()) @db.Timestamp(0)
+  updated_at               DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at               DateTime? @db.Timestamp(0)
+}
+
+model conta_receber_arquivo {
+  id               Int     @unique(map: "conta_receber_arquivo_id_IDX") @default(autoincrement())
+  conta_receber_id Int?
+  arquivo          String? @db.VarChar(500)
+}
+
+model departamento {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(150)
+  unit_id    Int
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model email {
+  id               Int       @id @default(autoincrement())
+  assunto          String    @db.VarChar(255)
+  corpo            String    @db.Text
+  destinatario     String    @db.VarChar(255)
+  email_ja_enviado Boolean   @default(false)
+  data_para_envio  DateTime  @db.Date
+  created_at       DateTime  @default(now()) @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+  deleted_at       DateTime? @db.Timestamp(0)
+}
+
+model email_aenviar {
+  id           Int    @id @default(autoincrement())
+  email_id     Int
+  email_enviar String @db.VarChar(255)
+}
+
+model emails_cliente {
+  id          Int       @id
+  responsavel String?   @db.VarChar(100)
+  email       String    @db.VarChar(150)
+  cliente_id  Int
+  created_at  DateTime  @default(now()) @db.Timestamp(0)
+  updated_at  DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at  DateTime? @db.Timestamp(0)
+  cliente     cliente   @relation(fields: [cliente_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "emails_cliente_ibfk_1")
+
+  @@index([cliente_id], map: "cliente_id")
+}
+
+model emails_fornecedor {
+  id            Int       @id @default(autoincrement())
+  responsavel   String?   @db.VarChar(100)
+  email         String    @db.VarChar(150)
+  fornecedor_id Int
+  created_at    DateTime  @default(now()) @db.Timestamp(0)
+  updated_at    DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+}
+
+model emails_unidade {
+  id          Int       @id @default(autoincrement())
+  responsavel String?   @db.VarChar(100)
+  email       String?   @db.VarChar(150)
+  unidades_id Int
+  created_at  DateTime  @default(now()) @db.Timestamp(0)
+  updated_at  DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at  DateTime? @db.Timestamp(0)
+}
+
+model estoque {
+  id         Int       @id @default(autoincrement())
+  unit_id    Int
+  produto_id Int?
+  local      String?   @db.VarChar(20)
+  saldo      Decimal   @default(0.0000) @db.Decimal(14, 4)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+
+  @@unique([produto_id, local], map: "estoque_unico_pk")
+}
+
+model estoque_consumo {
+  id         Int       @id @default(autoincrement())
+  unit_id    Int
+  produto_id Int?
+  local      String?   @db.VarChar(20)
+  saldo      Decimal   @default(0.0000) @db.Decimal(14, 4)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+
+  @@unique([produto_id, local], map: "estoque_unico_pk")
+}
+
+model estoque_control_imobilizado {
+  id         Int       @id @default(autoincrement())
+  unit_id    Int
+  produto_id Int?
+  local      String?   @db.VarChar(20)
+  saldo      Float     @db.Float
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model estoque_controlmov_imobilizado {
+  id             Int       @id @default(autoincrement())
+  unit_id        Int
+  produto_id     Int
+  local          String    @db.VarChar(55)
+  alocado        String?   @db.Text
+  user_id        Int
+  estado         Int
+  validade_mes   Int?
+  data_avaliacao DateTime  @db.Date
+  valor_justo    Decimal   @db.Decimal(15, 2)
+  emplacamento   String    @db.VarChar(100)
+  tipo           String    @db.Char(1)
+  quantidade     Float
+  saldo          Float?
+  created_at     DateTime  @default(now()) @db.Timestamp(0)
+  updated_at     DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at     DateTime? @db.Timestamp(0)
+}
+
+model estoque_devolucao {
+  id             Int       @id @default(autoincrement())
+  data_devolucao DateTime  @db.Date
+  hora_devolucao DateTime  @db.Time(0)
+  responsavel_id Int
+  user_id        Int
+  unit_id        Int?
+  observacao     String    @db.Text
+  baixa          String?   @default("N") @db.Char(1)
+  created_at     DateTime  @default(now()) @db.Timestamp(0)
+  updated_at     DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at     DateTime? @db.Timestamp(0)
+}
+
+model estoque_devolucao_itens {
+  id                   Int       @id @default(autoincrement())
+  estoque_devolucao_id Int
+  produto_id           Int
+  produto_tipo         Int       @default(1)
+  quantidade           Int
+  created_at           DateTime  @default(now()) @db.Timestamp(0)
+  updated_at           DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at           DateTime? @db.Timestamp(0)
+}
+
+model estoque_imobilizado {
+  id         Int       @id @default(autoincrement())
+  unit_id    Int
+  produto_id Int?
+  local      String?   @db.VarChar(20)
+  saldo      Decimal?  @db.Decimal(14, 4)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model estoque_insumos {
+  id                 Int       @id @default(autoincrement())
+  data_lancamento    DateTime  @db.Date
+  hora               DateTime  @db.Time(0)
+  responsavel        String    @db.VarChar(200)
+  emitente           String?   @db.VarChar(255)
+  almoxerifado       String?   @db.VarChar(255)
+  transportador      String?   @db.VarChar(255)
+  user_id            Int
+  unit_id            Int?
+  observacao         String?   @db.Text
+  baixa              String?   @default("N") @db.Char(1)
+  cliente_id         Int?
+  compras_projeto_id Int?
+  total              Decimal?  @default(0.0000) @db.Decimal(15, 4)
+  created_at         DateTime  @default(now()) @db.Timestamp(0)
+  updated_at         DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at         DateTime? @db.Timestamp(0)
+}
+
+model estoque_insumos_itens {
+  id                 Int       @id @default(autoincrement())
+  estoque_insumos_id Int
+  produto_id         Int
+  estoque            String?   @db.Char(1)
+  nfe_entrada_id     Int?
+  und                String?   @db.Char(5)
+  quantidade         Float
+  preco              Decimal?  @db.Decimal(15, 4)
+  total_item         Decimal?  @db.Decimal(15, 4)
+  created_at         DateTime  @default(now()) @db.Timestamp(0)
+  updated_at         DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at         DateTime? @db.Timestamp(0)
+}
+
+model estoque_lote {
+  id            Int       @id @default(autoincrement())
+  unit_id       Int
+  produto_id    Int?
+  fornecedor_id Int?
+  local         String?   @db.VarChar(20)
+  quantidade    Decimal?  @db.Decimal(15, 4)
+  saldo         Float
+  lote          String?   @db.VarChar(60)
+  vencimento    DateTime? @db.Date
+  tipo          String?   @db.Char(1)
+  valor         Decimal?  @db.Decimal(15, 4)
+  numero_nfe    String?   @db.VarChar(45)
+  data_nfe      DateTime? @db.Date
+  created_at    DateTime? @default(now()) @db.Timestamp(0)
+  updated_at    DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+}
+
+model estoque_movel {
+  id         Int       @id @default(autoincrement())
+  unit_id    Int
+  produto_id Int?
+  local      String?   @db.VarChar(20)
+  saldo      Float?
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model estoque_requisicao {
+  id              Int       @id @default(autoincrement())
+  data_requisicao DateTime  @db.Date
+  hora_requisicao DateTime  @db.Time(0)
+  responsavel_id  Int
+  user_id         Int
+  unit_id         Int?
+  observacao      String    @db.Text
+  baixa           String?   @default("N") @db.Char(1)
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+}
+
+model estoque_requisicao_itens {
+  id                    Int       @id @default(autoincrement())
+  estoque_requisicao_id Int
+  produto_id            Int
+  produto_tipo          Int       @default(1)
+  quantidade            Int
+  created_at            DateTime  @default(now()) @db.Timestamp(0)
+  updated_at            DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at            DateTime? @db.Timestamp(0)
+}
+
+model estoque_tipo {
+  id         Int       @id @default(autoincrement())
+  tipo       String    @db.VarChar(200)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model estoque_transferencia_imobilizado {
+  id            Int       @id @default(autoincrement())
+  unit_id       Int
+  local_origem  String    @db.VarChar(55)
+  local_destino String    @db.VarChar(55)
+  user_id       Int
+  baixa         String?   @default("N") @db.Char(1)
+  created_at    DateTime  @default(now()) @db.Timestamp(0)
+  updated_at    DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+}
+
+model estoque_transferencia_imobilizado_item {
+  id                                   Int       @id @default(autoincrement())
+  estoque_transferencia_imobilizado_id Int
+  produto_id                           Int
+  estado                               Int
+  data_avaliacao                       DateTime  @db.Date
+  valor_justo                          Decimal   @default(0.00) @db.Decimal(15, 2)
+  emplacamento                         String    @db.VarChar(100)
+  created_at                           DateTime  @default(now()) @db.Timestamp(0)
+  updated_at                           DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at                           DateTime? @db.Timestamp(0)
+}
+
+model estoquemov {
+  id            Int       @id @default(autoincrement())
+  unit_id       Int
+  produto_id    Int?
+  local         String?   @db.VarChar(20)
+  tipo          String?   @db.Char(1)
+  quantidade    Decimal?  @db.Decimal(14, 4)
+  saldo         Decimal?  @db.Decimal(14, 2)
+  valor         Decimal?  @db.Decimal(14, 2)
+  referencia    String?   @db.VarChar(100)
+  controla_lote String    @db.Char(1)
+  created_at    DateTime? @default(now()) @db.Timestamp(0)
+  updated_at    DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+}
+
+model estoquemov_consumo {
+  id         Int       @id @default(autoincrement())
+  unit_id    Int
+  produto_id Int?
+  local      String?   @db.VarChar(20)
+  tipo       String?   @db.Char(1)
+  quantidade Decimal?  @db.Decimal(14, 4)
+  saldo      Decimal?  @db.Decimal(14, 2)
+  valor      Decimal?  @db.Decimal(14, 2)
+  referencia String?   @db.VarChar(100)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model estoquemov_imobilizado {
+  id            Int       @id @default(autoincrement())
+  unit_id       Int
+  produto_id    Int?
+  local         String?   @db.VarChar(20)
+  tipo          String?   @db.Char(1)
+  quantidade    Decimal?  @db.Decimal(14, 4)
+  saldo         Decimal?  @db.Decimal(14, 2)
+  valor         Decimal?  @db.Decimal(14, 2)
+  referencia    String?   @db.VarChar(100)
+  controla_lote String?   @default("N") @db.Char(1)
+  created_at    DateTime? @default(now()) @db.Timestamp(0)
+  updated_at    DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+}
+
+model estoquemov_lote {
+  id            Int       @id @default(autoincrement())
+  unit_id       Int
+  produto_id    Int?
+  estoquemov_id Int?
+  local         String?   @db.VarChar(20)
+  lote          String?   @db.VarChar(60)
+  quantidade    Decimal?  @db.Decimal(15, 4)
+  saldo         Float     @default(0.00)
+  vencimento    DateTime? @db.Date
+  tipo          String?   @db.Char(1)
+  created_at    DateTime? @default(now()) @db.Timestamp(0)
+  updated_at    DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+}
+
+model estoquemov_movel {
+  id            Int       @id @default(autoincrement())
+  unit_id       Int
+  produto_id    Int?
+  local         String?   @db.VarChar(20)
+  tipo          String?   @db.Char(1)
+  quantidade    Decimal?  @db.Decimal(14, 4)
+  saldo         Decimal?  @db.Decimal(14, 2)
+  valor         Decimal?  @db.Decimal(14, 2)
+  referencia    String?   @db.VarChar(100)
+  controla_lote String    @db.Char(1)
+  created_at    DateTime? @default(now()) @db.Timestamp(0)
+  updated_at    DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+}
+
+model fornecedor {
+  id                        Int                   @id @default(autoincrement())
+  nome_fantasia             String?               @db.VarChar(150)
+  razao_social              String?               @db.VarChar(150)
+  insc_estadual             String?               @db.VarChar(20)
+  tipo                      String?               @db.VarChar(1)
+  cpf_cnpj                  String?               @db.VarChar(20)
+  cep                       String?               @db.VarChar(10)
+  logradouro                String?               @db.VarChar(55)
+  numero                    String?               @db.VarChar(10)
+  bairro                    String?               @db.VarChar(55)
+  complemento               String?               @db.VarChar(200)
+  cidade                    String?               @db.VarChar(55)
+  uf                        String?               @db.Char(2)
+  codMuni                   String?               @db.Char(20)
+  site                      String?               @db.VarChar(65)
+  parceria                  String?               @db.Char(1)
+  unit_id                   Int
+  user_id                   Int?
+  comissao_tabela_id        Int?
+  banco_nome                String?               @db.VarChar(100)
+  banco_representante       String?               @db.VarChar(100)
+  banco_agencia             String?               @db.VarChar(100)
+  banco_conta               String?               @db.VarChar(100)
+  banco_pix                 String?               @db.VarChar(200)
+  rg                        String?               @db.VarChar(100)
+  estado_civil              String?               @db.VarChar(100)
+  codigo_parceiro           String?               @db.VarChar(100)
+  telefone_principal        String?               @db.VarChar(55)
+  email_principal           String?               @db.VarChar(255)
+  orgao_emissor             String?               @db.VarChar(100)
+  beneficiario_mutuante     String?               @db.VarChar(250)
+  cpf_beneficiario_mutuante String?               @db.VarChar(20)
+  created_at                DateTime              @default(now()) @db.Timestamp(0)
+  updated_at                DateTime              @default(now()) @db.Timestamp(0)
+  deleted_at                DateTime?             @db.Timestamp(0)
+  cliente                   cliente[]
+  comissao_fornecedor       comissao_fornecedor[]
+}
+
+model historico_os_servico {
+  id                    Int      @id
+  system_user_id        Int
+  os_id                 Int
+  os_servico_id         Int
+  tecnico_id            Int
+  situacao_id           Int
+  observacao            String?  @db.VarChar(500)
+  data_inicio           DateTime @default(now()) @db.Timestamp(0)
+  data_fim              DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.Timestamp(0)
+  created_at            DateTime @default(now()) @db.Timestamp(0)
+  diagnostico_atribuido String?  @db.VarChar(500)
+}
+
+model lancamento_bancario {
+  id                Int       @id @default(autoincrement())
+  conta_bancaria_id Int?
+  data_lancamento   DateTime? @db.Date
+  tipo              String?   @db.VarChar(55)
+  historico         String?   @db.VarChar(80)
+  status            String?   @db.VarChar(55)
+  valor             Decimal   @default(0.00) @db.Decimal(12, 2)
+  pc_receita_id     Int?
+  pc_despesa_id     Int?
+  unit_id           Int
+  user_id           Int
+  created_at        DateTime  @default(now()) @db.Timestamp(0)
+  updated_at        DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at        DateTime? @db.Timestamp(0)
+
+  @@index([pc_despesa_id], map: "idcentro_custo_d")
+  @@index([pc_receita_id], map: "idcentro_custo_r")
+  @@index([conta_bancaria_id], map: "idconta_bancaria")
+  @@index([unit_id], map: "idunidade")
+}
+
+model movimentacao_bancaria {
+  id                        Int       @id @default(autoincrement())
+  valor_movimentacao        Decimal?  @db.Decimal(12, 2)
+  data_lancamento           DateTime? @db.Date
+  data_vencimento           DateTime? @db.Date
+  data_baixa                DateTime? @db.Date
+  status                    String?   @db.VarChar(55)
+  historico                 String?   @db.VarChar(80)
+  baixa                     String?   @db.Char(1)
+  tipo                      Int?
+  documento                 String?   @db.VarChar(100)
+  unit_id                   Int
+  cliente_id                Int?
+  fornecedor_id             Int?
+  pc_receita_id             Int?
+  pc_receita_nome           String?   @db.VarChar(200)
+  pc_despesa_id             Int?
+  pc_despesa_nome           String?   @db.VarChar(200)
+  conta_pagar_id            Int?
+  conta_receber_id          Int?
+  conta_bancaria_id         Int?
+  lancamento_bancario_id    Int?
+  transferencia_bancaria_id Int?
+  departamento_id           Int?
+  created_at                DateTime  @default(now()) @db.Timestamp(0)
+  updated_at                DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at                DateTime? @db.Timestamp(0)
+}
+
+model mutuario {
+  id            Int       @unique(map: "mutuario_id_IDX") @default(autoincrement())
+  nome          String?   @db.VarChar(100)
+  cpf           String?   @db.VarChar(20)
+  rg            String?   @db.VarChar(100)
+  orgao_emissor String?   @db.VarChar(100)
+  cep           String?   @db.VarChar(15)
+  logradouro    String?   @db.VarChar(255)
+  numero        String?   @db.VarChar(100)
+  complemento   String?   @db.VarChar(255)
+  bairro        String?   @db.VarChar(100)
+  cidade        String?   @db.VarChar(100)
+  uf            String?   @db.Char(2)
+  codMuni       String?   @db.VarChar(100)
+  created_at    DateTime? @default(now()) @db.Timestamp(0)
+  updated_at    DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+}
+
+model nf_direcionador {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(200)
+  consumidor String    @db.Char(1)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nf_direcionador_cfop {
+  id              Int       @id @default(autoincrement())
+  tributo_id      Int
+  direcionador_id Int
+  cfop_interno    Int
+  cfop_externo    Int
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+}
+
+model nf_tributacao {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(60)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nf_tributacao_faixa {
+  id                               Int       @id @default(autoincrement())
+  nfe_operacoes_id                 Int
+  tributacao_id                    Int
+  tributo_id                       Int
+  origem                           String    @db.Char(2)
+  destino                          String    @db.Char(2)
+  tipo_movimento                   String    @db.Char(1)
+  tipo_cliente                     String    @db.Char(1)
+  enquadramento_tributario_cliente String    @db.Char(1)
+  cst                              String    @db.VarChar(3)
+  cod_enq                          String?   @db.Char(3)
+  percentual_base_calculo          Float     @default(0.00)
+  percentual_aliquota              Float     @default(0.00)
+  percentual_mva                   Float     @default(0.00)
+  percentual_base_calculo_st       Float     @default(0.00)
+  percentual_aliquota_st           Float     @default(0.00)
+  created_at                       DateTime  @default(now()) @db.Timestamp(0)
+  updated_at                       DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at                       DateTime? @db.Timestamp(0)
+}
+
+model nf_tributacao_imposto {
+  id                              Int       @id @default(autoincrement())
+  nfe_id                          Int
+  nfe_itens_id                    Int
+  tributo_id                      Int
+  cfop                            Int?
+  cst                             String    @db.Char(3)
+  cod_enq                         String?   @db.Char(3)
+  valor_base_calculo              Float     @default(0.00)
+  percentual_aliquota             Float     @default(0.00)
+  valor_imposto                   Float     @default(0.00)
+  percentual_reducao_base_calculo Float     @default(0.00)
+  percentual_mva                  Float     @default(0.00)
+  valor_base_calculo_st           Float     @default(0.00)
+  percentual_aliquota_st          Float     @default(0.00)
+  valor_imposto_st                Float     @default(0.00)
+  valor_imposto_operacao          Float     @default(0.00)
+  created_at                      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at                      DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at                      DateTime? @db.Timestamp(0)
+}
+
+model nf_tributo {
+  id         Int       @id
+  nome       String    @db.VarChar(60)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe {
+  id                        Int         @id @default(autoincrement())
+  unit_id                   Int?
+  chave                     String?     @db.VarChar(44)
+  idDest                    String?     @default("1") @db.Char(1)
+  indPres                   String?     @default("1") @db.Char(1)
+  indFinal                  Int?        @default(1)
+  ide_tpNF                  String?     @db.VarChar(2)
+  ide_cuf                   Int?
+  ide_cNF                   String?     @db.VarChar(8)
+  direcionador_id           Int
+  nfe_regra_id              Int
+  nfe_operacoes_id          Int
+  ide_natOp                 String?     @db.VarChar(60)
+  ide_indPag                Int?
+  ide_mod                   String?     @db.Char(2)
+  ide_serie                 String?     @db.VarChar(3)
+  ide_nNF                   Int?
+  ide_dEmi                  DateTime?   @db.DateTime(0)
+  ide_SaiEnt                DateTime?   @db.DateTime(0)
+  ide_cMunFG                String?     @db.VarChar(7)
+  ide_tp_Imp                String?     @db.VarChar(45)
+  ide_tpEmis                Int?        @default(1)
+  ide_cDV                   Int?
+  ide_tpAmb                 Int?        @default(1)
+  ide_finNFe                Int?        @default(1)
+  ide_procEmi               Int?
+  ide_verProc               String?     @db.VarChar(20)
+  emit_cnpj_cpf             String?     @db.VarChar(20)
+  emit_xNome                String?     @db.VarChar(60)
+  emit_xFant                String?     @db.VarChar(60)
+  emit_xLgr                 String?     @db.VarChar(60)
+  emit_nro                  String?     @db.VarChar(60)
+  emit_xCpl                 String?     @db.VarChar(60)
+  emit_xBairro              String?     @db.VarChar(60)
+  emit_cMun                 String?     @db.VarChar(7)
+  emit_xMun                 String?     @db.VarChar(60)
+  emit_UF                   String?     @db.VarChar(2)
+  emit_CEP                  String?     @db.VarChar(8)
+  emit_cPais                Int?
+  emit_xPais                String?     @db.VarChar(60)
+  emit_fone                 String?     @db.VarChar(14)
+  emit_IE                   String?     @db.VarChar(14)
+  emit_IEST                 String?     @db.VarChar(20)
+  emit_IM                   String?     @db.VarChar(15)
+  emit_CNAE                 String?     @db.VarChar(7)
+  emit_CRT                  String?     @db.VarChar(45)
+  indIEDest                 Int?        @default(2)
+  dest_cnpj_cpf             String?     @db.VarChar(20)
+  dest_xNome                String?     @db.VarChar(60)
+  dest_xLgr                 String?     @db.VarChar(60)
+  dest_nro                  String?     @db.VarChar(60)
+  dest_xCpl                 String?     @db.VarChar(60)
+  dest_xBairro              String?     @db.VarChar(60)
+  dest_cMun                 String?     @db.VarChar(7)
+  dest_xMun                 String?     @db.VarChar(60)
+  dest_UF                   String?     @db.VarChar(2)
+  dest_CEP                  String?     @db.VarChar(10)
+  dest_cPais                Int?
+  dest_xPais                String?     @db.VarChar(60)
+  dest_fone                 String?     @db.VarChar(14)
+  dest_IE                   String?     @db.VarChar(14)
+  dest_email                String?     @db.VarChar(60)
+  vBC                       Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vICMS                     Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vBCST                     Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vST                       Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vProd                     Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vFrete                    Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vSeg                      Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vDesc                     Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vII                       Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vIPI                      Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vPIS                      Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vCOFINS                   Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vOutro                    Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vNF                       Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vFCPUFDest_ttlnfe         Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vICMSUFDest_ttlnfe        Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vICMSUFRemet_ttlnfe       Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vICMSDeson                Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  vTotTrib                  Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  modFrete                  Int?
+  transp_cnpj_cpf           String?     @db.VarChar(14)
+  transp_xNome              String?     @db.VarChar(60)
+  transp_IE                 String?     @db.VarChar(14)
+  transp_xEnder             String?     @db.VarChar(60)
+  transp_xMun               String?     @db.VarChar(60)
+  transp_UF                 String?     @db.VarChar(2)
+  veic_placa                String?     @db.VarChar(8)
+  veic_UF                   String?     @db.VarChar(2)
+  veic_RNTC                 String?     @db.VarChar(20)
+  vol_qVol                  Int?
+  vol_esp                   String?     @db.VarChar(60)
+  vol_marca                 String?     @db.VarChar(60)
+  vol_nVol                  String?     @db.VarChar(60)
+  vol_pesoL                 Decimal?    @db.Decimal(15, 3)
+  vol_pesoB                 Decimal?    @db.Decimal(15, 3)
+  infAdFisco                String?     @db.MediumText
+  infCpl                    String?     @db.MediumText
+  exporta_UFEmarq           String?     @db.VarChar(2)
+  exporta_xLocEmarq         String?     @db.VarChar(60)
+  cd_status                 Int?
+  protocolo_autorizacao     String?     @db.VarChar(30)
+  dt_autorizacao            DateTime?   @db.DateTime(0)
+  motivo_cancelamento       String?     @db.VarChar(100)
+  protocolo_cancelamento    String?     @db.VarChar(30)
+  dt_cancelamento           DateTime?   @db.DateTime(0)
+  status_cancelamento       String?     @db.Text
+  pedido_id                 Int?
+  cliente_id                Int?
+  ide_hSaiEnt               DateTime?   @db.Time(0)
+  recibo_envio              String?     @db.VarChar(45)
+  cd_condicao               Int?
+  codigousuario             Int?
+  gerar_pdf                 String?     @db.Text
+  SitDescricao              String?     @db.Text
+  arquivo_xml               String?     @db.LongText
+  refNFe                    String?     @db.VarChar(100)
+  CCe                       String?     @db.Text
+  valorPedido               Decimal?    @default(0.00) @db.Decimal(15, 2)
+  nDI                       String?     @db.VarChar(55)
+  dDi                       DateTime?   @db.Date
+  xLocDesemb                String?     @db.VarChar(200)
+  UFDesemb                  String?     @db.VarChar(3)
+  cExportador               String?     @db.VarChar(200)
+  dDesemb                   DateTime?   @db.Date
+  tpViaTransp               Int?
+  vAFRMM                    String?     @db.VarChar(200)
+  tpIntermedio              String?     @db.VarChar(200)
+  CNPJ_adq                  String?     @db.VarChar(25)
+  UFTerceiro                String?     @db.VarChar(10)
+  xml                       String?     @db.LongText
+  pdf                       String?     @db.LongText
+  xml_carta_correcao        String?     @db.Text
+  pdf_carta_correcao        String?     @db.Text
+  numero_carta_correcao     Int?
+  motivo_cce                String?     @db.Text
+  dt_autorizacao_cce        DateTime?   @db.Date
+  protocolo_autorizacao_cce String?     @db.VarChar(200)
+  created_at                DateTime    @default(now()) @db.Timestamp(0)
+  updated_at                DateTime    @default(now()) @db.Timestamp(0)
+  deleted_at                DateTime?   @db.Timestamp(0)
+  nfe_itens                 nfe_itens[]
+}
+
+model nfe_cfop {
+  id         Int       @id @default(autoincrement())
+  codigo     String    @db.VarChar(8)
+  descricao  String    @db.Text
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_cofins {
+  id         Int       @id @default(autoincrement())
+  codigo     String    @db.VarChar(16)
+  descricao  String    @db.Text
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_csosn {
+  id         Int       @id @default(autoincrement())
+  codigo     String    @db.VarChar(4)
+  nome       String    @db.VarChar(128)
+  descricao  String?   @db.Text
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_entrada {
+  id                   Int                    @id @unique(map: "id") @default(autoincrement())
+  unit_id              Int?
+  fornecedor_id        Int?
+  cUF                  String?                @db.Char(5)
+  cNF                  String?                @db.VarChar(50)
+  natOp                String?                @db.VarChar(150)
+  modelo               String?                @db.VarChar(10)
+  serie                String?                @db.VarChar(10)
+  nNF                  String?                @db.VarChar(20)
+  dhEmi                DateTime?              @db.DateTime(0)
+  dhSaiEnt             DateTime?              @db.DateTime(0)
+  tpNF                 String?                @db.VarChar(20)
+  idDest               String?                @db.VarChar(10)
+  cMunFG               String?                @db.VarChar(10)
+  tpImp                String?                @db.VarChar(10)
+  tpEmis               String?                @db.VarChar(10)
+  cDV                  String?                @db.VarChar(20)
+  tpAmb                String?                @db.VarChar(10)
+  finNFe               String?                @db.VarChar(10)
+  indFinal             String?                @db.VarChar(10)
+  indPres              String?                @db.VarChar(10)
+  procEmi              String?                @db.VarChar(10)
+  verProc              String?                @db.VarChar(200)
+  emit_CNPJ            String?                @db.VarChar(50)
+  emit_xNome           String?                @db.VarChar(200)
+  emit_xFant           String?                @db.VarChar(200)
+  emit_xLgr            String?                @db.VarChar(200)
+  emit_nro             String?                @db.VarChar(45)
+  emit_xCpl            String?                @db.VarChar(200)
+  emit_xBairro         String?                @db.VarChar(200)
+  emit_cMun            String?                @db.VarChar(10)
+  emit_xMun            String?                @db.VarChar(200)
+  emit_UF              String?                @db.Char(2)
+  emit_CEP             String?                @db.VarChar(15)
+  emit_xPais           String?                @db.VarChar(200)
+  emit_fone            String?                @db.VarChar(20)
+  emit_IE              String?                @db.VarChar(10)
+  emit_CRT             String?                @db.VarChar(55)
+  dest_CNPJ            String?                @db.VarChar(20)
+  dest_xNome           String?                @db.VarChar(200)
+  dest_xFant           String?                @db.VarChar(200)
+  dest_xLgr            String?                @db.VarChar(200)
+  dest_nro             String?                @db.VarChar(20)
+  dest_xCpl            String?                @db.VarChar(200)
+  dest_xBairro         String?                @db.VarChar(200)
+  dest_cMun            String?                @db.VarChar(20)
+  dest_xMun            String?                @db.VarChar(200)
+  dest_UF              String?                @db.Char(2)
+  dest_CEP             String?                @db.VarChar(15)
+  dest_xPais           String?                @db.VarChar(20)
+  dest_fone            String?                @db.VarChar(20)
+  dest_IE              String?                @db.VarChar(20)
+  indIEDest            String?                @db.VarChar(20)
+  vBC                  Decimal?               @db.Decimal(15, 5)
+  vICMS                Decimal?               @db.Decimal(15, 5)
+  vICMSDeson           Decimal?               @db.Decimal(15, 5)
+  vFCP                 Decimal?               @db.Decimal(15, 5)
+  vBCST                Decimal?               @db.Decimal(15, 5)
+  vST                  Decimal?               @db.Decimal(15, 5)
+  vFCPST               Decimal?               @db.Decimal(15, 5)
+  vFCPSTRet            Decimal?               @db.Decimal(15, 5)
+  vProd                Decimal?               @db.Decimal(15, 5)
+  vFrete               Decimal?               @db.Decimal(15, 5)
+  vSeg                 Decimal?               @db.Decimal(15, 5)
+  vDesc                Decimal?               @db.Decimal(15, 5)
+  vII                  Decimal?               @db.Decimal(15, 5)
+  vIPI                 Decimal?               @db.Decimal(15, 5)
+  vPIS                 Decimal?               @db.Decimal(15, 5)
+  vCOFINS              Decimal?               @db.Decimal(15, 5)
+  vOutro               Decimal?               @db.Decimal(15, 5)
+  vNF                  Decimal?               @db.Decimal(15, 5)
+  vTotTrib             Decimal?               @db.Decimal(15, 5)
+  modFrete             String?                @db.VarChar(5)
+  transporta_xNome     String?                @db.VarChar(200)
+  qVol                 String?                @db.VarChar(10)
+  infAdic              String?                @db.LongText
+  chNFe                String?                @db.VarChar(100)
+  nProt                String?                @db.VarChar(100)
+  baixa                String?                @default("N") @db.Char(1)
+  gerou_financeiro     String                 @default("N") @db.Char(1)
+  created_at           DateTime               @default(now()) @db.Timestamp(0)
+  updated_at           DateTime               @default(now()) @db.Timestamp(0)
+  deleted_at           DateTime?              @db.Timestamp(0)
+  nfe_entrada_cobranca nfe_entrada_cobranca[]
+  nfe_entrada_itens    nfe_entrada_itens[]
+}
+
+model nfe_entrada_cobranca {
+  id             Int         @id @default(autoincrement())
+  nfe_entrada_id Int
+  nDup           String      @db.VarChar(200)
+  dVenc          DateTime    @db.Date
+  vDup           Decimal     @default(0.00) @db.Decimal(15, 2)
+  created_at     DateTime    @default(now()) @db.Timestamp(0)
+  updated_at     DateTime    @default(now()) @db.Timestamp(0)
+  deleted_at     DateTime?   @db.Timestamp(0)
+  nfe_entrada    nfe_entrada @relation(fields: [nfe_entrada_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "nfe_entrada_cobranca_ibfk_1")
+
+  @@index([nfe_entrada_id], map: "nfe_entrada_id")
+}
+
+model nfe_entrada_itens {
+  id               Int          @id
+  nfe_entrada_id   Int?
+  sequencia        Int
+  cProd            String?      @db.VarChar(100)
+  cEAN             String?      @db.VarChar(20)
+  xProd            String?      @db.LongText
+  NCM              String?      @db.Char(20)
+  CEST             String?      @db.Char(20)
+  CFOP             String?      @db.VarChar(4)
+  uCom             String?      @db.VarChar(10)
+  qCom             Float?
+  vUnCom           Decimal?     @db.Decimal(15, 5)
+  vProd            Decimal?     @db.Decimal(15, 5)
+  vDesconto        Decimal?     @default(0.00) @db.Decimal(15, 2)
+  vOutros          Decimal?     @default(0.00) @db.Decimal(15, 2)
+  vSeguro          Decimal?     @default(0.00) @db.Decimal(15, 2)
+  vFrete           Decimal?     @default(0.00) @db.Decimal(15, 2)
+  cEANTrib         String?      @db.VarChar(20)
+  uTrib            String?      @db.VarChar(10)
+  qTrib            Int?
+  vUnTrib          Decimal?     @db.Decimal(15, 5)
+  indTot           String?      @db.VarChar(10)
+  rastro_nLote     String?      @db.VarChar(55)
+  rastro_qLote     String?      @db.VarChar(55)
+  rastro_dFab      DateTime?    @db.Date
+  rastro_dVal      DateTime?    @db.Date
+  vTotTrib         Decimal?     @db.Decimal(15, 5)
+  ICMS_orig        String?      @db.VarChar(10)
+  ICMS_CST         String?      @db.VarChar(10)
+  ICMS_vBC         Decimal?     @db.Decimal(15, 5)
+  ICMS_pICMS       Decimal?     @db.Decimal(15, 5)
+  ICMS_vICMS       Decimal?     @db.Decimal(15, 5)
+  ICMS_vBCST       Decimal?     @default(0.00) @db.Decimal(15, 2)
+  ICMSST           Decimal?     @default(0.00) @db.Decimal(15, 2)
+  vICMSST          Decimal?     @default(0.00) @db.Decimal(15, 2)
+  pCredSN          Decimal?     @default(0.00) @db.Decimal(15, 2)
+  vCredICMSSN      Decimal?     @default(0.00) @db.Decimal(15, 2)
+  pMVAST           Decimal?     @default(0.00) @db.Decimal(15, 2)
+  pRedBCST         Decimal?     @default(0.00) @db.Decimal(15, 2)
+  modBC            String?      @db.Char(5)
+  modBCST          String?      @db.Char(5)
+  pRedBC           Decimal?     @default(0.00) @db.Decimal(15, 2)
+  pBCOp            Decimal?     @default(0.00) @db.Decimal(15, 2)
+  UFST             Decimal?     @default(0.00) @db.Decimal(15, 2)
+  PIS_CST          String?      @db.VarChar(10)
+  PIS_vBC          Decimal?     @db.Decimal(15, 5)
+  PIS_pPIS         Decimal?     @db.Decimal(15, 5)
+  PIS_vPIS         Decimal?     @db.Decimal(15, 5)
+  COFINS_CST       String?      @db.VarChar(10)
+  COFINS_vBC       Decimal?     @db.Decimal(15, 5)
+  COFINS_pCOFINS   Decimal?     @db.Decimal(15, 5)
+  COFINS_vCOFINS   Decimal?     @db.Decimal(15, 5)
+  IPI_CST          String?      @db.VarChar(10)
+  IPI_vBC          Decimal?     @db.Decimal(15, 5)
+  IPI_pIPI         Decimal?     @db.Decimal(15, 5)
+  IPI_vIPI         Decimal?     @db.Decimal(15, 5)
+  IPI_cENQ         String?      @db.VarChar(10)
+  produto_id       Int?
+  cfop_entrada     String?      @db.VarChar(4)
+  lote             String?      @db.VarChar(100)
+  validade_lote    DateTime?    @db.Date
+  produto_fator_id Int?
+  produto_tipo     Int?         @default(0)
+  precoFator       Decimal?     @default(0.0000) @db.Decimal(15, 4)
+  created_at       DateTime     @default(now()) @db.Timestamp(0)
+  updated_at       DateTime     @default(now()) @db.Timestamp(0)
+  deleted_at       DateTime?    @db.Timestamp(0)
+  nfe_entrada      nfe_entrada? @relation(fields: [nfe_entrada_id], references: [id], onDelete: Cascade, map: "itens")
+
+  @@index([nfe_entrada_id], map: "itens")
+}
+
+model nfe_estado {
+  id            Int       @id @default(autoincrement())
+  nome_estado   String    @db.VarChar(64)
+  uf_estado     String    @db.VarChar(2)
+  codigo_estado String    @db.VarChar(2)
+  created_at    DateTime  @default(now()) @db.Timestamp(0)
+  updated_at    DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+}
+
+model nfe_faturamento {
+  id                Int       @id @default(autoincrement())
+  nfe_id            Int
+  vencimento        DateTime  @db.Date
+  valor             Decimal   @db.Decimal(15, 2)
+  valor_total       Decimal?  @default(0.00) @db.Decimal(15, 2)
+  conta_bancaria_id Int
+  pc_receita_id     Int
+  tipo_pgto_id      String    @db.Char(2)
+  num_aprovacao     String?   @db.VarChar(45)
+  created_at        DateTime  @default(now()) @db.Timestamp(0)
+  updated_at        DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at        DateTime? @db.Timestamp(0)
+}
+
+model nfe_generos_produtos {
+  id         Int       @id @default(autoincrement())
+  codigo     String    @db.Char(2)
+  descricao  String    @db.VarChar(200)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_icms {
+  id         Int      @id @default(autoincrement())
+  codigo     String   @db.VarChar(16)
+  descricao  String   @db.Text
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @default(now()) @db.Timestamp(0)
+  deleted_at DateTime @default(now()) @db.Timestamp(0)
+}
+
+model nfe_icms_desoneracao {
+  id         Int       @id @default(autoincrement())
+  codigo     String    @db.VarChar(16)
+  descricao  String    @db.VarChar(128)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_icms_modalidade_bc {
+  id         Int       @id @default(autoincrement())
+  codigo     String    @db.VarChar(16)
+  descricao  String    @db.VarChar(128)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_icms_modalidade_st {
+  id         Int       @id @default(autoincrement())
+  codigo     String    @db.VarChar(16)
+  descricao  String    @db.VarChar(128)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_icms_origem {
+  id         Int       @id @default(autoincrement())
+  cod        String    @db.VarChar(16)
+  descricao  String    @db.VarChar(128)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_iedest {
+  id         Int       @id @default(autoincrement())
+  codigo     String    @db.Char(5)
+  descricao  String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_imposto {
+  id         Int       @id @default(autoincrement()) @db.UnsignedInt
+  nome       String?   @db.VarChar(60)
+  obs        String?   @db.VarChar(30)
+  ativo      String?   @db.Char(1)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_inutiliza {
+  id             Int       @id @default(autoincrement())
+  unit_id        Int
+  serie          Int
+  justificativa  String    @db.Text
+  numero_inicial Int
+  numero_final   Int
+  codigo         Int?
+  mensagem       String?   @db.VarChar(100)
+  protocolo      String?   @db.VarChar(45)
+  xml            String?   @db.LongText
+  created_at     DateTime  @default(now()) @db.Timestamp(0)
+  updated_at     DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at     DateTime? @db.Timestamp(0)
+}
+
+model nfe_ipi {
+  id         Int       @id @default(autoincrement())
+  codigo     String    @db.VarChar(16)
+  descricao  String    @db.Text
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_ipi_enquadramento {
+  id                  Int       @id @default(autoincrement())
+  nfe_ipi_operacao_id Int
+  codigo              String    @db.VarChar(4)
+  enquadramento       String    @db.Text
+  created_at          DateTime  @default(now()) @db.Timestamp(0)
+  updated_at          DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at          DateTime? @db.Timestamp(0)
+
+  @@index([id], map: "fk_ipi_enquadramento_ipi_operacao1_idx")
+}
+
+model nfe_ipi_operacao {
+  id         Int       @id @default(autoincrement())
+  descricao  String    @db.VarChar(64)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_itens {
+  id                      Int       @id
+  nfe_id                  Int
+  sequencia               Int?
+  produto_id              Int
+  produto_tabela_preco_id Int?
+  descricao               String?   @db.VarChar(500)
+  preco                   Decimal   @db.Decimal(12, 2)
+  quantidade              Float?
+  desconto                Decimal?  @db.Decimal(12, 2)
+  total_item              Decimal?  @db.Decimal(12, 2)
+  total                   Decimal   @db.Decimal(12, 2)
+  cfop                    String?   @db.Char(4)
+  bc_icms                 Decimal?  @default(0.00) @db.Decimal(15, 2)
+  aliq_icms               Float?
+  vlr_icms                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  cst_icms                String?   @db.Char(3)
+  cd_parametro_icms       Int?
+  bc_ipi                  Decimal?  @default(0.00) @db.Decimal(15, 2)
+  aliq_ipi                Float?    @db.Float
+  vlr_ipi                 Decimal?  @default(0.00) @db.Decimal(15, 2)
+  cst_ipi                 String?   @db.Char(3)
+  cd_parametro_ipi        Int?
+  enq_ipi                 String?   @db.Char(3)
+  bc_pis                  Decimal?  @default(0.00) @db.Decimal(15, 2)
+  aliq_pis                Float?    @db.Float
+  vlr_pis                 Decimal?  @default(0.00) @db.Decimal(15, 2)
+  cst_pis                 String?   @db.Char(3)
+  cd_parametro_pis        Int?
+  bc_cofins               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  aliq_cofins             Float?    @db.Float
+  vlr_cofins              Decimal?  @default(0.00) @db.Decimal(15, 2)
+  cst_cofins              String?   @db.Char(3)
+  cd_parametro_cofins     Int?
+  modbcst                 Int?
+  pmvast                  Float?    @db.Float
+  vbcst                   Decimal?  @default(0.00) @db.Decimal(15, 2)
+  picmsst                 Float?    @db.Float
+  pRedBCST                Float?    @default(0.00) @db.Float
+  vICMSDeson              Decimal?  @default(0.00) @db.Decimal(15, 2)
+  motDesICMS              Int?      @default(9)
+  vicmsst                 Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vFrete                  Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vSeg                    Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vOutro                  Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vBCUFDest               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  pFCPUFDest              Float?    @default(0.00)
+  pICMSUFDest             Float?    @default(0.00)
+  pICMSInter              Float?    @default(0.00)
+  pICMSInterPart          Float?    @default(0.00)
+  vFCPUFDest              Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vICMSUFDest             Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vICMSUFRemet            Decimal?  @default(0.00) @db.Decimal(15, 2)
+  total_tributos          Decimal?  @default(0.00) @db.Decimal(15, 2)
+  lote                    String?   @db.VarChar(45)
+  validade                DateTime? @db.Date
+  anvisa                  String?   @db.VarChar(45)
+  nAdicao                 Int?
+  nSeqAdic                Int?
+  cFabricante             String?   @db.VarChar(200)
+  vDescDI                 Decimal?  @default(0.00) @db.Decimal(15, 2)
+  nDrawAdicoes            Int?
+  vBC_imp                 Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vDespAdu                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vII                     Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vIOF                    Decimal?  @default(0.00) @db.Decimal(15, 2)
+  direcionador_id         Int?
+  created_at              DateTime  @default(now()) @db.Timestamp(0)
+  updated_at              DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at              DateTime? @db.Timestamp(0)
+  nfe                     nfe       @relation(fields: [nfe_id], references: [id], onDelete: Cascade, map: "nfe_id")
+
+  @@index([nfe_id], map: "nfe_id")
+}
+
+model nfe_municipio_incidencia {
+  id         Int       @id @default(autoincrement())
+  codigo     String?   @db.VarChar(10)
+  descricao  String?   @db.Text
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_operacoes {
+  id           Int       @id @unique(map: "id")
+  descricao    String?   @db.VarChar(50)
+  gera_titulo  String?   @db.Char(1)
+  gera_estoque String    @default("S") @db.Char(1)
+  created_at   DateTime  @default(now()) @db.Timestamp(0)
+  updated_at   DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at   DateTime? @db.Timestamp(0)
+}
+
+model nfe_parametros {
+  id               Int       @id @default(autoincrement())
+  unit_id          Int?
+  nfe_operacoes_id Int
+  nfe_regra_id     Int?
+  uf_origem        String?   @db.VarChar(2)
+  uf_destino       String?   @db.VarChar(2)
+  cst_icms         String?   @db.VarChar(3)
+  cst_icms_st      String?   @db.VarChar(3)
+  cst_ipi          String?   @db.VarChar(3)
+  cst_pis          String?   @db.VarChar(3)
+  cst_cofins       String?   @db.VarChar(3)
+  aliq_icms        Decimal?  @default(0.00) @db.Decimal(5, 2)
+  aliq_icms_st     Float?    @default(0.00) @db.Float
+  aliq_ipi         Float?    @default(0.00) @db.Float
+  aliq_pis         Float?    @default(0.00) @db.Float
+  aliq_cofins      Float?    @default(0.00) @db.Float
+  cfop             String?   @db.Char(5)
+  cfop_descricao   String?   @db.Text
+  comp_cfop        Int?      @default(0) @db.UnsignedInt
+  enq_ipi          String?   @db.VarChar(3)
+  nome_enq_ipi     String?   @db.Text
+  modBC            Int?      @default(0)
+  modBCST          Int?      @default(0)
+  pRedBC_S         Float?    @default(0.00) @db.Float
+  pRedBCST_S       Float?    @default(0.00) @db.Float
+  pICMSST_S        Float?    @default(0.00) @db.Float
+  pCredSN_S        Float?    @default(0.00) @db.Float
+  pRedBCST_N       Float?    @default(0.00) @db.Float
+  pICMSST_N        Float?    @default(0.00) @db.Float
+  motDesICMS       Int?      @default(9)
+  aplicacao        String?   @db.Char(1)
+  idgrupo_produtos Int?
+  ncm              String?   @db.VarChar(10)
+  cest             String?   @db.VarChar(10)
+  pICMSInter       Float?    @default(0.00)
+  pICMSUFDest      Float?    @default(0.00)
+  pFCPUFDest       Float?    @default(0.00)
+  pOrigem          Float?    @default(0.00)
+  pICMSInterPart   Float?    @default(0.00)
+  movEstoque       String?   @default("S") @db.Char(1)
+  created_at       DateTime  @default(now()) @db.Timestamp(0)
+  updated_at       DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at       DateTime? @db.Timestamp(0)
+}
+
+model nfe_pis {
+  id         Int       @id @default(autoincrement())
+  codigo     String    @db.VarChar(16)
+  descricao  String    @db.Text
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_regra {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  ativo      String    @default("S") @db.Char(1)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfe_tabelaCEST {
+  id            Int       @id @default(autoincrement())
+  legal_tbc     Int
+  ncm_tbc       Int
+  descricao_tbc String    @db.VarChar(300)
+  created_at    DateTime  @default(now()) @db.Timestamp(0)
+  updated_at    DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+
+  @@index([ncm_tbc], map: "ncm_tbc")
+}
+
+model nfe_tabelaIBPT {
+  id                Int       @id
+  ex                String?   @db.VarChar(2)
+  tipo              String?   @db.VarChar(10)
+  descricao         String?   @db.VarChar(500)
+  nacionalfederal   Float?    @db.Float
+  importadosfederal Float?    @db.Float
+  estadual          Float?    @db.Float
+  municipal         Float?    @db.Float
+  vigenciainicio    String?   @db.VarChar(20)
+  vigenciafim       String?   @db.VarChar(20)
+  chave             String?   @db.VarChar(20)
+  versao            String?   @db.VarChar(20)
+  fonte             String?   @db.VarChar(55)
+  created_at        DateTime  @default(now()) @db.Timestamp(0)
+  updated_at        DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at        DateTime? @db.Timestamp(0)
+}
+
+model nfe_ultimo_numero {
+  id         Int       @id @default(autoincrement())
+  numero     Int
+  unit_id    Int
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfse {
+  id                     Int       @id @default(autoincrement())
+  unit_id                Int
+  conta_receber_id       Int
+  cliente_id             Int
+  lote                   Int?
+  numeroNfse             Int
+  enviarEmail            Boolean?  @default(true)
+  dataEmissao            DateTime  @default(now()) @db.Timestamp(0)
+  competencia            DateTime  @db.Date
+  substituicao           Boolean?  @default(false)
+  TcpfCnpj               String    @db.VarChar(20)
+  TrazaoSocial           String    @db.VarChar(200)
+  Temail                 String?   @db.VarChar(200)
+  Tlogradouro            String    @db.VarChar(200)
+  Tnumero                String    @db.VarChar(20)
+  Tbairro                String?   @db.VarChar(100)
+  Tcidade                String?   @db.VarChar(100)
+  Tuf                    String?   @db.Char(2)
+  Tcomplemento           String?   @db.VarChar(100)
+  TcodigoCidade          Int
+  Tcep                   String    @db.VarChar(20)
+  Scodigo                String    @db.VarChar(20)
+  Sdiscriminacao         String    @db.VarChar(200)
+  Scnae                  Int
+  ISSaliquota            Float
+  ISStipoTributacao      Int?      @default(6)
+  ISSretido              Boolean   @default(false)
+  ISSvalor               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  ISSvalorRetido         Decimal?  @default(0.00) @db.Decimal(15, 2)
+  ISSexigibilidade       Int?      @default(1)
+  ISSProcessoSuspencao   String?   @db.VarChar(55)
+  total_servico          Decimal?  @default(0.00) @db.Decimal(15, 2)
+  deducoes               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  base_calculo           Decimal?  @default(0.00) @db.Decimal(15, 2)
+  status                 String?   @db.VarChar(200)
+  statusCode             String?   @db.VarChar(10)
+  protocolo              String?   @db.VarChar(500)
+  protocolo_cancelamento String?   @db.VarChar(200)
+  pdf                    String?   @db.VarChar(800)
+  xml                    String?   @db.VarChar(800)
+  tipo                   String?   @db.Char(1)
+  id_retorno             String?   @db.VarChar(100)
+  ServCodigo             String?   @db.VarChar(20)
+  ServDescricao          String?   @db.VarChar(500)
+  RetCofins              Decimal?  @default(0.00) @db.Decimal(15, 2)
+  RetCsll                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  RetInss                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  RetIrrf                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  RetPis                 Decimal?  @default(0.00) @db.Decimal(15, 2)
+  RetOutros              Decimal?  @default(0.00) @db.Decimal(15, 2)
+  EventoTipo             String?   @db.VarChar(20)
+  EventoDescricao        String?   @db.VarChar(500)
+  vRetCofins             Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vRetCsll               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vRetInss               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vRetIrrf               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  vRetPis                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  observacao             String?   @db.LongText
+  created_at             DateTime  @default(now()) @db.Timestamp(0)
+  updated_at             DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at             DateTime? @db.Timestamp(0)
+}
+
+model nfse_codigo_atividades {
+  id                      Int       @id @default(autoincrement())
+  nfse_codigo_servicos_id Int
+  codigo                  Int
+  descricao               String    @db.Text
+  created_at              DateTime  @default(now()) @db.Timestamp(0)
+  updated_at              DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at              DateTime? @db.Timestamp(0)
+}
+
+model nfse_codigo_servicos {
+  id         Int       @id @default(autoincrement())
+  codigo     String    @db.Char(5)
+  descricao  String    @db.VarChar(200)
+  IRRF       Float?    @default(0.00)
+  PIS        Float?    @default(0.00)
+  COFINS     Float?    @default(0.00)
+  CSLL       Float?    @default(0.00)
+  comentario String?   @db.Text
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfse_exigibilidade {
+  id         Int       @id @default(autoincrement())
+  descricao  String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfse_itens {
+  id         Int       @id @default(autoincrement())
+  nfse_id    Int
+  descricao  String    @db.VarChar(500)
+  valor      Decimal   @default(0.00) @db.Decimal(15, 2)
+  quantidade Int
+  total_item Decimal   @default(0.00) @db.Decimal(15, 2)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+
+  @@index([nfse_id], map: "nfse_itens_FK")
+}
+
+model nfse_parametro {
+  id                            Int       @id
+  apikey                        String?   @db.VarChar(200)
+  tipo_ambiente                 String    @db.VarChar(100)
+  unico_servico                 String?   @db.Char(1)
+  nome_servico                  String?   @db.VarChar(200)
+  DeducaoTipo                   Int?
+  DeducaoDescricao              String?   @db.VarChar(200)
+  EventoTipo                    Int?
+  EventoDescricao               String?   @db.VarChar(200)
+  IssAliquota                   Decimal?  @default(0.00) @db.Decimal(15, 2)
+  IssExigibilidade              Int?      @default(1)
+  IssProcessoSuspensao          String?   @db.VarChar(55)
+  IssValor                      Decimal?  @default(0.00) @db.Decimal(15, 2)
+  IssRetido                     String?   @default("N") @db.Char(1)
+  IssValorRetido                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  RetCofins                     Decimal?  @default(0.00) @db.Decimal(15, 2)
+  RetCsll                       Decimal?  @default(0.00) @db.Decimal(15, 2)
+  RetInss                       Decimal?  @default(0.00) @db.Decimal(15, 2)
+  RetIrrf                       Decimal?  @default(0.00) @db.Decimal(15, 2)
+  RetOutrasRetencoes            Decimal?  @default(0.00) @db.Decimal(15, 2)
+  RetPis                        Decimal?  @default(0.00) @db.Decimal(15, 2)
+  ServCnae                      String?   @db.VarChar(10)
+  ServCodigo                    String?   @db.VarChar(10)
+  ServCodigoCidadeIncidencia    String?   @db.VarChar(20)
+  ServCodigoTributacao          String?   @db.VarChar(20)
+  ServDescricaoCidadeIncidencia String?   @db.VarChar(55)
+  ServDiscriminacao             String?   @db.VarChar(100)
+  ServIdIntegracao              String?   @db.VarChar(55)
+  unit_id                       Int
+  ultimoNumeroNfse              Int
+  ultimoNumeroLote              Int
+  tipoTributacao                Int
+  enviarEmail                   Int?      @default(1)
+  created_at                    DateTime  @default(now()) @db.Timestamp(0)
+  updated_at                    DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at                    DateTime? @db.Timestamp(0)
+}
+
+model nfse_tipodeducao {
+  id         Int       @id @default(autoincrement())
+  descricao  String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model nfse_tipotributacao {
+  id         Int       @id @default(autoincrement())
+  descricao  String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model os {
+  id                            Int           @id @default(autoincrement())
+  unit_id                       Int
+  user_id                       Int
+  cliente_id                    Int
+  tipo_pgto_id                  Int?          @default(1)
+  tipo_forma_pgto_id            Int
+  relatorio_customizado_id      Int?          @default(1)
+  relatorio_termo_garantia_id   Int?          @default(1)
+  servico_motivo_id             Int?          @default(0)
+  tipo_endereco_id              Int?          @default(1)
+  vencimento_orcamento_os       DateTime?     @default(now()) @db.Timestamp(0)
+  vencimento_faturamento_os     DateTime?     @db.Date
+  dataAbertura                  DateTime      @db.DateTime(0)
+  dataPrevisao                  DateTime?     @db.DateTime(0)
+  dataFechamento                DateTime?     @db.DateTime(0)
+  situacao                      Int           @db.TinyInt
+  color                         String?       @db.VarChar(20)
+  valor                         Decimal?      @default(0.00) @db.Decimal(15, 2)
+  solicitacao_defeito_declarado String?       @db.VarChar(250)
+  status                        String        @default("A") @db.Char(1)
+  created_at                    DateTime?     @default(now()) @db.Timestamp(0)
+  updated_at                    DateTime?     @default(now()) @db.Timestamp(0)
+  deleted_at                    DateTime?     @db.Timestamp(0)
+  numero_garantia               Int?
+  cliente_equipamento_id        Int
+  diagnostico                   String?       @db.VarChar(500)
+  os_pecas                      os_pecas[]
+  os_servicos                   os_servicos[]
+}
+
+model os_checklist {
+  id             Int       @id @default(autoincrement())
+  os_servicos_id Int
+  descricao      String?   @db.VarChar(200)
+  concluido      Boolean   @default(false)
+  created_at     DateTime  @default(now()) @db.Timestamp(0)
+  updated_at     DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at     DateTime? @db.Timestamp(0)
+}
+
+model os_pecas {
+  id             Int       @id @default(autoincrement())
+  os_id          Int
+  produto_id     Int?
+  equipamento_id Int?
+  estoque        String    @db.Char(1)
+  tecnico_id     Int
+  quantidade     Int?
+  precoUnitario  Decimal?  @db.Decimal(12, 2)
+  total          Decimal?  @db.Decimal(12, 2)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at     DateTime? @db.Timestamp(0)
+  os             os        @relation(fields: [os_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "os_pecas_ibfk_1")
+  produto        produto?  @relation(fields: [produto_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "os_pecas_ibfk_2")
+
+  @@index([os_id], map: "os_id_idx")
+  @@index([produto_id], map: "peca_id_idx")
+}
+
+model os_servicos {
+  id                       Int       @id @default(autoincrement())
+  os_id                    Int
+  pmoc_tipo_equipamento_id Int
+  produto_id               Int
+  valor_hora               Decimal?  @default(0.00) @db.Decimal(15, 2)
+  tecnico_id               Int?
+  dataInicio               DateTime? @db.DateTime(0)
+  dataTermino              DateTime? @db.DateTime(0)
+  situacao                 Int       @default(1) @db.TinyInt
+  color                    String?   @db.VarChar(20)
+  valor                    Decimal?  @default(0.00) @db.Decimal(15, 2)
+  observacao               String?   @db.VarChar(250)
+  created_at               DateTime? @db.Timestamp(0)
+  updated_at               DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at               DateTime? @db.Timestamp(0)
+  os                       os        @relation(fields: [os_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: " os_ibfk_1")
+  produto                  produto   @relation(fields: [produto_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "os_servicos_ibfk_1")
+
+  @@index([os_id], map: "os_id")
+  @@index([produto_id], map: "servico_id")
+}
+
+model pc_despesa {
+  id         Int       @id @default(autoincrement())
+  nivel1     String    @db.VarChar(100)
+  nivel2     String?   @db.VarChar(100)
+  nivel3     String?   @db.VarChar(100)
+  nivel4     String?   @db.VarChar(100)
+  nome       String    @db.VarChar(100)
+  unit_id    Int
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model pc_receita {
+  id         Int       @id @default(autoincrement())
+  nivel1     String?   @db.VarChar(100)
+  nivel2     String?   @db.VarChar(100)
+  nivel3     String?   @db.VarChar(100)
+  nivel4     String?   @db.VarChar(100)
+  nome       String    @db.VarChar(100)
+  unit_id    Int
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model peca {
+  id           Int       @id @default(autoincrement())
+  categoria_id Int
+  produto_id   Int
+  situacao     Int       @db.TinyInt
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at   DateTime? @db.Timestamp(0)
+
+  @@index([categoria_id], map: "categoria_id_idx")
+}
+
+model peca_categoria {
+  id         Int       @id @default(autoincrement())
+  descricao  String    @db.VarChar(30)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model pedido {
+  id                 Int       @id @default(autoincrement())
+  data_vencimento    DateTime? @db.Date
+  data_competencia   DateTime? @db.Date
+  data_faturado      DateTime? @db.Date
+  referencia         String?   @db.VarChar(10)
+  tipo               String?   @db.VarChar(10)
+  user_id            String?   @db.VarChar(55)
+  total_itens        Decimal?  @db.Decimal(12, 2)
+  total_desconto     Decimal?  @db.Decimal(12, 2)
+  total_pedido       Decimal?  @db.Decimal(12, 2)
+  notas              String?   @db.MediumText
+  faturado           String?   @default("N") @db.Char(1)
+  status             String    @default("A") @db.Char(1)
+  tipo_pgto_id       Int?
+  tipo_forma_pgto_id Int?
+  num_aprovacao      String?   @db.VarChar(20)
+  certificadora      Int?
+  boleto_id          String?   @db.VarChar(100)
+  boleto_emitido     String?   @default("N") @db.Char(1)
+  boleto_status      String?   @db.VarChar(50)
+  geraNFe            String?   @default("N") @db.Char(1)
+  unit_id            Int
+  cliente_id         Int
+  pc_receita_id      Int?
+  pc_receita_nome    String?   @db.VarChar(200)
+  orcamento_id       Int?
+  conta_bancaria_id  Int?
+  boleto_account_id  String?   @db.VarChar(100)
+  tabela_precos_id   Int?      @default(1)
+  created_at         DateTime? @default(now()) @db.Timestamp(0)
+  updated_at         DateTime? @db.Timestamp(0)
+  deleted_at         DateTime? @db.Timestamp(0)
+
+  @@index([unit_id], map: "idunidade")
+}
+
+model pedido_itens {
+  id                      Int       @id @default(autoincrement())
+  pedido_id               Int
+  sequencia               Int?
+  produto_id              Int
+  vaucher_id              Int?
+  produto_tabela_preco_id Int?
+  descricao               String?   @db.VarChar(500)
+  preco                   Decimal   @db.Decimal(15, 2)
+  quantidade              Int
+  desconto                Decimal?  @db.Decimal(15, 2)
+  total_item              Decimal   @db.Decimal(15, 2)
+  total                   Decimal   @db.Decimal(15, 2)
+  created_at              DateTime  @default(now()) @db.Timestamp(0)
+  updated_at              DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at              DateTime? @db.Timestamp(0)
+}
+
+model pedido_os {
+  id              Int               @id @default(autoincrement())
+  cliente_id      Int
+  unit_id         Int
+  created_at      DateTime          @default(now()) @db.Timestamp(0)
+  updated_at      DateTime          @default(now()) @db.Timestamp(0)
+  deleted_at      DateTime?         @db.Timestamp(0)
+  pedido_os_itens pedido_os_itens[]
+}
+
+model pedido_os_itens {
+  id           Int       @id @default(autoincrement())
+  pedido_os_id Int
+  os_id        Int
+  created_at   DateTime  @default(now()) @db.Timestamp(0)
+  updated_at   DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at   DateTime? @db.Timestamp(0)
+  pedido_os    pedido_os @relation(fields: [pedido_os_id], references: [id], onDelete: Cascade, map: "pedido_os_id")
+
+  @@index([pedido_os_id], map: "pedido_os_id")
+  @@index([pedido_os_id], map: "pedido_os_id_2")
+  @@index([pedido_os_id], map: "pedido_os_id_3")
+}
+
+model plano {
+  id                        Int             @id @default(autoincrement())
+  nome                      String          @db.VarChar(100)
+  valor                     Decimal         @default(0.00) @db.Decimal(15, 2)
+  valor_recorrencia         Decimal?        @db.Decimal(15, 2)
+  adesao                    Decimal?        @db.Decimal(15, 2)
+  valor_parcela             Decimal?        @default(0.00) @db.Decimal(15, 2)
+  plano_recorrencia_tipo_id Int?
+  pc_receita_id             Int
+  pc_receita_nome           String          @db.VarChar(200)
+  pc_despesa_id             Int?
+  pc_despesa_nome           String?         @db.VarChar(200)
+  hash_plano                String?         @db.VarChar(255)
+  eh_recorrente             Int             @default(0)
+  ativo                     String          @default("N") @db.Char(1)
+  created_at                DateTime        @default(now()) @db.Timestamp(0)
+  updated_at                DateTime        @default(now()) @db.Timestamp(0)
+  deleted_at                DateTime?       @db.Timestamp(0)
+  plano_unidade             plano_unidade[]
+}
+
+model plano_recorrencia_tipo {
+  id                       Int       @id
+  nome                     String    @db.VarChar(255)
+  intervalo_meses_cobranca Int
+  system_user_id           Int
+  created_at               DateTime  @default(now()) @db.Timestamp(0)
+  updated_at               DateTime? @db.Timestamp(0)
+  deleted_at               DateTime? @db.Timestamp(0)
+}
+
+model plano_unidade {
+  id          Int         @id @default(autoincrement())
+  plano_id    Int
+  unit_id     Int
+  created_at  DateTime    @default(now()) @db.Timestamp(0)
+  updated_at  DateTime    @default(now()) @db.Timestamp(0)
+  deleted_at  DateTime?   @db.Timestamp(0)
+  plano       plano       @relation(fields: [plano_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_plano")
+  system_unit system_unit @relation(fields: [unit_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_unit")
+
+  @@index([plano_id], map: "fk_plano")
+  @@index([unit_id], map: "fk_unit")
+}
+
+model pmoc_ambiente {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model pmoc_andar {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(55)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model pmoc_area_climatizada {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model pmoc_capacidade {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model pmoc_componente {
+  id                       Int       @id @default(autoincrement())
+  pmoc_tipo_equipamento_id Int
+  nome                     String    @db.VarChar(100)
+  created_at               DateTime  @default(now()) @db.Timestamp(0)
+  updated_at               DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at               DateTime? @db.Timestamp(0)
+}
+
+model pmoc_componente_defeitos {
+  id                 Int       @id @default(autoincrement())
+  pmoc_componente_id Int
+  nome               String    @db.VarChar(100)
+  created_at         DateTime  @default(now()) @db.Timestamp(0)
+  updated_at         DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at         DateTime? @db.Timestamp(0)
+}
+
+model pmoc_fluido_refrigerante {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model pmoc_identificacao_tagtombo {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model pmoc_tensao {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model pmoc_tipo_atividade {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model pmoc_tipo_equipamento {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model produto {
+  id                      Int               @id @unique(map: "id") @default(autoincrement())
+  produto_grupo_id        Int?
+  produto_subgrupo_id     Int?
+  produto_fabricante_id   Int?
+  produto_modelo_id       Int?
+  produto_complexidade_id Int?
+  unit_id                 Int
+  ncm                     String?           @db.VarChar(8)
+  barras                  String?           @db.VarChar(100)
+  cod_referencia          String?           @db.VarChar(100)
+  padrao                  String?           @db.VarChar(55)
+  unidade_medida_id       Int?
+  nome_produto            String?           @db.VarChar(100)
+  local                   String?           @db.VarChar(55)
+  preco_venda             Int?              @default(0)
+  estoque_min             Float?
+  estoque_max             Float?
+  serial                  String?           @db.VarChar(100)
+  preco_ultima_compra     Decimal?          @default(0.00) @db.Decimal(12, 2)
+  obs                     String?           @db.Text
+  tipo_produto            String?           @db.VarChar(55)
+  image_produto           String?           @db.VarChar(200)
+  composicao              String?           @default("N") @db.Char(1)
+  kit                     String            @db.Char(1)
+  nve                     String?           @db.VarChar(8)
+  cEANTrib                String?           @db.VarChar(13)
+  CEST                    Int?
+  vFrete                  Decimal?          @default(0.00) @db.Decimal(15, 2)
+  vSeg                    Decimal?          @default(0.00) @db.Decimal(15, 2)
+  vOutro                  Decimal?          @default(0.00) @db.Decimal(15, 2)
+  extipi                  String?           @db.VarChar(3)
+  orig                    Int?              @default(0)
+  MVA                     Float?            @default(0.00) @db.Float
+  impostos_venda          Int?              @default(1)
+  impostos_compra         Int?
+  anvisa                  String?           @db.VarChar(45)
+  pis                     Decimal?          @default(0.00) @db.Decimal(15, 2)
+  cofins                  Decimal?          @default(0.00) @db.Decimal(15, 2)
+  icms                    Decimal?          @default(0.00) @db.Decimal(15, 2)
+  iss                     Decimal?          @default(0.00) @db.Decimal(15, 2)
+  ipi                     Decimal?          @default(0.00) @db.Decimal(15, 2)
+  tipo                    String            @default("P") @db.Char(1)
+  comissao                String?           @default("N") @db.Char(1)
+  tributacao_id           Int?
+  created_at              DateTime?         @default(now()) @db.Timestamp(0)
+  updated_at              DateTime          @default(now()) @db.Timestamp(0)
+  deleted_at              DateTime?         @db.Timestamp(0)
+  os_pecas                os_pecas[]
+  os_servicos             os_servicos[]
+  produto_grupo           produto_grupo?    @relation(fields: [produto_grupo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "produto_ibfk_1")
+  produto_subgrupo        produto_subgrupo? @relation(fields: [produto_subgrupo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "produto_ibfk_2")
+  system_unit             system_unit       @relation(fields: [unit_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "produto_ibfk_3")
+
+  @@index([produto_grupo_id], map: "produto_grupo_id")
+  @@index([produto_subgrupo_id], map: "produto_subgrupo_id")
+  @@index([unit_id], map: "unit_id")
+}
+
+model produto_complexidade {
+  id         Int       @id @default(autoincrement())
+  descricao  String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model produto_composicao {
+  id            Int       @id @default(autoincrement())
+  produto_id    Int
+  composicao_id Int
+  quantidade    Float?
+  valor_unidade Decimal   @default(0.00) @db.Decimal(15, 2)
+  valor_total   Decimal   @default(0.00) @db.Decimal(15, 2)
+  created_at    DateTime  @default(now()) @db.Timestamp(0)
+  updated_at    DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+}
+
+model produto_fabricante {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model produto_fator {
+  id         Int       @id @default(autoincrement())
+  descricao  String    @db.VarChar(200)
+  tipo       String    @db.Char(1)
+  unid_ent   String    @db.Char(10)
+  unid_conv  String?   @db.VarChar(10)
+  valor      Float?
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model produto_grupo {
+  id         Int       @id @default(autoincrement())
+  nome       String?   @db.VarChar(55)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+  produto    produto[]
+
+  @@index([id], map: "id")
+}
+
+model produto_modelo {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(100)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model produto_subgrupo {
+  id               Int       @id @default(autoincrement())
+  produto_grupo_id Int?
+  nome             String?   @db.VarChar(100)
+  created_at       DateTime  @default(now()) @db.Timestamp(0)
+  updated_at       DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at       DateTime? @db.Timestamp(0)
+  produto          produto[]
+
+  @@index([id], map: "id")
+  @@index([id], map: "id_2")
+}
+
+model produto_tabela_preco {
+  id                       Int       @id @default(autoincrement())
+  tabela_preco_id          Int
+  preco                    Decimal?  @db.Decimal(15, 2)
+  controla_validade        String?   @db.Char(1)
+  data_validade            DateTime? @db.Date
+  descontoMax              Decimal?  @db.Decimal(15, 2)
+  tem_comissao             String?   @db.Char(1)
+  comissao                 Decimal?  @db.Decimal(15, 2)
+  tem_promocao             String?   @db.Char(1)
+  promocao                 Decimal?  @db.Decimal(15, 2)
+  promocao_validade        DateTime? @db.Date
+  produto_id               Int
+  markup_preco_custo       Decimal?  @default(0.00) @db.Decimal(15, 2)
+  markup_despesa_variavel  Decimal?  @default(0.00) @db.Decimal(15, 2)
+  markup_despesa_fixa      Decimal?  @default(0.00) @db.Decimal(15, 2)
+  markup_lucro_desejado    Decimal?  @default(0.00) @db.Decimal(15, 2)
+  markup_preco_venda       Decimal?  @default(0.00) @db.Decimal(15, 2)
+  markup_comissao_tecnico  Decimal?  @default(0.00) @db.Decimal(15, 2)
+  markup_comissao_parceiro Decimal?  @default(0.00) @db.Decimal(15, 2)
+  created_at               DateTime  @default(now()) @db.Timestamp(0)
+  updated_at               DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at               DateTime? @db.Timestamp(0)
+}
+
+model produto_unidade_medida {
+  id         Int       @id @default(autoincrement())
+  cod        String    @db.Char(10)
+  descricao  String    @db.VarChar(55)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model profissao {
+  id         Int       @unique(map: "profissao_id_IDX") @default(autoincrement())
+  nome       String?   @db.VarChar(500)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model relatorio_customizado {
+  id                    Int       @unique(map: "relatorio_customizado_id_IDX") @default(autoincrement())
+  unit_id               Int
+  nome                  String    @db.VarChar(55)
+  conteudo              String    @db.LongText
+  pc_receita_id         Int?
+  pc_receita_nome       String?   @db.VarChar(255)
+  pc_despesa_id         Int?
+  pc_despesa_nome       String?   @db.VarChar(255)
+  cp_tipo_pgto_id       Int?
+  cr_tipo_pgto_id       Int?
+  cp_tipo_forma_pgto_id Int?
+  cr_tipo_forma_pgto_id Int?
+  cp_user_id            Int?
+  cr_user_id            Int?
+  cp_conta_bancaria_id  Int?
+  cr_conta_bancaria_id  Int?
+  cp_departamento_id    Int?
+  cr_departamento_id    Int?
+  cp_descricao          String?   @db.VarChar(200)
+  cr_descricao          String?   @db.VarChar(500)
+  incremento            String?   @default("N") @db.Char(1)
+  decremento            String?   @default("N") @db.Char(1)
+  renovacao             String?   @default("N") @db.Char(1)
+  aumento_prazo         String?   @default("N") @db.Char(1)
+  pagamento_acumulativo String?   @default("N") @db.Char(1)
+  aditivo_database      String?   @default("N") @db.Char(1)
+  pagamento_unico       String?   @default("N") @db.Char(1)
+  created_at            DateTime  @default(now()) @db.Timestamp(0)
+  updated_at            DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at            DateTime? @db.Timestamp(0)
+}
+
+model relatorio_termo_garantia {
+  id         Int       @id @default(autoincrement())
+  unit_id    Int
+  nome       String    @db.VarChar(55)
+  conteudo   String    @db.LongText
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model servico {
+  id                   Int       @id @default(autoincrement())
+  produto_id           Int
+  servico_categoria_id Int
+  situacao             Int
+  precoVenda           Decimal   @db.Decimal(15, 2)
+  tempoEstimado        DateTime  @db.Time(0)
+  created_at           DateTime? @default(now()) @db.Timestamp(0)
+  updated_at           DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at           DateTime? @db.Timestamp(0)
+
+  @@index([servico_categoria_id], map: "fk_servico_servico_categoria1_idx")
+}
+
+model servico_categoria {
+  id             Int       @id @default(autoincrement())
+  nome_categoria String    @db.VarChar(45)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at     DateTime? @db.Timestamp(0)
+}
+
+model servico_motivos {
+  id                Int       @id @unique(map: "id") @default(autoincrement())
+  servico_status_id Int
+  nome              String    @db.VarChar(200)
+  created_at        DateTime  @default(now()) @db.Timestamp(0)
+  updated_at        DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at        DateTime? @db.Timestamp(0)
+}
+
+model servico_setlist {
+  id         Int       @id @default(autoincrement())
+  unit_id    Int
+  produto_id Int
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model servico_setlist_itens {
+  id                 Int       @id @default(autoincrement())
+  servico_setlist_id Int
+  descricao          String    @db.VarChar(200)
+  created_at         DateTime  @default(now()) @db.Timestamp(0)
+  updated_at         DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at         DateTime? @db.Timestamp(0)
+}
+
+model servico_status {
+  id                    Int       @id @default(autoincrement())
+  descricao             String    @db.VarChar(100)
+  color                 String?   @db.VarChar(50)
+  baixa                 String?   @default("S") @db.Char(1)
+  motivo                String?   @default("N") @db.Char(1)
+  filtro                String?   @default("S") @db.Char(1)
+  created_at            DateTime  @default(now()) @db.Timestamp(0)
+  updated_at            DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at            DateTime? @db.Timestamp(0)
+  tecnico_possui_acesso String    @default("N") @db.Char(1)
+}
+
+model situacao {
+  id   Int     @unique(map: "situacao_id_IDX") @default(autoincrement())
+  nome String? @db.VarChar(100)
+}
+
+model solicitacao_fim_status {
+  id         Int       @id @default(autoincrement())
+  status     String    @db.VarChar(55)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model solicitacao_financeiro {
+  id                        Int       @id @default(autoincrement())
+  departamento_id           Int
+  fornecedor_id             Int?
+  system_group_id           Int
+  user_id                   Int
+  unit_id                   Int
+  resumo                    String    @db.VarChar(200)
+  descricao                 String    @db.Text
+  valor                     Decimal?  @default(0.00) @db.Decimal(15, 2)
+  solicitacao_fim_status_id Int       @default(1)
+  reposta_financeiro        String?   @db.Text
+  data_vencimento           DateTime? @db.Date
+  tipo_pgto_id              Int?
+  tipo_forma_pgto_id        Int?
+  pc_despesa_id             Int?
+  pc_despesa_nome           String?   @db.VarChar(255)
+  conta_bancaria_id         Int?
+  created_at                DateTime  @default(now()) @db.Timestamp(0)
+  updated_at                DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at                DateTime? @db.Timestamp(0)
+}
+
+model system_access_log {
+  id              Int       @id
+  sessionid       String?   @db.Text
+  login           String?   @db.Text
+  login_year      String?   @db.VarChar(4)
+  login_month     String?   @db.VarChar(2)
+  login_day       String?   @db.VarChar(2)
+  login_time      DateTime  @default(dbgenerated("'2017-10-29 05:00:00'")) @db.Timestamp(0)
+  logout_time     DateTime  @default(dbgenerated("'2017-10-29 05:00:00'")) @db.Timestamp(0)
+  impersonated    String?   @db.Char(1)
+  access_ip       String?   @db.VarChar(45)
+  impersonated_by String?   @db.VarChar(200)
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+}
+
+model system_change_log {
+  id             Int      @id
+  logdate        DateTime @default(now()) @db.Timestamp(0)
+  login          String?  @db.Text
+  tablename      String?  @db.Text
+  primarykey     String?  @db.Text
+  pkvalue        String?  @db.Text
+  operation      String?  @db.Text
+  columnname     String?  @db.Text
+  oldvalue       String?  @db.Text
+  newvalue       String?  @db.Text
+  access_ip      String?  @db.Text
+  transaction_id String?  @db.Text
+  log_trace      String?  @db.Text
+  session_id     String?  @db.Text
+  class_name     String?  @db.Text
+  php_sapi       String?  @db.Text
+  log_year       String?  @db.VarChar(4)
+  log_month      String?  @db.VarChar(2)
+  log_day        String?  @db.VarChar(2)
+}
+
+model system_document {
+  id              Int       @id
+  system_user_id  Int?
+  title           String?   @db.Text
+  description     String?   @db.Text
+  category_id     Int?
+  submission_date DateTime? @db.Date
+  archive_date    DateTime? @db.Date
+  filename        String?   @db.Text
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+}
+
+model system_document_category {
+  id         Int       @id
+  name       String?   @db.Text
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model system_document_group {
+  id              Int       @id
+  document_id     Int?
+  system_group_id Int?
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+}
+
+model system_document_user {
+  id             Int       @id
+  document_id    Int?
+  system_user_id Int?
+  created_at     DateTime  @default(now()) @db.Timestamp(0)
+  updated_at     DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at     DateTime? @db.Timestamp(0)
+}
+
+model system_group {
+  id                   Int                    @id
+  name                 String?                @db.VarChar(100)
+  created_at           DateTime               @default(now()) @db.Timestamp(0)
+  updated_at           DateTime               @default(now()) @db.Timestamp(0)
+  deleted_at           DateTime?              @db.Timestamp(0)
+  system_group_program system_group_program[]
+  system_user_group    system_user_group[]
+}
+
+model system_group_program {
+  id                Int             @id
+  system_group_id   Int?
+  system_program_id Int?
+  created_at        DateTime        @default(now()) @db.Timestamp(0)
+  deleted_at        DateTime        @default(now()) @db.Timestamp(0)
+  updated_at        DateTime?       @db.Timestamp(0)
+  system_group      system_group?   @relation(fields: [system_group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_group_program_ibfk_1")
+  system_program    system_program? @relation(fields: [system_program_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_group_program_ibfk_2")
+
+  @@index([system_group_id], map: "sys_group_program_group_idx")
+  @@index([system_program_id], map: "sys_group_program_program_idx")
+}
+
+model system_message {
+  id                Int       @id
+  system_user_id    Int?
+  system_user_to_id Int?
+  subject           String?   @db.Text
+  message           String?   @db.Text
+  dt_message        String?   @db.Text
+  checked           String?   @db.Char(1)
+  created_at        DateTime  @default(now()) @db.Timestamp(0)
+  updated_at        DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at        DateTime? @db.Timestamp(0)
+}
+
+model system_notification {
+  id                Int       @id
+  system_user_id    Int?
+  system_user_to_id Int?
+  subject           String?   @db.Text
+  message           String?   @db.Text
+  dt_message        String?   @db.Text
+  action_url        String?   @db.Text
+  action_label      String?   @db.Text
+  icon              String?   @db.Text
+  checked           String?   @db.Char(1)
+  created_at        DateTime  @default(now()) @db.Timestamp(0)
+  updated_at        DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at        DateTime? @db.Timestamp(0)
+}
+
+model system_preference {
+  id         String    @id @db.VarChar(100)
+  value      String?   @db.Text
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model system_program {
+  id                   Int                    @id
+  name                 String?                @db.VarChar(100)
+  controller           String?                @db.VarChar(100)
+  created_at           DateTime?              @default(now()) @db.Timestamp(0)
+  updated_at           DateTime               @default(now()) @db.Timestamp(0)
+  deleted_at           DateTime?              @db.Timestamp(0)
+  system_group_program system_group_program[]
+  system_user          system_user[]
+  system_user_program  system_user_program[]
+}
+
+model system_request_log {
+  id               Int     @id
+  endpoint         String? @db.Text
+  logdate          String? @db.Text
+  log_year         String? @db.VarChar(4)
+  log_month        String? @db.VarChar(2)
+  log_day          String? @db.VarChar(2)
+  session_id       String? @db.Text
+  login            String? @db.Text
+  access_ip        String? @db.Text
+  class_name       String? @db.Text
+  http_host        String? @db.Text
+  server_port      String? @db.Text
+  request_uri      String? @db.Text
+  request_method   String? @db.Text
+  query_string     String? @db.Text
+  request_headers  String? @db.Text
+  request_body     String? @db.Text
+  request_duration Int?
+}
+
+model system_sql_log {
+  id             Int       @id
+  logdate        DateTime  @default(now()) @db.Timestamp(0)
+  login          String?   @db.Text
+  database_name  String?   @db.Text
+  sql_command    String?   @db.Text
+  statement_type String?   @db.Text
+  access_ip      String?   @db.VarChar(45)
+  transaction_id String?   @db.Text
+  log_trace      String?   @db.Text
+  session_id     String?   @db.Text
+  class_name     String?   @db.Text
+  php_sapi       String?   @db.Text
+  request_id     String?   @db.Text
+  log_year       String?   @db.VarChar(4)
+  log_month      String?   @db.VarChar(2)
+  log_day        String?   @db.VarChar(2)
+  created_at     DateTime  @default(now()) @db.Timestamp(0)
+  updated_at     DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at     DateTime? @db.Timestamp(0)
+}
+
+model system_unit {
+  id                          Int                   @id
+  producao                    String?               @default("S") @db.Char(1)
+  name                        String?               @db.VarChar(100)
+  matriz_filial               Int?
+  razao_social                String?               @db.VarChar(200)
+  nome_fantasia               String?               @db.VarChar(200)
+  unidade                     String?               @db.VarChar(100)
+  responsavel                 String?               @db.VarChar(100)
+  cnpj                        String?               @db.VarChar(20)
+  insc_estadual               String?               @db.VarChar(20)
+  insc_municipal              String?               @db.VarChar(20)
+  cnae                        String?               @db.VarChar(10)
+  crt                         String?               @db.VarChar(10)
+  atividade                   String?               @db.VarChar(100)
+  regime                      String?               @db.VarChar(20)
+  junta_comercial             Int?
+  ativo                       String?               @db.Char(1)
+  porte                       String?               @db.VarChar(20)
+  cep                         String?               @db.VarChar(10)
+  logradouro                  String?               @db.VarChar(200)
+  numero                      String?               @db.VarChar(20)
+  bairro                      String?               @db.VarChar(200)
+  complemento                 String?               @db.VarChar(200)
+  cidade                      String?               @db.VarChar(100)
+  uf                          String?               @db.Char(2)
+  codMuni                     String?               @db.VarChar(20)
+  email                       String?               @db.VarChar(200)
+  telefone                    String?               @db.VarChar(100)
+  telefone_sped               String?               @db.VarChar(20)
+  site                        String?               @db.VarChar(200)
+  cont_limite                 String?               @db.Char(1)
+  limite                      Decimal?              @db.Decimal(15, 2)
+  certificado                 String?               @db.LongText
+  data_vencimento_certificado DateTime?             @db.Date
+  senha                       String?               @db.VarChar(200)
+  connection_name             String?               @db.Text
+  contabilista_nome           String?               @db.VarChar(200)
+  contabilista_cpf            String?               @db.VarChar(20)
+  contabilista_crc            String?               @db.VarChar(55)
+  contabilista_cnpj           String?               @db.VarChar(20)
+  contabilista_cep            String?               @db.VarChar(20)
+  contabilista_end            String?               @db.VarChar(200)
+  contabilista_num            String?               @db.VarChar(20)
+  contabilista_compl          String?               @db.VarChar(200)
+  contabilista_bairro         String?               @db.VarChar(200)
+  contabilista_fone           String?               @db.VarChar(20)
+  contabilista_email          String?               @db.VarChar(150)
+  created_at                  DateTime?             @db.Timestamp(0)
+  updated_at                  DateTime?             @db.Timestamp(0)
+  deleted_at                  DateTime?             @db.Timestamp(0)
+  banco                       banco[]
+  cliente                     cliente[]
+  comissao_fornecedor         comissao_fornecedor[]
+  comissao_user               comissao_user[]
+  plano_unidade               plano_unidade[]
+  produto                     produto[]
+  system_user_unit            system_user_unit[]
+}
+
+model system_user {
+  id                        Int                        @id
+  name                      String?                    @db.VarChar(100)
+  login                     String?                    @db.VarChar(100)
+  password                  String?                    @db.VarChar(100)
+  email                     String?                    @db.VarChar(100)
+  frontpage_id              Int?
+  tipo_estoque              Int?
+  system_unit_id            Int?
+  active                    String?                    @db.Char(1)
+  accepted_term_policy      String?                    @db.Char(1)
+  accepted_term_policy_at   String?                    @db.Text
+  accepted_term_policy_data String?                    @db.Text
+  phone                     String?                    @db.VarChar(20)
+  address                   String?                    @db.VarChar(200)
+  function_name             String?                    @db.VarChar(100)
+  about                     String?                    @db.VarChar(100)
+  created_at                DateTime                   @default(now()) @db.Timestamp(0)
+  updated_at                DateTime                   @default(now()) @db.Timestamp(0)
+  deleted_at                DateTime?                  @db.Timestamp(0)
+  cliente                   cliente[]
+  comissao_user             comissao_user[]
+  system_program            system_program?            @relation(fields: [frontpage_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_ibfk_1")
+  system_user_group         system_user_group[]
+  system_user_old_password  system_user_old_password[]
+  system_user_program       system_user_program[]
+  system_user_unit          system_user_unit[]
+
+  @@index([frontpage_id], map: "sys_user_program_idx")
+}
+
+model system_user_group {
+  id              Int           @id
+  system_user_id  Int?
+  system_group_id Int?
+  created_at      DateTime      @default(now()) @db.Timestamp(0)
+  updated_at      DateTime      @default(now()) @db.Timestamp(0)
+  deleted_at      DateTime?     @db.Timestamp(0)
+  system_user     system_user?  @relation(fields: [system_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_group_ibfk_1")
+  system_group    system_group? @relation(fields: [system_group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_group_ibfk_2")
+
+  @@index([system_group_id], map: "sys_user_group_group_idx")
+  @@index([system_user_id], map: "sys_user_group_user_idx")
+}
+
+model system_user_old_password {
+  id             Int          @id
+  system_user_id Int?
+  password       String?      @db.Text
+  created_at     DateTime?    @db.Date
+  system_user    system_user? @relation(fields: [system_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_old_password_ibfk_1")
+
+  @@index([system_user_id], map: "system_user_id")
+}
+
+model system_user_program {
+  id                Int             @id
+  system_user_id    Int?
+  system_program_id Int?
+  created_at        DateTime        @default(now()) @db.Timestamp(0)
+  updated_at        DateTime        @default(now()) @db.Timestamp(0)
+  deleted_at        DateTime?       @db.Timestamp(0)
+  system_user       system_user?    @relation(fields: [system_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_program_ibfk_1")
+  system_program    system_program? @relation(fields: [system_program_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_program_ibfk_2")
+
+  @@index([system_program_id], map: "sys_user_program_program_idx")
+  @@index([system_user_id], map: "sys_user_program_user_idx")
+}
+
+model system_user_unit {
+  id             Int          @id
+  system_user_id Int?
+  system_unit_id Int?
+  created_at     DateTime     @default(now()) @db.Timestamp(0)
+  updated_at     DateTime     @default(now()) @db.Timestamp(0)
+  deleted_at     DateTime?    @db.Timestamp(0)
+  system_user    system_user? @relation(fields: [system_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_unit_ibfk_1")
+  system_unit    system_unit? @relation(fields: [system_unit_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_unit_ibfk_2")
+
+  @@index([system_unit_id], map: "system_unit_id")
+  @@index([system_user_id], map: "system_user_id")
+}
+
+model tabela_precos {
+  id         Int       @id @default(autoincrement())
+  nome       String?   @db.VarChar(45)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model telefones_cliente {
+  id          Int       @id @default(autoincrement())
+  responsavel String?   @db.VarChar(100)
+  telefone    String    @db.VarChar(20)
+  cliente_id  Int
+  created_at  DateTime  @default(now()) @db.Timestamp(0)
+  updated_at  DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at  DateTime? @db.Timestamp(0)
+
+  @@index([cliente_id], map: "cliente_id")
+}
+
+model telefones_fornecedor {
+  id            Int       @id @default(autoincrement())
+  responsavel   String?   @db.VarChar(100)
+  telefone      String    @db.VarChar(150)
+  fornecedor_id Int
+  created_at    DateTime  @default(now()) @db.Timestamp(0)
+  updated_at    DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+}
+
+model telefones_unidade {
+  id          Int       @id @default(autoincrement())
+  responsavel String?   @db.VarChar(100)
+  telefone    String?   @db.VarChar(20)
+  unidades_id Int?
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+  deleted_at  DateTime? @db.Timestamp(0)
+}
+
+model tipo_endereco {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(55)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model tipo_estoque {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(55)
+  valor      String    @db.VarChar(1)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model tipo_forma_pgto {
+  id           Int       @id @default(autoincrement())
+  nome         String    @db.VarChar(100)
+  regra        String    @db.VarChar(100)
+  parcela      Int
+  valor_minimo Decimal?  @default(0.00) @db.Decimal(15, 2)
+  created_at   DateTime  @default(now()) @db.Timestamp(0)
+  updated_at   DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at   DateTime? @db.Timestamp(0)
+}
+
+model tipo_pgto {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(55)
+  unit_id    Int
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model transferencia_bancaria {
+  id                                                                              Int            @id @default(autoincrement())
+  unit_id                                                                         Int
+  user_id                                                                         Int
+  conta_bancaria_debito_id                                                        Int
+  conta_bancaria_credito_id                                                       Int
+  data_lancamento                                                                 DateTime       @db.Date
+  data_transferencia                                                              DateTime       @db.Date
+  valor                                                                           Decimal        @db.Decimal(15, 2)
+  pc_despesa_id                                                                   String         @db.VarChar(11)
+  pc_despesa_nome                                                                 String         @db.VarChar(100)
+  pc_receita_id                                                                   String         @db.VarChar(11)
+  pc_receita_nome                                                                 String         @db.VarChar(100)
+  observacao                                                                      String         @db.Text
+  baixa                                                                           String         @default("N") @db.Char(1)
+  data_baixa                                                                      DateTime?      @db.Date
+  created_at                                                                      DateTime       @default(now()) @db.Timestamp(0)
+  updated_at                                                                      DateTime       @default(now()) @db.Timestamp(0)
+  deleted_at                                                                      DateTime?      @db.Timestamp(0)
+  conta_bancaria_transferencia_bancaria_conta_bancaria_credito_idToconta_bancaria conta_bancaria @relation("transferencia_bancaria_conta_bancaria_credito_idToconta_bancaria", fields: [conta_bancaria_credito_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transferencia_bancaria_ibfk_1")
+  conta_bancaria_transferencia_bancaria_conta_bancaria_debito_idToconta_bancaria  conta_bancaria @relation("transferencia_bancaria_conta_bancaria_debito_idToconta_bancaria", fields: [conta_bancaria_debito_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transferencia_bancaria_ibfk_2")
+
+  @@index([conta_bancaria_credito_id], map: "conta_bancaria_credito_id")
+  @@index([conta_bancaria_debito_id], map: "conta_bancaria_debito_id")
+  @@index([pc_despesa_id], map: "pc_despesa_id")
+  @@index([pc_receita_id], map: "pc_receita_id")
+  @@index([unit_id], map: "unit_id")
+  @@index([user_id], map: "user_id")
+}
+
+model transportadora {
+  id            Int       @id @default(autoincrement())
+  nome_fantasia String?   @db.VarChar(65)
+  razao_social  String?   @db.VarChar(65)
+  insc_estadual String?   @db.VarChar(20)
+  im            String?   @db.VarChar(20)
+  cnpj          String?   @db.VarChar(20)
+  cep           String?   @db.VarChar(10)
+  logradouro    String?   @db.VarChar(65)
+  numero        String?   @db.VarChar(10)
+  bairro        String?   @db.VarChar(55)
+  complemento   String?   @db.VarChar(200)
+  cidade        String?   @db.VarChar(55)
+  uf            String?   @db.Char(2)
+  telefone      String?   @db.VarChar(15)
+  fax           String?   @db.VarChar(15)
+  responsavel   String?   @db.VarChar(55)
+  email         String?   @db.VarChar(65)
+  site          String?   @db.VarChar(55)
+  created_at    DateTime  @default(now()) @db.Timestamp(0)
+  updated_at    DateTime? @default(now()) @db.Timestamp(0)
+  deleted_at    DateTime? @db.Timestamp(0)
+}

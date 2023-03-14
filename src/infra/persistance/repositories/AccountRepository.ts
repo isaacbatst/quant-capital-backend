@@ -14,5 +14,7 @@ export type AccountRepository = {
 	updateNotificationSettings(accountId: string, settings: Partial<NotificationSettings>): Promise<void>;
 	save(account: Account): Promise<void>;
 	saveSessionToken(sessionToken: string, accountId: string): Promise<void>;
+	savePushToken(pushToken: string, accountId: string): Promise<void>;
 	removeSessionToken(accountId: string, sessionToken: string): Promise<void>;
+	removePushToken(accountId: string, pushToken: string): Promise<void>;
 };

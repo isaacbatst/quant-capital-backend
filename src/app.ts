@@ -24,6 +24,7 @@ import {Logout} from './app/usecases/Logout';
 import {RequestContractWithdraw} from './app/usecases/RequestContractWithdraw';
 import {RequestEmailChange} from './app/usecases/RequestEmailChange';
 import {ResetPassword} from './app/usecases/ResetPassword';
+import {SavePushToken} from './app/usecases/SavePushToken';
 import {UpdateNotificationSettings} from './app/usecases/UpdateNotificationSettings';
 import {ViewNotification} from './app/usecases/ViewNotification';
 import {ChangePasswordController} from './infra/controllers/ChangePasswordController';
@@ -47,6 +48,7 @@ import {LogoutController} from './infra/controllers/LogoutController';
 import {RequestContractWithdrawController} from './infra/controllers/RequestContractWithdrawController';
 import {RequestEmailChangeController} from './infra/controllers/RequestEmailChangeController';
 import {ResetPasswordController} from './infra/controllers/ResetPasswordController';
+import {SavePushTokenController} from './infra/controllers/SavePushTokenController';
 import {UpdateNotificationSettingsController} from './infra/controllers/UpdateNotificationSettingsController';
 import {ViewNotificationController} from './infra/controllers/ViewNotification';
 import {type EmailGateway} from './infra/gateways/EmailGateway/EmailGateway';
@@ -96,6 +98,7 @@ export class App {
 		const getCustomerService = new GetCustomerService(authService);
 		const getCarouselBanners = new GetCarouselBanners(authService, appUrl);
 		const logout = new Logout(authService);
+		const savePushToken = new SavePushToken(authService);
 
 		const loginController = new LoginController(login);
 		const getUserController = new GetUserController(getUser);
@@ -120,6 +123,7 @@ export class App {
 		const getCustomerServiceController = new GetCustomerServiceController(getCustomerService);
 		const getCarouselBannersController = new GetCarouselBannersController(getCarouselBanners);
 		const logoutController = new LogoutController(logout);
+		const savePushTokenController = new SavePushTokenController(savePushToken);
 
 		this.app.post('/login', async (req, res) => loginController.handle(req, res));
 		this.app.post('/forgot-password', async (req, res) => forgotMyPasswordController.handle(req, res));
@@ -132,6 +136,7 @@ export class App {
 		this.app.get('/user/notification-settings', async (req, res) => getNotificationSettingsController.handle(req, res));
 		this.app.patch('/user/notification-settings', async (req, res) => updateNotificationSettingsController.handle(req, res));
 		this.app.post('/user/request-email-change', async (req, res) => requestEmailChangeController.handle(req, res));
+		this.app.post('/user/push-token', async (req, res) => savePushTokenController.handle(req, res));
 		this.app.get('/contracts', async (req, res) => getContractsController.handle(req, res));
 		this.app.get('/contract/:id', async (req, res) => getContractController.handle(req, res));
 		this.app.post('/contract/:contractId/request-withdraw', async (req, res) => requestContractWithdrawController.handle(req, res));

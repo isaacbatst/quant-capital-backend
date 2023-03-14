@@ -98,4 +98,22 @@ export class AccountRepositoryFake implements AccountRepository {
 
 		account.sessionTokens = account.sessionTokens.filter(token => token !== sessionToken);
 	}
+
+	async removePushToken(accountId: string, pushToken: string): Promise<void> {
+		const account = this.accounts.find(account => account.account.getId() === accountId);
+		if (!account) {
+			throw new NotFoundError('ACCOUNT_NOT_FOUND');
+		}
+
+		account.pushTokens = account.pushTokens?.filter(token => token !== pushToken);
+	}
+
+	async savePushToken(pushToken: string, accountId: string): Promise<void> {
+		const account = this.accounts.find(account => account.account.getId() === accountId);
+		if (!account) {
+			throw new NotFoundError('ACCOUNT_NOT_FOUND');
+		}
+
+		account.pushTokens = account.pushTokens ? [...account.pushTokens, pushToken] : [pushToken];
+	}
 }
