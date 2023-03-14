@@ -1,8 +1,8 @@
 import {AccountRepositoryFake} from './AccountRepository/AccountRepositoryFake';
 import {ContractRepositoryFake} from './ContractRepository/ContractRepositoryFake';
 import {ContractWithdrawRequestRepositoryFake} from './ContractWithdrawRequestRepository/ContractWithdrawRequestRepositoryFake';
-import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository';
-import {EmailChangeRequestRepositoryFake} from './EmailChangeRequestRepositoryFake';
+import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository/EmailChangeRequestRepository';
+import {EmailChangeRequestRepositoryFake} from './EmailChangeRequestRepository/EmailChangeRequestRepositoryFake';
 import {NotificationRepositoryFake} from './NotificationRepositoryFake';
 import {PasswordResetRequestRepositoryFake} from './PasswordResetRequestRepositoryFake';
 import {ProductRepositoryFake} from './ProductRepositoryFake';

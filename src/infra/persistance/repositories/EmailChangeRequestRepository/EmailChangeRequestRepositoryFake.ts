@@ -1,5 +1,5 @@
-import {type EmailChangeRequest} from '../../../domain/entities/Account/EmailChangeRequest';
-import {EmailChangeRequestStatus} from '../../../domain/entities/Account/EmailChangeRequestStatus';
+import {type EmailChangeRequest} from '../../../../domain/entities/Account/EmailChangeRequest';
+import {EmailChangeRequestStatus} from '../../../../domain/entities/Account/EmailChangeRequestStatus';
 import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository';
 
 export class EmailChangeRequestRepositoryFake implements EmailChangeRequestRepository {
@@ -20,5 +20,5 @@ export class EmailChangeRequestRepositoryFake implements EmailChangeRequestRepos
 	};
 
 	getUserOpenRequests = async (userId: string) => this.requests
-		.filter(request => request.userId === userId && request.getStatus() === EmailChangeRequestStatus.open);
+		.filter(request => request.clientId === userId && request.getStatus() === EmailChangeRequestStatus.open);
 }

@@ -7,7 +7,7 @@ describe('EmailChangeRequest', () => {
 		const emailChangeRequest = new EmailChangeRequest('request-id', 'user-id', EmailChangeRequestStatus.open);
 
 		expect(emailChangeRequest.id).toBe('request-id');
-		expect(emailChangeRequest.userId).toBe('user-id');
+		expect(emailChangeRequest.clientId).toBe('user-id');
 		expect(emailChangeRequest.getStatus()).toBe(EmailChangeRequestStatus.open);
 	});
 });
