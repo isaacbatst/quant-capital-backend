@@ -1,46 +1,44 @@
 import {describe, expect, it} from 'vitest';
 import {ClientNotification} from './ClientNotification';
+import {NotificationType} from './Notification';
 import {NotificationBasic} from './NotificationBasic';
 
 describe('ClientNotification', () => {
 	it('should create a client notification', () => {
 		const now = new Date();
-		const notification = new NotificationBasic({
+		const clientNotification = new ClientNotification({
 			id: 'id',
 			body: 'body',
 			title: 'title',
 			createdAt: now,
-			to: ['client-id-1', 'client-id-2'],
-		});
-		const clientNotification = new ClientNotification(notification, false, '25');
-		expect(clientNotification.getNotification()).toEqual(notification);
+			type: NotificationType.basic,
+		}, false, '25');
+		expect(clientNotification.getNotification()).toEqual(clientNotification);
 		expect(clientNotification.getIsViewed()).toBe(false);
 	});
 
 	it('should view notification', () => {
 		const now = new Date();
-		const notification = new NotificationBasic({
+		const clientNotification = new ClientNotification({
 			id: 'id',
 			body: 'body',
 			title: 'title',
 			createdAt: now,
-			to: ['client-id-1', 'client-id-2'],
-		});
-		const clientNotification = new ClientNotification(notification, false, '25');
+			type: NotificationType.basic,
+		}, false, '25');
 		clientNotification.view();
 		expect(clientNotification.getIsViewed()).toBe(true);
 	});
 
 	it('should not view notification alread viewed', () => {
 		const now = new Date();
-		const notification = new NotificationBasic({
+		const clientNotification = new ClientNotification({
 			id: 'id',
 			body: 'body',
 			title: 'title',
 			createdAt: now,
-			to: ['client-id-1', 'client-id-2'],
-		});
-		const clientNotification = new ClientNotification(notification, true, '25');
+			type: NotificationType.basic,
+		}, true, '25');
 
 		expect(() => {
 			clientNotification.view();

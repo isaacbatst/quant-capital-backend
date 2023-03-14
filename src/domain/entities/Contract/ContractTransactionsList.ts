@@ -12,11 +12,22 @@ export class ContractTransactionsList {
 
 	getTransactionsSortedByDate(sortType: SortType = 'desc') {
 		return this.transactions.slice().sort((a, b) => {
+			const timeA = this.getTimeWithFallback(a.getDate());
+			const timeB = this.getTimeWithFallback(b.getDate());
+
 			if (sortType === 'asc') {
-				return a.getDate().getTime() - b.getDate().getTime();
+				return timeA - timeB;
 			}
 
-			return b.getDate().getTime() - a.getDate().getTime();
+			return timeB - timeA;
 		});
+	}
+
+	private getTimeWithFallback(date: Date | undefined): number {
+		if (date) {
+			return date.getTime();
+		}
+
+		return 0;
 	}
 }

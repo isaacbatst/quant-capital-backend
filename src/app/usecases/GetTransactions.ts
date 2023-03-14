@@ -12,7 +12,7 @@ type Input = {
 
 type Output = {
 	id: string;
-	date: string;
+	date?: string;
 	value: number;
 	type: ContractTransactionType;
 };
@@ -38,7 +38,7 @@ export class GetTransactions {
 		const transactionsByDate = transactions.getTransactionsSortedByDate();
 		const pageTransactions = Paginator.getPage(transactionsByDate, input.page, GetTransactions.pageSize);
 		return pageTransactions.map(transaction => ({
-			date: transaction.getDate().toISOString(),
+			date: transaction.getDate()?.toISOString(),
 			id: transaction.getId(),
 			value: transaction.getValue(),
 			type: transaction.getType(),

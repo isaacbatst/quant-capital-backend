@@ -10,7 +10,7 @@ type Input = {
 
 type Output = {
 	id: string;
-	date: string;
+	date?: string;
 	value: number;
 	type: ContractTransactionType;
 };
@@ -39,7 +39,7 @@ export class GetLastTransactions {
 		const transactionsByDate = transactions.getTransactionsSortedByDate();
 		const lastTransactions = transactionsByDate.slice(0, GetLastTransactions.lastTransactionsLength);
 		return lastTransactions.map(transaction => ({
-			date: transaction.getDate().toISOString(),
+			date: transaction.getDate()?.toISOString(),
 			id: transaction.getId(),
 			value: transaction.getValue(),
 			type: transaction.getType(),

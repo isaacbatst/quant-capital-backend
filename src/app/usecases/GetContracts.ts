@@ -9,7 +9,7 @@ type Input = {
 
 type Output = {
 	id: string;
-	date: string;
+	date?: string;
 	balance: number;
 	clientId: string;
 };
@@ -29,7 +29,7 @@ export class GetContracts {
 		const contracts = await this.contractRepository.getContractBriefsByClientId(account.getId());
 		return contracts.map<Output>(contract => ({
 			id: contract.getId(),
-			date: contract.getDate().toISOString(),
+			date: contract.getDate()?.toISOString(),
 			balance: contract.getBalance(),
 			clientId: contract.getClientId(),
 		}));

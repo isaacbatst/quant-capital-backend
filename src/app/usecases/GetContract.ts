@@ -15,15 +15,15 @@ type Input = {
 
 type OutputTransaction = {
 	id: string;
-	date: string;
+	date?: string;
 	value: number;
 	type: ContractTransactionType;
 };
 
 type OutputVersion = {
 	id: string;
-	startDate: string;
-	dueDate: string;
+	startDate?: string;
+	dueDate?: string;
 	type: ContractVersionType;
 	rate: {
 		value: number;
@@ -35,7 +35,7 @@ type OutputVersion = {
 
 type Output = {
 	id: string;
-	contractDate: string;
+	contractDate?: string;
 	clientId: string;
 	balance: number;
 	initialVersion: OutputVersion;
@@ -71,7 +71,7 @@ export class GetContract {
 		const lastVersion = contract.getLastVersion();
 		return ({
 			id: contract.getId(),
-			contractDate: contract.getDate().toISOString(),
+			contractDate: contract.getDate()?.toISOString(),
 			clientId: contract.getClientId(),
 			balance: contract.getBalance(),
 			lastVersion: this.toOutputVersion(lastVersion),
@@ -84,8 +84,8 @@ export class GetContract {
 		return {
 			id: version.getId(),
 			balance: version.getBalance(),
-			startDate: version.getStartDate().toISOString(),
-			dueDate: version.getDueDate().toISOString(),
+			startDate: version.getStartDate()?.toISOString(),
+			dueDate: version.getDueDate()?.toISOString(),
 			type: version.getType(),
 			rate: {
 				type: version.getRate().type,
@@ -98,7 +98,7 @@ export class GetContract {
 	private toOutputTransactions(transactions: ContractTransaction[]): OutputTransaction[] {
 		return transactions.map(transaction => ({
 			id: transaction.getId(),
-			date: transaction.getDate().toISOString(),
+			date: transaction.getDate()?.toISOString(),
 			value: transaction.getValue(),
 			type: transaction.getType(),
 		}));

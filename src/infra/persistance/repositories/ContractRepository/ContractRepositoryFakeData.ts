@@ -13,7 +13,6 @@ export class ContractRepositoryFakeData {
 				initialVersion: {
 					startDate: new Date('2022-08-15'),
 					dueDate: new Date('2023-02-15'),
-					type: 'contract',
 					rate: new ContractRate(1.5, 'perYear'),
 					initialTransactionValue: 27600,
 					balance: 27600,
@@ -51,7 +50,6 @@ export class ContractRepositoryFakeData {
 				initialVersion: {
 					startDate: new Date('2021-08-20'),
 					dueDate: new Date('2023-08-20'),
-					type: 'contract',
 					rate: new ContractRate(1.5, 'perYear'),
 					initialTransactionValue: 200_000,
 					balance: 200_000,
@@ -83,7 +81,6 @@ export class ContractRepositoryFakeData {
 				initialVersion: {
 					startDate: new Date('2020-10-09'),
 					dueDate: new Date('2021-10-09'),
-					type: 'contract',
 					rate: new ContractRate(1.5, 'perMonth'),
 					balance: 5000,
 					initialTransactionValue: 5000,
@@ -137,7 +134,6 @@ export class ContractRepositoryFakeData {
 				initialVersion: {
 					startDate: new Date('2020-10-09'),
 					dueDate: new Date('2021-10-09'),
-					type: 'contract',
 					rate: new ContractRate(1.5, 'perMonth'),
 					balance: 5000,
 					initialTransactionValue: 5000,

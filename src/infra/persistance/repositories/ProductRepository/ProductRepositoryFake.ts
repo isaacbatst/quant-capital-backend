@@ -11,6 +11,7 @@ export class ProductRepositoryFake implements ProductRepository {
 			shortDescription: 'product-description-1',
 			imageSrc: `${this.appUrl}/banner_1.jpg`,
 			description: 'product-description-1',
+			order: 2,
 			contact: new ProductContact({
 				email: new EmailAddress('product-contact-email-1@email.com'),
 				tel: 'product-contact-tel-1',
@@ -23,6 +24,7 @@ export class ProductRepositoryFake implements ProductRepository {
 			shortDescription: 'product-description-2',
 			imageSrc: `${this.appUrl}/banner_1.jpg`,
 			description: 'product-description-2',
+			order: 1,
 			contact: new ProductContact({
 				email: new EmailAddress('product-contact-email-2@email.com'),
 				tel: 'product-contact-tel-2',

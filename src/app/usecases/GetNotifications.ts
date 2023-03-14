@@ -66,18 +66,12 @@ export class GetNotifications {
 			const notification = clientNotification.getNotification();
 			const isViewed = clientNotification.getIsViewed();
 
-			let payload: Record<string, unknown> = {};
-
-			if (notification instanceof NotificationNavigator) {
-				payload = notification.getPayload();
-			}
-
 			return ({
-				type: notification.getType(),
-				id: notification.getId(),
-				title: notification.getTitle(),
-				body: notification.getBody(),
-				payload,
+				type: notification.type,
+				id: notification.id,
+				title: notification.title,
+				body: notification.body,
+				payload: notification.payload,
 				isViewed,
 			});
 		});
