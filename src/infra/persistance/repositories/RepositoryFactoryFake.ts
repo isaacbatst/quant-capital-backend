@@ -1,5 +1,5 @@
 import {AccountRepositoryFake} from './AccountRepository/AccountRepositoryFake';
-import {ContractRepositoryFake} from './ContractRepositoryFake';
+import {ContractRepositoryFake} from './ContractRepository/ContractRepositoryFake';
 import {ContractWithdrawRequestRepositoryFake} from './ContractWithdrawRequestRepositoryFake';
 import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository';
 import {EmailChangeRequestRepositoryFake} from './EmailChangeRequestRepositoryFake';

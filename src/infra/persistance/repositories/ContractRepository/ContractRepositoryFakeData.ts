@@ -1,6 +1,6 @@
-import {Contract} from '../../../domain/entities/Contract/Contract';
-import {ContractRate} from '../../../domain/entities/Contract/ContractRate';
-import {ContractTransaction} from '../../../domain/entities/Contract/ContractTransaction';
+import {Contract} from '../../../../domain/entities/Contract/Contract';
+import {ContractRate} from '../../../../domain/entities/Contract/ContractRate';
+import {ContractTransaction} from '../../../../domain/entities/Contract/ContractTransaction';
 
 export class ContractRepositoryFakeData {
 	static get contracts(): Contract[] {

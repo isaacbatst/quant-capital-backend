@@ -1,7 +1,7 @@
 import {ContractsList} from '../../domain/entities/Contract/ContractsList';
 import {type ContractTransactionType} from '../../domain/entities/Contract/ContractTransaction';
 import {Paginator} from '../../domain/entities/Paginator';
-import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository';
+import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository/ContractRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type AuthService} from './AuthService';
 

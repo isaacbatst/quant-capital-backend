@@ -4,7 +4,7 @@ import {type ContractTransaction, type ContractTransactionType} from '../../doma
 import {type ContractVersion, type ContractVersionTransactions, type ContractVersionType} from '../../domain/entities/Contract/ContractVersion';
 import {NotFoundError} from '../../domain/errors/NotFoundError';
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository/AccountRepository';
-import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository';
+import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository/ContractRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type AuthService} from './AuthService';
 

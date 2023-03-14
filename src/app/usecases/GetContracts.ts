@@ -1,5 +1,5 @@
 import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository/AccountRepository';
-import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository';
+import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository/ContractRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type AuthService} from './AuthService';
 

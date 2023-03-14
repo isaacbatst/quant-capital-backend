@@ -1,5 +1,5 @@
-import {type Contract} from '../../../domain/entities/Contract/Contract';
-import {ContractBrief} from '../../../domain/entities/Contract/ContractBrief';
+import {type Contract} from '../../../../domain/entities/Contract/Contract';
+import {ContractBrief} from '../../../../domain/entities/Contract/ContractBrief';
 import {type ContractRepository} from './ContractRepository';
 import {ContractRepositoryFakeData} from './ContractRepositoryFakeData';
 
