@@ -1,6 +1,6 @@
 import {type NotificationType} from '../../domain/entities/Notification/Notification';
 import {NotificationNavigator} from '../../domain/entities/Notification/NotificationNavigator';
-import {type NotificationRepository} from '../../infra/persistance/repositories/NotificationRepository';
+import {type NotificationRepository} from '../../infra/persistance/repositories/NotificationRepository/NotificationRepository';
 import {type AuthService} from './AuthService';
 
 export type PushNotification = {

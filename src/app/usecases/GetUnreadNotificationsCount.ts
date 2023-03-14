@@ -1,4 +1,4 @@
-import {type NotificationRepository} from '../../infra/persistance/repositories/NotificationRepository';
+import {type NotificationRepository} from '../../infra/persistance/repositories/NotificationRepository/NotificationRepository';
 import {type AuthService} from './AuthService';
 
 export class GetUnreadNotificationsCount {

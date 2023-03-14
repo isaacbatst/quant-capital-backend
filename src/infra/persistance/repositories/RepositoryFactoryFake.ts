@@ -3,7 +3,7 @@ import {ContractRepositoryFake} from './ContractRepository/ContractRepositoryFak
 import {ContractWithdrawRequestRepositoryFake} from './ContractWithdrawRequestRepository/ContractWithdrawRequestRepositoryFake';
 import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository/EmailChangeRequestRepository';
 import {EmailChangeRequestRepositoryFake} from './EmailChangeRequestRepository/EmailChangeRequestRepositoryFake';
-import {NotificationRepositoryFake} from './NotificationRepositoryFake';
+import {NotificationRepositoryFake} from './NotificationRepository/NotificationRepositoryFake';
 import {PasswordResetRequestRepositoryFake} from './PasswordResetRequestRepositoryFake';
 import {ProductRepositoryFake} from './ProductRepositoryFake';
 import {type RepositoryFactory} from './RepositoryFactory';

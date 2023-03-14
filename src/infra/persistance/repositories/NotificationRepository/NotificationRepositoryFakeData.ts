@@ -1,6 +1,6 @@
-import {type Notification} from '../../../domain/entities/Notification/Notification';
-import {NotificationBasic} from '../../../domain/entities/Notification/NotificationBasic';
-import {NotificationNavigator} from '../../../domain/entities/Notification/NotificationNavigator';
+import {type Notification} from '../../../../domain/entities/Notification/Notification';
+import {NotificationBasic} from '../../../../domain/entities/Notification/NotificationBasic';
+import {NotificationNavigator} from '../../../../domain/entities/Notification/NotificationNavigator';
 
 export class NotificationRepositoryFakeData {
 	static get notifications(): Array<{notification: Notification; isViewed: boolean}> {

@@ -10,6 +10,14 @@ CREATE TABLE `PanelUser` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `PanelUserSession` (
+    `token` VARCHAR(191) NOT NULL,
+    `panelUserId` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`token`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Client` (
     `id` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
@@ -22,6 +30,14 @@ CREATE TABLE `Client` (
 
     UNIQUE INDEX `Client_email_key`(`email`),
     PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ClientSession` (
+    `token` VARCHAR(191) NOT NULL,
+    `clientId` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`token`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -76,12 +92,12 @@ CREATE TABLE `Notification` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `NotificationsClientPushTokens` (
+CREATE TABLE `NotificationsClients` (
     `isViewed` BOOLEAN NOT NULL,
     `notificationId` VARCHAR(191) NOT NULL,
-    `clientPushTokenToken` VARCHAR(191) NOT NULL,
+    `clientId` VARCHAR(191) NOT NULL,
 
-    PRIMARY KEY (`notificationId`, `clientPushTokenToken`)
+    PRIMARY KEY (`notificationId`, `clientId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -110,6 +126,12 @@ CREATE TABLE `Product` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
+ALTER TABLE `PanelUserSession` ADD CONSTRAINT `PanelUserSession_panelUserId_fkey` FOREIGN KEY (`panelUserId`) REFERENCES `PanelUser`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ClientSession` ADD CONSTRAINT `ClientSession_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `Client`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `ClientPasswordResetRequest` ADD CONSTRAINT `ClientPasswordResetRequest_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `Client`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -119,7 +141,7 @@ ALTER TABLE `ClientEmailChangeRequest` ADD CONSTRAINT `ClientEmailChangeRequest_
 ALTER TABLE `ClientPushToken` ADD CONSTRAINT `ClientPushToken_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `Client`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `NotificationsClientPushTokens` ADD CONSTRAINT `NotificationsClientPushTokens_notificationId_fkey` FOREIGN KEY (`notificationId`) REFERENCES `Notification`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `NotificationsClients` ADD CONSTRAINT `NotificationsClients_notificationId_fkey` FOREIGN KEY (`notificationId`) REFERENCES `Notification`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `NotificationsClientPushTokens` ADD CONSTRAINT `NotificationsClientPushTokens_clientPushTokenToken_fkey` FOREIGN KEY (`clientPushTokenToken`) REFERENCES `ClientPushToken`(`token`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `NotificationsClients` ADD CONSTRAINT `NotificationsClients_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `Client`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -155,10 +155,10 @@ exports.Prisma.NotificationScalarFieldEnum = makeEnum({
   payload: 'payload'
 });
 
-exports.Prisma.NotificationsClientPushTokensScalarFieldEnum = makeEnum({
+exports.Prisma.NotificationsClientsScalarFieldEnum = makeEnum({
   isViewed: 'isViewed',
   notificationId: 'notificationId',
-  clientPushTokenToken: 'clientPushTokenToken'
+  clientId: 'clientId'
 });
 
 exports.Prisma.NullableJsonNullValueInput = makeEnum({
@@ -227,7 +227,7 @@ exports.Prisma.ModelName = makeEnum({
   ClientPushToken: 'ClientPushToken',
   ContractWithdrawRequest: 'ContractWithdrawRequest',
   Notification: 'Notification',
-  NotificationsClientPushTokens: 'NotificationsClientPushTokens',
+  NotificationsClients: 'NotificationsClients',
   CustomerService: 'CustomerService',
   Product: 'Product'
 });

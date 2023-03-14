@@ -17,7 +17,7 @@ export type NotificationNavigatorParams = Omit<NotificationParams, 'type'> & {
 };
 
 export class NotificationNavigator extends Notification {
-	private readonly payload: PushNotificationNavigatorPayload;
+	protected readonly payload: PushNotificationNavigatorPayload;
 	constructor(params: NotificationNavigatorParams) {
 		super({
 			...params,

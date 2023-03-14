@@ -85,7 +85,7 @@ export class AccountRepositoryFake implements AccountRepository {
 		this.accounts[foundIndex].sessionTokens.push(sessionToken);
 	}
 
-	async getAllPushTokens(): Promise<string[]> {
+	async getAllWithPushTokens(): Promise<string[]> {
 		return this.accounts
 			.flatMap(({pushTokens}) => pushTokens ?? []);
 	}

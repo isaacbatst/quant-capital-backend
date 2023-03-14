@@ -80,7 +80,7 @@ export class AccountRepositoryPrisma implements AccountRepository {
 		});
 	}
 
-	async getAllPushTokens(): Promise<string[]> {
+	async getAllWithPushTokens(): Promise<string[]> {
 		const tokens = await this.appPrisma.clientPushToken.findMany();
 		return tokens.map(({token}) => token);
 	}

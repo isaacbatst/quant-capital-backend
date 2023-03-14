@@ -8,7 +8,7 @@ export type AccountRepository = {
 	getRegistrationData(accountId: string): Promise<AccountRegistrationData | undefined>;
 	getNotificationsSettings(accountId: string): Promise<NotificationSettings | undefined>;
 	getBySessionToken(sessionToken: string): Promise<Account | undefined>;
-	getAllPushTokens(): Promise<string[]>;
+	getAllWithPushTokens(): Promise<Array<{account: Account; pushTokens: string[]}>>;
 	getAccountPushTokens(accountId: string): Promise<string[]>;
 	update(account: Account): Promise<void>;
 	updateNotificationSettings(accountId: string, settings: Partial<NotificationSettings>): Promise<void>;

@@ -1,5 +1,5 @@
-import {type ClientNotification} from '../../../domain/entities/Notification/ClientNotification';
-import {type Notification} from '../../../domain/entities/Notification/Notification';
+import {type ClientNotification} from '../../../../domain/entities/Notification/ClientNotification';
+import {type Notification} from '../../../../domain/entities/Notification/Notification';
 
 export type NotificationRepository = {
 	save(notification: Notification): Promise<void>;

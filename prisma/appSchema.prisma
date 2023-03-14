@@ -35,6 +35,7 @@ model Client {
   notifyAnnouncements    Boolean
   notifyNewProducts      Boolean
   notifyEventsAndActions Boolean
+  notifications          NotificationsClients[]
 }
 
 model ClientSession {
@@ -66,10 +67,9 @@ model ClientEmailChangeRequest {
 }
 
 model ClientPushToken {
-  token                         String                          @id
-  client                        Client                          @relation(fields: [clientId], references: [id])
-  clientId                      String
-  notificationsClientPushTokens NotificationsClientPushTokens[]
+  token    String @id
+  client   Client @relation(fields: [clientId], references: [id])
+  clientId String
 }
 
 enum ContractWithdrawRequestStatus {
@@ -92,23 +92,24 @@ enum NotificationType {
 }
 
 model Notification {
-  id                            String                          @id
-  type                          NotificationType
-  title                         String
-  body                          String
-  createdAt                     DateTime
-  payload                       Json?
-  notificationsClientPushTokens NotificationsClientPushTokens[]
+  id        String                 @id
+  type      NotificationType
+  title     String
+  body      String
+  createdAt DateTime
+  payload   Json?
+  clients   NotificationsClients[]
 }
 
-model NotificationsClientPushTokens {
-  isViewed             Boolean
-  notification         Notification    @relation(fields: [notificationId], references: [id])
-  clientPushToken      ClientPushToken @relation(fields: [clientPushTokenToken], references: [token])
-  notificationId       String
-  clientPushTokenToken String
+model NotificationsClients {
+  isViewed       Boolean
+  notification   Notification @relation(fields: [notificationId], references: [id])
+  notificationId String
+  client         Client       @relation(fields: [clientId], references: [id])
+  clientId       String
 
-  @@id([notificationId, clientPushTokenToken])
+  @@id([notificationId, clientId])
+  @@map("NotificationsClients")
 }
 
 model CustomerService {

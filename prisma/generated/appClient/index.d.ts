@@ -113,13 +113,13 @@ export type Notification = {
 }
 
 /**
- * Model NotificationsClientPushTokens
+ * Model NotificationsClients
  * 
  */
-export type NotificationsClientPushTokens = {
+export type NotificationsClients = {
   isViewed: boolean
   notificationId: string
-  clientPushTokenToken: string
+  clientId: string
 }
 
 /**
@@ -391,14 +391,14 @@ export class PrismaClient<
   get notification(): Prisma.NotificationDelegate<GlobalReject>;
 
   /**
-   * `prisma.notificationsClientPushTokens`: Exposes CRUD operations for the **NotificationsClientPushTokens** model.
+   * `prisma.notificationsClients`: Exposes CRUD operations for the **NotificationsClients** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more NotificationsClientPushTokens
-    * const notificationsClientPushTokens = await prisma.notificationsClientPushTokens.findMany()
+    * // Fetch zero or more NotificationsClients
+    * const notificationsClients = await prisma.notificationsClients.findMany()
     * ```
     */
-  get notificationsClientPushTokens(): Prisma.NotificationsClientPushTokensDelegate<GlobalReject>;
+  get notificationsClients(): Prisma.NotificationsClientsDelegate<GlobalReject>;
 
   /**
    * `prisma.customerService`: Exposes CRUD operations for the **CustomerService** model.
@@ -904,7 +904,7 @@ export namespace Prisma {
     ClientPushToken: 'ClientPushToken',
     ContractWithdrawRequest: 'ContractWithdrawRequest',
     Notification: 'Notification',
-    NotificationsClientPushTokens: 'NotificationsClientPushTokens',
+    NotificationsClients: 'NotificationsClients',
     CustomerService: 'CustomerService',
     Product: 'Product'
   };
@@ -1124,6 +1124,7 @@ export namespace Prisma {
     emailChangeRequests: number
     pushTokens: number
     sessions: number
+    notifications: number
   }
 
   export type ClientCountOutputTypeSelect = {
@@ -1131,6 +1132,7 @@ export namespace Prisma {
     emailChangeRequests?: boolean
     pushTokens?: boolean
     sessions?: boolean
+    notifications?: boolean
   }
 
   export type ClientCountOutputTypeGetPayload<S extends boolean | null | undefined | ClientCountOutputTypeArgs> =
@@ -1164,59 +1166,16 @@ export namespace Prisma {
 
 
   /**
-   * Count Type ClientPushTokenCountOutputType
-   */
-
-
-  export type ClientPushTokenCountOutputType = {
-    notificationsClientPushTokens: number
-  }
-
-  export type ClientPushTokenCountOutputTypeSelect = {
-    notificationsClientPushTokens?: boolean
-  }
-
-  export type ClientPushTokenCountOutputTypeGetPayload<S extends boolean | null | undefined | ClientPushTokenCountOutputTypeArgs> =
-    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? ClientPushTokenCountOutputType :
-    S extends undefined ? never :
-    S extends { include: any } & (ClientPushTokenCountOutputTypeArgs)
-    ? ClientPushTokenCountOutputType 
-    : S extends { select: any } & (ClientPushTokenCountOutputTypeArgs)
-      ? {
-    [P in TruthyKeys<S['select']>]:
-    P extends keyof ClientPushTokenCountOutputType ? ClientPushTokenCountOutputType[P] : never
-  } 
-      : ClientPushTokenCountOutputType
-
-
-
-
-  // Custom InputTypes
-
-  /**
-   * ClientPushTokenCountOutputType without action
-   */
-  export type ClientPushTokenCountOutputTypeArgs = {
-    /**
-     * Select specific fields to fetch from the ClientPushTokenCountOutputType
-     */
-    select?: ClientPushTokenCountOutputTypeSelect | null
-  }
-
-
-
-  /**
    * Count Type NotificationCountOutputType
    */
 
 
   export type NotificationCountOutputType = {
-    notificationsClientPushTokens: number
+    clients: number
   }
 
   export type NotificationCountOutputTypeSelect = {
-    notificationsClientPushTokens?: boolean
+    clients?: boolean
   }
 
   export type NotificationCountOutputTypeGetPayload<S extends boolean | null | undefined | NotificationCountOutputTypeArgs> =
@@ -3306,6 +3265,7 @@ export namespace Prisma {
     notifyAnnouncements?: boolean
     notifyNewProducts?: boolean
     notifyEventsAndActions?: boolean
+    notifications?: boolean | Client$notificationsArgs
     _count?: boolean | ClientCountOutputTypeArgs
   }
 
@@ -3315,6 +3275,7 @@ export namespace Prisma {
     emailChangeRequests?: boolean | Client$emailChangeRequestsArgs
     pushTokens?: boolean | Client$pushTokensArgs
     sessions?: boolean | Client$sessionsArgs
+    notifications?: boolean | Client$notificationsArgs
     _count?: boolean | ClientCountOutputTypeArgs
   }
 
@@ -3329,6 +3290,7 @@ export namespace Prisma {
         P extends 'emailChangeRequests' ? Array < ClientEmailChangeRequestGetPayload<S['include'][P]>>  :
         P extends 'pushTokens' ? Array < ClientPushTokenGetPayload<S['include'][P]>>  :
         P extends 'sessions' ? Array < ClientSessionGetPayload<S['include'][P]>>  :
+        P extends 'notifications' ? Array < NotificationsClientsGetPayload<S['include'][P]>>  :
         P extends '_count' ? ClientCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (ClientArgs | ClientFindManyArgs)
@@ -3338,6 +3300,7 @@ export namespace Prisma {
         P extends 'emailChangeRequests' ? Array < ClientEmailChangeRequestGetPayload<S['select'][P]>>  :
         P extends 'pushTokens' ? Array < ClientPushTokenGetPayload<S['select'][P]>>  :
         P extends 'sessions' ? Array < ClientSessionGetPayload<S['select'][P]>>  :
+        P extends 'notifications' ? Array < NotificationsClientsGetPayload<S['select'][P]>>  :
         P extends '_count' ? ClientCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Client ? Client[P] : never
   } 
       : Client
@@ -3719,6 +3682,8 @@ export namespace Prisma {
     pushTokens<T extends Client$pushTokensArgs= {}>(args?: Subset<T, Client$pushTokensArgs>): PrismaPromise<Array<ClientPushTokenGetPayload<T>>| Null>;
 
     sessions<T extends Client$sessionsArgs= {}>(args?: Subset<T, Client$sessionsArgs>): PrismaPromise<Array<ClientSessionGetPayload<T>>| Null>;
+
+    notifications<T extends Client$notificationsArgs= {}>(args?: Subset<T, Client$notificationsArgs>): PrismaPromise<Array<NotificationsClientsGetPayload<T>>| Null>;
 
     private get _document();
     /**
@@ -4156,6 +4121,27 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Enumerable<ClientSessionScalarFieldEnum>
+  }
+
+
+  /**
+   * Client.notifications
+   */
+  export type Client$notificationsArgs = {
+    /**
+     * Select specific fields to fetch from the NotificationsClients
+     */
+    select?: NotificationsClientsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: NotificationsClientsInclude | null
+    where?: NotificationsClientsWhereInput
+    orderBy?: Enumerable<NotificationsClientsOrderByWithRelationInput>
+    cursor?: NotificationsClientsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<NotificationsClientsScalarFieldEnum>
   }
 
 
@@ -7077,15 +7063,11 @@ export namespace Prisma {
     token?: boolean
     client?: boolean | ClientArgs
     clientId?: boolean
-    notificationsClientPushTokens?: boolean | ClientPushToken$notificationsClientPushTokensArgs
-    _count?: boolean | ClientPushTokenCountOutputTypeArgs
   }
 
 
   export type ClientPushTokenInclude = {
     client?: boolean | ClientArgs
-    notificationsClientPushTokens?: boolean | ClientPushToken$notificationsClientPushTokensArgs
-    _count?: boolean | ClientPushTokenCountOutputTypeArgs
   }
 
   export type ClientPushTokenGetPayload<S extends boolean | null | undefined | ClientPushTokenArgs> =
@@ -7095,16 +7077,12 @@ export namespace Prisma {
     S extends { include: any } & (ClientPushTokenArgs | ClientPushTokenFindManyArgs)
     ? ClientPushToken  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'client' ? ClientGetPayload<S['include'][P]> :
-        P extends 'notificationsClientPushTokens' ? Array < NotificationsClientPushTokensGetPayload<S['include'][P]>>  :
-        P extends '_count' ? ClientPushTokenCountOutputTypeGetPayload<S['include'][P]> :  never
+        P extends 'client' ? ClientGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (ClientPushTokenArgs | ClientPushTokenFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'client' ? ClientGetPayload<S['select'][P]> :
-        P extends 'notificationsClientPushTokens' ? Array < NotificationsClientPushTokensGetPayload<S['select'][P]>>  :
-        P extends '_count' ? ClientPushTokenCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof ClientPushToken ? ClientPushToken[P] : never
+        P extends 'client' ? ClientGetPayload<S['select'][P]> :  P extends keyof ClientPushToken ? ClientPushToken[P] : never
   } 
       : ClientPushToken
 
@@ -7480,8 +7458,6 @@ export namespace Prisma {
 
     client<T extends ClientArgs= {}>(args?: Subset<T, ClientArgs>): Prisma__ClientClient<ClientGetPayload<T> | Null>;
 
-    notificationsClientPushTokens<T extends ClientPushToken$notificationsClientPushTokensArgs= {}>(args?: Subset<T, ClientPushToken$notificationsClientPushTokensArgs>): PrismaPromise<Array<NotificationsClientPushTokensGetPayload<T>>| Null>;
-
     private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7834,27 +7810,6 @@ export namespace Prisma {
      * Filter which ClientPushTokens to delete
      */
     where?: ClientPushTokenWhereInput
-  }
-
-
-  /**
-   * ClientPushToken.notificationsClientPushTokens
-   */
-  export type ClientPushToken$notificationsClientPushTokensArgs = {
-    /**
-     * Select specific fields to fetch from the NotificationsClientPushTokens
-     */
-    select?: NotificationsClientPushTokensSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: NotificationsClientPushTokensInclude | null
-    where?: NotificationsClientPushTokensWhereInput
-    orderBy?: Enumerable<NotificationsClientPushTokensOrderByWithRelationInput>
-    cursor?: NotificationsClientPushTokensWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Enumerable<NotificationsClientPushTokensScalarFieldEnum>
   }
 
 
@@ -8962,13 +8917,13 @@ export namespace Prisma {
     body?: boolean
     createdAt?: boolean
     payload?: boolean
-    notificationsClientPushTokens?: boolean | Notification$notificationsClientPushTokensArgs
+    clients?: boolean | Notification$clientsArgs
     _count?: boolean | NotificationCountOutputTypeArgs
   }
 
 
   export type NotificationInclude = {
-    notificationsClientPushTokens?: boolean | Notification$notificationsClientPushTokensArgs
+    clients?: boolean | Notification$clientsArgs
     _count?: boolean | NotificationCountOutputTypeArgs
   }
 
@@ -8979,13 +8934,13 @@ export namespace Prisma {
     S extends { include: any } & (NotificationArgs | NotificationFindManyArgs)
     ? Notification  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'notificationsClientPushTokens' ? Array < NotificationsClientPushTokensGetPayload<S['include'][P]>>  :
+        P extends 'clients' ? Array < NotificationsClientsGetPayload<S['include'][P]>>  :
         P extends '_count' ? NotificationCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : S extends { select: any } & (NotificationArgs | NotificationFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'notificationsClientPushTokens' ? Array < NotificationsClientPushTokensGetPayload<S['select'][P]>>  :
+        P extends 'clients' ? Array < NotificationsClientsGetPayload<S['select'][P]>>  :
         P extends '_count' ? NotificationCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Notification ? Notification[P] : never
   } 
       : Notification
@@ -9360,7 +9315,7 @@ export namespace Prisma {
     constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
     readonly [Symbol.toStringTag]: 'PrismaClientPromise';
 
-    notificationsClientPushTokens<T extends Notification$notificationsClientPushTokensArgs= {}>(args?: Subset<T, Notification$notificationsClientPushTokensArgs>): PrismaPromise<Array<NotificationsClientPushTokensGetPayload<T>>| Null>;
+    clients<T extends Notification$clientsArgs= {}>(args?: Subset<T, Notification$clientsArgs>): PrismaPromise<Array<NotificationsClientsGetPayload<T>>| Null>;
 
     private get _document();
     /**
@@ -9718,23 +9673,23 @@ export namespace Prisma {
 
 
   /**
-   * Notification.notificationsClientPushTokens
+   * Notification.clients
    */
-  export type Notification$notificationsClientPushTokensArgs = {
+  export type Notification$clientsArgs = {
     /**
-     * Select specific fields to fetch from the NotificationsClientPushTokens
+     * Select specific fields to fetch from the NotificationsClients
      */
-    select?: NotificationsClientPushTokensSelect | null
+    select?: NotificationsClientsSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: NotificationsClientPushTokensInclude | null
-    where?: NotificationsClientPushTokensWhereInput
-    orderBy?: Enumerable<NotificationsClientPushTokensOrderByWithRelationInput>
-    cursor?: NotificationsClientPushTokensWhereUniqueInput
+    include?: NotificationsClientsInclude | null
+    where?: NotificationsClientsWhereInput
+    orderBy?: Enumerable<NotificationsClientsOrderByWithRelationInput>
+    cursor?: NotificationsClientsWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<NotificationsClientPushTokensScalarFieldEnum>
+    distinct?: Enumerable<NotificationsClientsScalarFieldEnum>
   }
 
 
@@ -9755,331 +9710,331 @@ export namespace Prisma {
 
 
   /**
-   * Model NotificationsClientPushTokens
+   * Model NotificationsClients
    */
 
 
-  export type AggregateNotificationsClientPushTokens = {
-    _count: NotificationsClientPushTokensCountAggregateOutputType | null
-    _min: NotificationsClientPushTokensMinAggregateOutputType | null
-    _max: NotificationsClientPushTokensMaxAggregateOutputType | null
+  export type AggregateNotificationsClients = {
+    _count: NotificationsClientsCountAggregateOutputType | null
+    _min: NotificationsClientsMinAggregateOutputType | null
+    _max: NotificationsClientsMaxAggregateOutputType | null
   }
 
-  export type NotificationsClientPushTokensMinAggregateOutputType = {
+  export type NotificationsClientsMinAggregateOutputType = {
     isViewed: boolean | null
     notificationId: string | null
-    clientPushTokenToken: string | null
+    clientId: string | null
   }
 
-  export type NotificationsClientPushTokensMaxAggregateOutputType = {
+  export type NotificationsClientsMaxAggregateOutputType = {
     isViewed: boolean | null
     notificationId: string | null
-    clientPushTokenToken: string | null
+    clientId: string | null
   }
 
-  export type NotificationsClientPushTokensCountAggregateOutputType = {
+  export type NotificationsClientsCountAggregateOutputType = {
     isViewed: number
     notificationId: number
-    clientPushTokenToken: number
+    clientId: number
     _all: number
   }
 
 
-  export type NotificationsClientPushTokensMinAggregateInputType = {
+  export type NotificationsClientsMinAggregateInputType = {
     isViewed?: true
     notificationId?: true
-    clientPushTokenToken?: true
+    clientId?: true
   }
 
-  export type NotificationsClientPushTokensMaxAggregateInputType = {
+  export type NotificationsClientsMaxAggregateInputType = {
     isViewed?: true
     notificationId?: true
-    clientPushTokenToken?: true
+    clientId?: true
   }
 
-  export type NotificationsClientPushTokensCountAggregateInputType = {
+  export type NotificationsClientsCountAggregateInputType = {
     isViewed?: true
     notificationId?: true
-    clientPushTokenToken?: true
+    clientId?: true
     _all?: true
   }
 
-  export type NotificationsClientPushTokensAggregateArgs = {
+  export type NotificationsClientsAggregateArgs = {
     /**
-     * Filter which NotificationsClientPushTokens to aggregate.
+     * Filter which NotificationsClients to aggregate.
      */
-    where?: NotificationsClientPushTokensWhereInput
+    where?: NotificationsClientsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of NotificationsClientPushTokens to fetch.
+     * Determine the order of NotificationsClients to fetch.
      */
-    orderBy?: Enumerable<NotificationsClientPushTokensOrderByWithRelationInput>
+    orderBy?: Enumerable<NotificationsClientsOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: NotificationsClientPushTokensWhereUniqueInput
+    cursor?: NotificationsClientsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` NotificationsClientPushTokens from the position of the cursor.
+     * Take `±n` NotificationsClients from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` NotificationsClientPushTokens.
+     * Skip the first `n` NotificationsClients.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned NotificationsClientPushTokens
+     * Count returned NotificationsClients
     **/
-    _count?: true | NotificationsClientPushTokensCountAggregateInputType
+    _count?: true | NotificationsClientsCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: NotificationsClientPushTokensMinAggregateInputType
+    _min?: NotificationsClientsMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: NotificationsClientPushTokensMaxAggregateInputType
+    _max?: NotificationsClientsMaxAggregateInputType
   }
 
-  export type GetNotificationsClientPushTokensAggregateType<T extends NotificationsClientPushTokensAggregateArgs> = {
-        [P in keyof T & keyof AggregateNotificationsClientPushTokens]: P extends '_count' | 'count'
+  export type GetNotificationsClientsAggregateType<T extends NotificationsClientsAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotificationsClients]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateNotificationsClientPushTokens[P]>
-      : GetScalarType<T[P], AggregateNotificationsClientPushTokens[P]>
+        : GetScalarType<T[P], AggregateNotificationsClients[P]>
+      : GetScalarType<T[P], AggregateNotificationsClients[P]>
   }
 
 
 
 
-  export type NotificationsClientPushTokensGroupByArgs = {
-    where?: NotificationsClientPushTokensWhereInput
-    orderBy?: Enumerable<NotificationsClientPushTokensOrderByWithAggregationInput>
-    by: NotificationsClientPushTokensScalarFieldEnum[]
-    having?: NotificationsClientPushTokensScalarWhereWithAggregatesInput
+  export type NotificationsClientsGroupByArgs = {
+    where?: NotificationsClientsWhereInput
+    orderBy?: Enumerable<NotificationsClientsOrderByWithAggregationInput>
+    by: NotificationsClientsScalarFieldEnum[]
+    having?: NotificationsClientsScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: NotificationsClientPushTokensCountAggregateInputType | true
-    _min?: NotificationsClientPushTokensMinAggregateInputType
-    _max?: NotificationsClientPushTokensMaxAggregateInputType
+    _count?: NotificationsClientsCountAggregateInputType | true
+    _min?: NotificationsClientsMinAggregateInputType
+    _max?: NotificationsClientsMaxAggregateInputType
   }
 
 
-  export type NotificationsClientPushTokensGroupByOutputType = {
+  export type NotificationsClientsGroupByOutputType = {
     isViewed: boolean
     notificationId: string
-    clientPushTokenToken: string
-    _count: NotificationsClientPushTokensCountAggregateOutputType | null
-    _min: NotificationsClientPushTokensMinAggregateOutputType | null
-    _max: NotificationsClientPushTokensMaxAggregateOutputType | null
+    clientId: string
+    _count: NotificationsClientsCountAggregateOutputType | null
+    _min: NotificationsClientsMinAggregateOutputType | null
+    _max: NotificationsClientsMaxAggregateOutputType | null
   }
 
-  type GetNotificationsClientPushTokensGroupByPayload<T extends NotificationsClientPushTokensGroupByArgs> = PrismaPromise<
+  type GetNotificationsClientsGroupByPayload<T extends NotificationsClientsGroupByArgs> = PrismaPromise<
     Array<
-      PickArray<NotificationsClientPushTokensGroupByOutputType, T['by']> &
+      PickArray<NotificationsClientsGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof NotificationsClientPushTokensGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof NotificationsClientsGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], NotificationsClientPushTokensGroupByOutputType[P]>
-            : GetScalarType<T[P], NotificationsClientPushTokensGroupByOutputType[P]>
+              : GetScalarType<T[P], NotificationsClientsGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationsClientsGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type NotificationsClientPushTokensSelect = {
+  export type NotificationsClientsSelect = {
     isViewed?: boolean
     notification?: boolean | NotificationArgs
-    clientPushToken?: boolean | ClientPushTokenArgs
     notificationId?: boolean
-    clientPushTokenToken?: boolean
+    client?: boolean | ClientArgs
+    clientId?: boolean
   }
 
 
-  export type NotificationsClientPushTokensInclude = {
+  export type NotificationsClientsInclude = {
     notification?: boolean | NotificationArgs
-    clientPushToken?: boolean | ClientPushTokenArgs
+    client?: boolean | ClientArgs
   }
 
-  export type NotificationsClientPushTokensGetPayload<S extends boolean | null | undefined | NotificationsClientPushTokensArgs> =
+  export type NotificationsClientsGetPayload<S extends boolean | null | undefined | NotificationsClientsArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? NotificationsClientPushTokens :
+    S extends true ? NotificationsClients :
     S extends undefined ? never :
-    S extends { include: any } & (NotificationsClientPushTokensArgs | NotificationsClientPushTokensFindManyArgs)
-    ? NotificationsClientPushTokens  & {
+    S extends { include: any } & (NotificationsClientsArgs | NotificationsClientsFindManyArgs)
+    ? NotificationsClients  & {
     [P in TruthyKeys<S['include']>]:
         P extends 'notification' ? NotificationGetPayload<S['include'][P]> :
-        P extends 'clientPushToken' ? ClientPushTokenGetPayload<S['include'][P]> :  never
+        P extends 'client' ? ClientGetPayload<S['include'][P]> :  never
   } 
-    : S extends { select: any } & (NotificationsClientPushTokensArgs | NotificationsClientPushTokensFindManyArgs)
+    : S extends { select: any } & (NotificationsClientsArgs | NotificationsClientsFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
         P extends 'notification' ? NotificationGetPayload<S['select'][P]> :
-        P extends 'clientPushToken' ? ClientPushTokenGetPayload<S['select'][P]> :  P extends keyof NotificationsClientPushTokens ? NotificationsClientPushTokens[P] : never
+        P extends 'client' ? ClientGetPayload<S['select'][P]> :  P extends keyof NotificationsClients ? NotificationsClients[P] : never
   } 
-      : NotificationsClientPushTokens
+      : NotificationsClients
 
 
-  type NotificationsClientPushTokensCountArgs = 
-    Omit<NotificationsClientPushTokensFindManyArgs, 'select' | 'include'> & {
-      select?: NotificationsClientPushTokensCountAggregateInputType | true
+  type NotificationsClientsCountArgs = 
+    Omit<NotificationsClientsFindManyArgs, 'select' | 'include'> & {
+      select?: NotificationsClientsCountAggregateInputType | true
     }
 
-  export interface NotificationsClientPushTokensDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+  export interface NotificationsClientsDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
 
     /**
-     * Find zero or one NotificationsClientPushTokens that matches the filter.
-     * @param {NotificationsClientPushTokensFindUniqueArgs} args - Arguments to find a NotificationsClientPushTokens
+     * Find zero or one NotificationsClients that matches the filter.
+     * @param {NotificationsClientsFindUniqueArgs} args - Arguments to find a NotificationsClients
      * @example
-     * // Get one NotificationsClientPushTokens
-     * const notificationsClientPushTokens = await prisma.notificationsClientPushTokens.findUnique({
+     * // Get one NotificationsClients
+     * const notificationsClients = await prisma.notificationsClients.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUnique<T extends NotificationsClientPushTokensFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, NotificationsClientPushTokensFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'NotificationsClientPushTokens'> extends True ? Prisma__NotificationsClientPushTokensClient<NotificationsClientPushTokensGetPayload<T>> : Prisma__NotificationsClientPushTokensClient<NotificationsClientPushTokensGetPayload<T> | null, null>
+    findUnique<T extends NotificationsClientsFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, NotificationsClientsFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'NotificationsClients'> extends True ? Prisma__NotificationsClientsClient<NotificationsClientsGetPayload<T>> : Prisma__NotificationsClientsClient<NotificationsClientsGetPayload<T> | null, null>
 
     /**
-     * Find one NotificationsClientPushTokens that matches the filter or throw an error  with `error.code='P2025'` 
+     * Find one NotificationsClients that matches the filter or throw an error  with `error.code='P2025'` 
      *     if no matches were found.
-     * @param {NotificationsClientPushTokensFindUniqueOrThrowArgs} args - Arguments to find a NotificationsClientPushTokens
+     * @param {NotificationsClientsFindUniqueOrThrowArgs} args - Arguments to find a NotificationsClients
      * @example
-     * // Get one NotificationsClientPushTokens
-     * const notificationsClientPushTokens = await prisma.notificationsClientPushTokens.findUniqueOrThrow({
+     * // Get one NotificationsClients
+     * const notificationsClients = await prisma.notificationsClients.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUniqueOrThrow<T extends NotificationsClientPushTokensFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, NotificationsClientPushTokensFindUniqueOrThrowArgs>
-    ): Prisma__NotificationsClientPushTokensClient<NotificationsClientPushTokensGetPayload<T>>
+    findUniqueOrThrow<T extends NotificationsClientsFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, NotificationsClientsFindUniqueOrThrowArgs>
+    ): Prisma__NotificationsClientsClient<NotificationsClientsGetPayload<T>>
 
     /**
-     * Find the first NotificationsClientPushTokens that matches the filter.
+     * Find the first NotificationsClients that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationsClientPushTokensFindFirstArgs} args - Arguments to find a NotificationsClientPushTokens
+     * @param {NotificationsClientsFindFirstArgs} args - Arguments to find a NotificationsClients
      * @example
-     * // Get one NotificationsClientPushTokens
-     * const notificationsClientPushTokens = await prisma.notificationsClientPushTokens.findFirst({
+     * // Get one NotificationsClients
+     * const notificationsClients = await prisma.notificationsClients.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirst<T extends NotificationsClientPushTokensFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, NotificationsClientPushTokensFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'NotificationsClientPushTokens'> extends True ? Prisma__NotificationsClientPushTokensClient<NotificationsClientPushTokensGetPayload<T>> : Prisma__NotificationsClientPushTokensClient<NotificationsClientPushTokensGetPayload<T> | null, null>
+    findFirst<T extends NotificationsClientsFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, NotificationsClientsFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'NotificationsClients'> extends True ? Prisma__NotificationsClientsClient<NotificationsClientsGetPayload<T>> : Prisma__NotificationsClientsClient<NotificationsClientsGetPayload<T> | null, null>
 
     /**
-     * Find the first NotificationsClientPushTokens that matches the filter or
+     * Find the first NotificationsClients that matches the filter or
      * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationsClientPushTokensFindFirstOrThrowArgs} args - Arguments to find a NotificationsClientPushTokens
+     * @param {NotificationsClientsFindFirstOrThrowArgs} args - Arguments to find a NotificationsClients
      * @example
-     * // Get one NotificationsClientPushTokens
-     * const notificationsClientPushTokens = await prisma.notificationsClientPushTokens.findFirstOrThrow({
+     * // Get one NotificationsClients
+     * const notificationsClients = await prisma.notificationsClients.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirstOrThrow<T extends NotificationsClientPushTokensFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, NotificationsClientPushTokensFindFirstOrThrowArgs>
-    ): Prisma__NotificationsClientPushTokensClient<NotificationsClientPushTokensGetPayload<T>>
+    findFirstOrThrow<T extends NotificationsClientsFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, NotificationsClientsFindFirstOrThrowArgs>
+    ): Prisma__NotificationsClientsClient<NotificationsClientsGetPayload<T>>
 
     /**
-     * Find zero or more NotificationsClientPushTokens that matches the filter.
+     * Find zero or more NotificationsClients that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationsClientPushTokensFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @param {NotificationsClientsFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all NotificationsClientPushTokens
-     * const notificationsClientPushTokens = await prisma.notificationsClientPushTokens.findMany()
+     * // Get all NotificationsClients
+     * const notificationsClients = await prisma.notificationsClients.findMany()
      * 
-     * // Get first 10 NotificationsClientPushTokens
-     * const notificationsClientPushTokens = await prisma.notificationsClientPushTokens.findMany({ take: 10 })
+     * // Get first 10 NotificationsClients
+     * const notificationsClients = await prisma.notificationsClients.findMany({ take: 10 })
      * 
      * // Only select the `isViewed`
-     * const notificationsClientPushTokensWithIsViewedOnly = await prisma.notificationsClientPushTokens.findMany({ select: { isViewed: true } })
+     * const notificationsClientsWithIsViewedOnly = await prisma.notificationsClients.findMany({ select: { isViewed: true } })
      * 
     **/
-    findMany<T extends NotificationsClientPushTokensFindManyArgs>(
-      args?: SelectSubset<T, NotificationsClientPushTokensFindManyArgs>
-    ): PrismaPromise<Array<NotificationsClientPushTokensGetPayload<T>>>
+    findMany<T extends NotificationsClientsFindManyArgs>(
+      args?: SelectSubset<T, NotificationsClientsFindManyArgs>
+    ): PrismaPromise<Array<NotificationsClientsGetPayload<T>>>
 
     /**
-     * Create a NotificationsClientPushTokens.
-     * @param {NotificationsClientPushTokensCreateArgs} args - Arguments to create a NotificationsClientPushTokens.
+     * Create a NotificationsClients.
+     * @param {NotificationsClientsCreateArgs} args - Arguments to create a NotificationsClients.
      * @example
-     * // Create one NotificationsClientPushTokens
-     * const NotificationsClientPushTokens = await prisma.notificationsClientPushTokens.create({
+     * // Create one NotificationsClients
+     * const NotificationsClients = await prisma.notificationsClients.create({
      *   data: {
-     *     // ... data to create a NotificationsClientPushTokens
+     *     // ... data to create a NotificationsClients
      *   }
      * })
      * 
     **/
-    create<T extends NotificationsClientPushTokensCreateArgs>(
-      args: SelectSubset<T, NotificationsClientPushTokensCreateArgs>
-    ): Prisma__NotificationsClientPushTokensClient<NotificationsClientPushTokensGetPayload<T>>
+    create<T extends NotificationsClientsCreateArgs>(
+      args: SelectSubset<T, NotificationsClientsCreateArgs>
+    ): Prisma__NotificationsClientsClient<NotificationsClientsGetPayload<T>>
 
     /**
-     * Create many NotificationsClientPushTokens.
-     *     @param {NotificationsClientPushTokensCreateManyArgs} args - Arguments to create many NotificationsClientPushTokens.
+     * Create many NotificationsClients.
+     *     @param {NotificationsClientsCreateManyArgs} args - Arguments to create many NotificationsClients.
      *     @example
-     *     // Create many NotificationsClientPushTokens
-     *     const notificationsClientPushTokens = await prisma.notificationsClientPushTokens.createMany({
+     *     // Create many NotificationsClients
+     *     const notificationsClients = await prisma.notificationsClients.createMany({
      *       data: {
      *         // ... provide data here
      *       }
      *     })
      *     
     **/
-    createMany<T extends NotificationsClientPushTokensCreateManyArgs>(
-      args?: SelectSubset<T, NotificationsClientPushTokensCreateManyArgs>
+    createMany<T extends NotificationsClientsCreateManyArgs>(
+      args?: SelectSubset<T, NotificationsClientsCreateManyArgs>
     ): PrismaPromise<BatchPayload>
 
     /**
-     * Delete a NotificationsClientPushTokens.
-     * @param {NotificationsClientPushTokensDeleteArgs} args - Arguments to delete one NotificationsClientPushTokens.
+     * Delete a NotificationsClients.
+     * @param {NotificationsClientsDeleteArgs} args - Arguments to delete one NotificationsClients.
      * @example
-     * // Delete one NotificationsClientPushTokens
-     * const NotificationsClientPushTokens = await prisma.notificationsClientPushTokens.delete({
+     * // Delete one NotificationsClients
+     * const NotificationsClients = await prisma.notificationsClients.delete({
      *   where: {
-     *     // ... filter to delete one NotificationsClientPushTokens
+     *     // ... filter to delete one NotificationsClients
      *   }
      * })
      * 
     **/
-    delete<T extends NotificationsClientPushTokensDeleteArgs>(
-      args: SelectSubset<T, NotificationsClientPushTokensDeleteArgs>
-    ): Prisma__NotificationsClientPushTokensClient<NotificationsClientPushTokensGetPayload<T>>
+    delete<T extends NotificationsClientsDeleteArgs>(
+      args: SelectSubset<T, NotificationsClientsDeleteArgs>
+    ): Prisma__NotificationsClientsClient<NotificationsClientsGetPayload<T>>
 
     /**
-     * Update one NotificationsClientPushTokens.
-     * @param {NotificationsClientPushTokensUpdateArgs} args - Arguments to update one NotificationsClientPushTokens.
+     * Update one NotificationsClients.
+     * @param {NotificationsClientsUpdateArgs} args - Arguments to update one NotificationsClients.
      * @example
-     * // Update one NotificationsClientPushTokens
-     * const notificationsClientPushTokens = await prisma.notificationsClientPushTokens.update({
+     * // Update one NotificationsClients
+     * const notificationsClients = await prisma.notificationsClients.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -10089,34 +10044,34 @@ export namespace Prisma {
      * })
      * 
     **/
-    update<T extends NotificationsClientPushTokensUpdateArgs>(
-      args: SelectSubset<T, NotificationsClientPushTokensUpdateArgs>
-    ): Prisma__NotificationsClientPushTokensClient<NotificationsClientPushTokensGetPayload<T>>
+    update<T extends NotificationsClientsUpdateArgs>(
+      args: SelectSubset<T, NotificationsClientsUpdateArgs>
+    ): Prisma__NotificationsClientsClient<NotificationsClientsGetPayload<T>>
 
     /**
-     * Delete zero or more NotificationsClientPushTokens.
-     * @param {NotificationsClientPushTokensDeleteManyArgs} args - Arguments to filter NotificationsClientPushTokens to delete.
+     * Delete zero or more NotificationsClients.
+     * @param {NotificationsClientsDeleteManyArgs} args - Arguments to filter NotificationsClients to delete.
      * @example
-     * // Delete a few NotificationsClientPushTokens
-     * const { count } = await prisma.notificationsClientPushTokens.deleteMany({
+     * // Delete a few NotificationsClients
+     * const { count } = await prisma.notificationsClients.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
     **/
-    deleteMany<T extends NotificationsClientPushTokensDeleteManyArgs>(
-      args?: SelectSubset<T, NotificationsClientPushTokensDeleteManyArgs>
+    deleteMany<T extends NotificationsClientsDeleteManyArgs>(
+      args?: SelectSubset<T, NotificationsClientsDeleteManyArgs>
     ): PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more NotificationsClientPushTokens.
+     * Update zero or more NotificationsClients.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationsClientPushTokensUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {NotificationsClientsUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many NotificationsClientPushTokens
-     * const notificationsClientPushTokens = await prisma.notificationsClientPushTokens.updateMany({
+     * // Update many NotificationsClients
+     * const notificationsClients = await prisma.notificationsClients.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -10126,59 +10081,59 @@ export namespace Prisma {
      * })
      * 
     **/
-    updateMany<T extends NotificationsClientPushTokensUpdateManyArgs>(
-      args: SelectSubset<T, NotificationsClientPushTokensUpdateManyArgs>
+    updateMany<T extends NotificationsClientsUpdateManyArgs>(
+      args: SelectSubset<T, NotificationsClientsUpdateManyArgs>
     ): PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one NotificationsClientPushTokens.
-     * @param {NotificationsClientPushTokensUpsertArgs} args - Arguments to update or create a NotificationsClientPushTokens.
+     * Create or update one NotificationsClients.
+     * @param {NotificationsClientsUpsertArgs} args - Arguments to update or create a NotificationsClients.
      * @example
-     * // Update or create a NotificationsClientPushTokens
-     * const notificationsClientPushTokens = await prisma.notificationsClientPushTokens.upsert({
+     * // Update or create a NotificationsClients
+     * const notificationsClients = await prisma.notificationsClients.upsert({
      *   create: {
-     *     // ... data to create a NotificationsClientPushTokens
+     *     // ... data to create a NotificationsClients
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the NotificationsClientPushTokens we want to update
+     *     // ... the filter for the NotificationsClients we want to update
      *   }
      * })
     **/
-    upsert<T extends NotificationsClientPushTokensUpsertArgs>(
-      args: SelectSubset<T, NotificationsClientPushTokensUpsertArgs>
-    ): Prisma__NotificationsClientPushTokensClient<NotificationsClientPushTokensGetPayload<T>>
+    upsert<T extends NotificationsClientsUpsertArgs>(
+      args: SelectSubset<T, NotificationsClientsUpsertArgs>
+    ): Prisma__NotificationsClientsClient<NotificationsClientsGetPayload<T>>
 
     /**
-     * Count the number of NotificationsClientPushTokens.
+     * Count the number of NotificationsClients.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationsClientPushTokensCountArgs} args - Arguments to filter NotificationsClientPushTokens to count.
+     * @param {NotificationsClientsCountArgs} args - Arguments to filter NotificationsClients to count.
      * @example
-     * // Count the number of NotificationsClientPushTokens
-     * const count = await prisma.notificationsClientPushTokens.count({
+     * // Count the number of NotificationsClients
+     * const count = await prisma.notificationsClients.count({
      *   where: {
-     *     // ... the filter for the NotificationsClientPushTokens we want to count
+     *     // ... the filter for the NotificationsClients we want to count
      *   }
      * })
     **/
-    count<T extends NotificationsClientPushTokensCountArgs>(
-      args?: Subset<T, NotificationsClientPushTokensCountArgs>,
+    count<T extends NotificationsClientsCountArgs>(
+      args?: Subset<T, NotificationsClientsCountArgs>,
     ): PrismaPromise<
       T extends _Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], NotificationsClientPushTokensCountAggregateOutputType>
+          : GetScalarType<T['select'], NotificationsClientsCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a NotificationsClientPushTokens.
+     * Allows you to perform aggregations operations on a NotificationsClients.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationsClientPushTokensAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {NotificationsClientsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -10198,13 +10153,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends NotificationsClientPushTokensAggregateArgs>(args: Subset<T, NotificationsClientPushTokensAggregateArgs>): PrismaPromise<GetNotificationsClientPushTokensAggregateType<T>>
+    aggregate<T extends NotificationsClientsAggregateArgs>(args: Subset<T, NotificationsClientsAggregateArgs>): PrismaPromise<GetNotificationsClientsAggregateType<T>>
 
     /**
-     * Group by NotificationsClientPushTokens.
+     * Group by NotificationsClients.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationsClientPushTokensGroupByArgs} args - Group by arguments.
+     * @param {NotificationsClientsGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -10219,14 +10174,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends NotificationsClientPushTokensGroupByArgs,
+      T extends NotificationsClientsGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: NotificationsClientPushTokensGroupByArgs['orderBy'] }
-        : { orderBy?: NotificationsClientPushTokensGroupByArgs['orderBy'] },
+        ? { orderBy: NotificationsClientsGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationsClientsGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -10275,17 +10230,17 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, NotificationsClientPushTokensGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationsClientPushTokensGroupByPayload<T> : PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, NotificationsClientsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationsClientsGroupByPayload<T> : PrismaPromise<InputErrors>
 
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for NotificationsClientPushTokens.
+   * The delegate class that acts as a "Promise-like" for NotificationsClients.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export class Prisma__NotificationsClientPushTokensClient<T, Null = never> implements PrismaPromise<T> {
+  export class Prisma__NotificationsClientsClient<T, Null = never> implements PrismaPromise<T> {
     [prisma]: true;
     private readonly _dmmf;
     private readonly _fetcher;
@@ -10304,7 +10259,7 @@ export namespace Prisma {
 
     notification<T extends NotificationArgs= {}>(args?: Subset<T, NotificationArgs>): Prisma__NotificationClient<NotificationGetPayload<T> | Null>;
 
-    clientPushToken<T extends ClientPushTokenArgs= {}>(args?: Subset<T, ClientPushTokenArgs>): Prisma__ClientPushTokenClient<ClientPushTokenGetPayload<T> | Null>;
+    client<T extends ClientArgs= {}>(args?: Subset<T, ClientArgs>): Prisma__ClientClient<ClientGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -10334,27 +10289,27 @@ export namespace Prisma {
   // Custom InputTypes
 
   /**
-   * NotificationsClientPushTokens base type for findUnique actions
+   * NotificationsClients base type for findUnique actions
    */
-  export type NotificationsClientPushTokensFindUniqueArgsBase = {
+  export type NotificationsClientsFindUniqueArgsBase = {
     /**
-     * Select specific fields to fetch from the NotificationsClientPushTokens
+     * Select specific fields to fetch from the NotificationsClients
      */
-    select?: NotificationsClientPushTokensSelect | null
+    select?: NotificationsClientsSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: NotificationsClientPushTokensInclude | null
+    include?: NotificationsClientsInclude | null
     /**
-     * Filter, which NotificationsClientPushTokens to fetch.
+     * Filter, which NotificationsClients to fetch.
      */
-    where: NotificationsClientPushTokensWhereUniqueInput
+    where: NotificationsClientsWhereUniqueInput
   }
 
   /**
-   * NotificationsClientPushTokens findUnique
+   * NotificationsClients findUnique
    */
-  export interface NotificationsClientPushTokensFindUniqueArgs extends NotificationsClientPushTokensFindUniqueArgsBase {
+  export interface NotificationsClientsFindUniqueArgs extends NotificationsClientsFindUniqueArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
@@ -10364,76 +10319,76 @@ export namespace Prisma {
       
 
   /**
-   * NotificationsClientPushTokens findUniqueOrThrow
+   * NotificationsClients findUniqueOrThrow
    */
-  export type NotificationsClientPushTokensFindUniqueOrThrowArgs = {
+  export type NotificationsClientsFindUniqueOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the NotificationsClientPushTokens
+     * Select specific fields to fetch from the NotificationsClients
      */
-    select?: NotificationsClientPushTokensSelect | null
+    select?: NotificationsClientsSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: NotificationsClientPushTokensInclude | null
+    include?: NotificationsClientsInclude | null
     /**
-     * Filter, which NotificationsClientPushTokens to fetch.
+     * Filter, which NotificationsClients to fetch.
      */
-    where: NotificationsClientPushTokensWhereUniqueInput
+    where: NotificationsClientsWhereUniqueInput
   }
 
 
   /**
-   * NotificationsClientPushTokens base type for findFirst actions
+   * NotificationsClients base type for findFirst actions
    */
-  export type NotificationsClientPushTokensFindFirstArgsBase = {
+  export type NotificationsClientsFindFirstArgsBase = {
     /**
-     * Select specific fields to fetch from the NotificationsClientPushTokens
+     * Select specific fields to fetch from the NotificationsClients
      */
-    select?: NotificationsClientPushTokensSelect | null
+    select?: NotificationsClientsSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: NotificationsClientPushTokensInclude | null
+    include?: NotificationsClientsInclude | null
     /**
-     * Filter, which NotificationsClientPushTokens to fetch.
+     * Filter, which NotificationsClients to fetch.
      */
-    where?: NotificationsClientPushTokensWhereInput
+    where?: NotificationsClientsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of NotificationsClientPushTokens to fetch.
+     * Determine the order of NotificationsClients to fetch.
      */
-    orderBy?: Enumerable<NotificationsClientPushTokensOrderByWithRelationInput>
+    orderBy?: Enumerable<NotificationsClientsOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for NotificationsClientPushTokens.
+     * Sets the position for searching for NotificationsClients.
      */
-    cursor?: NotificationsClientPushTokensWhereUniqueInput
+    cursor?: NotificationsClientsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` NotificationsClientPushTokens from the position of the cursor.
+     * Take `±n` NotificationsClients from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` NotificationsClientPushTokens.
+     * Skip the first `n` NotificationsClients.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of NotificationsClientPushTokens.
+     * Filter by unique combinations of NotificationsClients.
      */
-    distinct?: Enumerable<NotificationsClientPushTokensScalarFieldEnum>
+    distinct?: Enumerable<NotificationsClientsScalarFieldEnum>
   }
 
   /**
-   * NotificationsClientPushTokens findFirst
+   * NotificationsClients findFirst
    */
-  export interface NotificationsClientPushTokensFindFirstArgs extends NotificationsClientPushTokensFindFirstArgsBase {
+  export interface NotificationsClientsFindFirstArgs extends NotificationsClientsFindFirstArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
@@ -10443,236 +10398,236 @@ export namespace Prisma {
       
 
   /**
-   * NotificationsClientPushTokens findFirstOrThrow
+   * NotificationsClients findFirstOrThrow
    */
-  export type NotificationsClientPushTokensFindFirstOrThrowArgs = {
+  export type NotificationsClientsFindFirstOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the NotificationsClientPushTokens
+     * Select specific fields to fetch from the NotificationsClients
      */
-    select?: NotificationsClientPushTokensSelect | null
+    select?: NotificationsClientsSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: NotificationsClientPushTokensInclude | null
+    include?: NotificationsClientsInclude | null
     /**
-     * Filter, which NotificationsClientPushTokens to fetch.
+     * Filter, which NotificationsClients to fetch.
      */
-    where?: NotificationsClientPushTokensWhereInput
+    where?: NotificationsClientsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of NotificationsClientPushTokens to fetch.
+     * Determine the order of NotificationsClients to fetch.
      */
-    orderBy?: Enumerable<NotificationsClientPushTokensOrderByWithRelationInput>
+    orderBy?: Enumerable<NotificationsClientsOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for NotificationsClientPushTokens.
+     * Sets the position for searching for NotificationsClients.
      */
-    cursor?: NotificationsClientPushTokensWhereUniqueInput
+    cursor?: NotificationsClientsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` NotificationsClientPushTokens from the position of the cursor.
+     * Take `±n` NotificationsClients from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` NotificationsClientPushTokens.
+     * Skip the first `n` NotificationsClients.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of NotificationsClientPushTokens.
+     * Filter by unique combinations of NotificationsClients.
      */
-    distinct?: Enumerable<NotificationsClientPushTokensScalarFieldEnum>
+    distinct?: Enumerable<NotificationsClientsScalarFieldEnum>
   }
 
 
   /**
-   * NotificationsClientPushTokens findMany
+   * NotificationsClients findMany
    */
-  export type NotificationsClientPushTokensFindManyArgs = {
+  export type NotificationsClientsFindManyArgs = {
     /**
-     * Select specific fields to fetch from the NotificationsClientPushTokens
+     * Select specific fields to fetch from the NotificationsClients
      */
-    select?: NotificationsClientPushTokensSelect | null
+    select?: NotificationsClientsSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: NotificationsClientPushTokensInclude | null
+    include?: NotificationsClientsInclude | null
     /**
-     * Filter, which NotificationsClientPushTokens to fetch.
+     * Filter, which NotificationsClients to fetch.
      */
-    where?: NotificationsClientPushTokensWhereInput
+    where?: NotificationsClientsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of NotificationsClientPushTokens to fetch.
+     * Determine the order of NotificationsClients to fetch.
      */
-    orderBy?: Enumerable<NotificationsClientPushTokensOrderByWithRelationInput>
+    orderBy?: Enumerable<NotificationsClientsOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing NotificationsClientPushTokens.
+     * Sets the position for listing NotificationsClients.
      */
-    cursor?: NotificationsClientPushTokensWhereUniqueInput
+    cursor?: NotificationsClientsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` NotificationsClientPushTokens from the position of the cursor.
+     * Take `±n` NotificationsClients from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` NotificationsClientPushTokens.
+     * Skip the first `n` NotificationsClients.
      */
     skip?: number
-    distinct?: Enumerable<NotificationsClientPushTokensScalarFieldEnum>
+    distinct?: Enumerable<NotificationsClientsScalarFieldEnum>
   }
 
 
   /**
-   * NotificationsClientPushTokens create
+   * NotificationsClients create
    */
-  export type NotificationsClientPushTokensCreateArgs = {
+  export type NotificationsClientsCreateArgs = {
     /**
-     * Select specific fields to fetch from the NotificationsClientPushTokens
+     * Select specific fields to fetch from the NotificationsClients
      */
-    select?: NotificationsClientPushTokensSelect | null
+    select?: NotificationsClientsSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: NotificationsClientPushTokensInclude | null
+    include?: NotificationsClientsInclude | null
     /**
-     * The data needed to create a NotificationsClientPushTokens.
+     * The data needed to create a NotificationsClients.
      */
-    data: XOR<NotificationsClientPushTokensCreateInput, NotificationsClientPushTokensUncheckedCreateInput>
+    data: XOR<NotificationsClientsCreateInput, NotificationsClientsUncheckedCreateInput>
   }
 
 
   /**
-   * NotificationsClientPushTokens createMany
+   * NotificationsClients createMany
    */
-  export type NotificationsClientPushTokensCreateManyArgs = {
+  export type NotificationsClientsCreateManyArgs = {
     /**
-     * The data used to create many NotificationsClientPushTokens.
+     * The data used to create many NotificationsClients.
      */
-    data: Enumerable<NotificationsClientPushTokensCreateManyInput>
+    data: Enumerable<NotificationsClientsCreateManyInput>
     skipDuplicates?: boolean
   }
 
 
   /**
-   * NotificationsClientPushTokens update
+   * NotificationsClients update
    */
-  export type NotificationsClientPushTokensUpdateArgs = {
+  export type NotificationsClientsUpdateArgs = {
     /**
-     * Select specific fields to fetch from the NotificationsClientPushTokens
+     * Select specific fields to fetch from the NotificationsClients
      */
-    select?: NotificationsClientPushTokensSelect | null
+    select?: NotificationsClientsSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: NotificationsClientPushTokensInclude | null
+    include?: NotificationsClientsInclude | null
     /**
-     * The data needed to update a NotificationsClientPushTokens.
+     * The data needed to update a NotificationsClients.
      */
-    data: XOR<NotificationsClientPushTokensUpdateInput, NotificationsClientPushTokensUncheckedUpdateInput>
+    data: XOR<NotificationsClientsUpdateInput, NotificationsClientsUncheckedUpdateInput>
     /**
-     * Choose, which NotificationsClientPushTokens to update.
+     * Choose, which NotificationsClients to update.
      */
-    where: NotificationsClientPushTokensWhereUniqueInput
+    where: NotificationsClientsWhereUniqueInput
   }
 
 
   /**
-   * NotificationsClientPushTokens updateMany
+   * NotificationsClients updateMany
    */
-  export type NotificationsClientPushTokensUpdateManyArgs = {
+  export type NotificationsClientsUpdateManyArgs = {
     /**
-     * The data used to update NotificationsClientPushTokens.
+     * The data used to update NotificationsClients.
      */
-    data: XOR<NotificationsClientPushTokensUpdateManyMutationInput, NotificationsClientPushTokensUncheckedUpdateManyInput>
+    data: XOR<NotificationsClientsUpdateManyMutationInput, NotificationsClientsUncheckedUpdateManyInput>
     /**
-     * Filter which NotificationsClientPushTokens to update
+     * Filter which NotificationsClients to update
      */
-    where?: NotificationsClientPushTokensWhereInput
+    where?: NotificationsClientsWhereInput
   }
 
 
   /**
-   * NotificationsClientPushTokens upsert
+   * NotificationsClients upsert
    */
-  export type NotificationsClientPushTokensUpsertArgs = {
+  export type NotificationsClientsUpsertArgs = {
     /**
-     * Select specific fields to fetch from the NotificationsClientPushTokens
+     * Select specific fields to fetch from the NotificationsClients
      */
-    select?: NotificationsClientPushTokensSelect | null
+    select?: NotificationsClientsSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: NotificationsClientPushTokensInclude | null
+    include?: NotificationsClientsInclude | null
     /**
-     * The filter to search for the NotificationsClientPushTokens to update in case it exists.
+     * The filter to search for the NotificationsClients to update in case it exists.
      */
-    where: NotificationsClientPushTokensWhereUniqueInput
+    where: NotificationsClientsWhereUniqueInput
     /**
-     * In case the NotificationsClientPushTokens found by the `where` argument doesn't exist, create a new NotificationsClientPushTokens with this data.
+     * In case the NotificationsClients found by the `where` argument doesn't exist, create a new NotificationsClients with this data.
      */
-    create: XOR<NotificationsClientPushTokensCreateInput, NotificationsClientPushTokensUncheckedCreateInput>
+    create: XOR<NotificationsClientsCreateInput, NotificationsClientsUncheckedCreateInput>
     /**
-     * In case the NotificationsClientPushTokens was found with the provided `where` argument, update it with this data.
+     * In case the NotificationsClients was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<NotificationsClientPushTokensUpdateInput, NotificationsClientPushTokensUncheckedUpdateInput>
+    update: XOR<NotificationsClientsUpdateInput, NotificationsClientsUncheckedUpdateInput>
   }
 
 
   /**
-   * NotificationsClientPushTokens delete
+   * NotificationsClients delete
    */
-  export type NotificationsClientPushTokensDeleteArgs = {
+  export type NotificationsClientsDeleteArgs = {
     /**
-     * Select specific fields to fetch from the NotificationsClientPushTokens
+     * Select specific fields to fetch from the NotificationsClients
      */
-    select?: NotificationsClientPushTokensSelect | null
+    select?: NotificationsClientsSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: NotificationsClientPushTokensInclude | null
+    include?: NotificationsClientsInclude | null
     /**
-     * Filter which NotificationsClientPushTokens to delete.
+     * Filter which NotificationsClients to delete.
      */
-    where: NotificationsClientPushTokensWhereUniqueInput
+    where: NotificationsClientsWhereUniqueInput
   }
 
 
   /**
-   * NotificationsClientPushTokens deleteMany
+   * NotificationsClients deleteMany
    */
-  export type NotificationsClientPushTokensDeleteManyArgs = {
+  export type NotificationsClientsDeleteManyArgs = {
     /**
-     * Filter which NotificationsClientPushTokens to delete
+     * Filter which NotificationsClients to delete
      */
-    where?: NotificationsClientPushTokensWhereInput
+    where?: NotificationsClientsWhereInput
   }
 
 
   /**
-   * NotificationsClientPushTokens without action
+   * NotificationsClients without action
    */
-  export type NotificationsClientPushTokensArgs = {
+  export type NotificationsClientsArgs = {
     /**
-     * Select specific fields to fetch from the NotificationsClientPushTokens
+     * Select specific fields to fetch from the NotificationsClients
      */
-    select?: NotificationsClientPushTokensSelect | null
+    select?: NotificationsClientsSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: NotificationsClientPushTokensInclude | null
+    include?: NotificationsClientsInclude | null
   }
 
 
@@ -12569,13 +12524,13 @@ export namespace Prisma {
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
-  export const NotificationsClientPushTokensScalarFieldEnum: {
+  export const NotificationsClientsScalarFieldEnum: {
     isViewed: 'isViewed',
     notificationId: 'notificationId',
-    clientPushTokenToken: 'clientPushTokenToken'
+    clientId: 'clientId'
   };
 
-  export type NotificationsClientPushTokensScalarFieldEnum = (typeof NotificationsClientPushTokensScalarFieldEnum)[keyof typeof NotificationsClientPushTokensScalarFieldEnum]
+  export type NotificationsClientsScalarFieldEnum = (typeof NotificationsClientsScalarFieldEnum)[keyof typeof NotificationsClientsScalarFieldEnum]
 
 
   export const NullableJsonNullValueInput: {
@@ -12736,6 +12691,7 @@ export namespace Prisma {
     notifyAnnouncements?: BoolFilter | boolean
     notifyNewProducts?: BoolFilter | boolean
     notifyEventsAndActions?: BoolFilter | boolean
+    notifications?: NotificationsClientsListRelationFilter
   }
 
   export type ClientOrderByWithRelationInput = {
@@ -12751,6 +12707,7 @@ export namespace Prisma {
     notifyAnnouncements?: SortOrder
     notifyNewProducts?: SortOrder
     notifyEventsAndActions?: SortOrder
+    notifications?: NotificationsClientsOrderByRelationAggregateInput
   }
 
   export type ClientWhereUniqueInput = {
@@ -12914,14 +12871,12 @@ export namespace Prisma {
     token?: StringFilter | string
     client?: XOR<ClientRelationFilter, ClientWhereInput>
     clientId?: StringFilter | string
-    notificationsClientPushTokens?: NotificationsClientPushTokensListRelationFilter
   }
 
   export type ClientPushTokenOrderByWithRelationInput = {
     token?: SortOrder
     client?: ClientOrderByWithRelationInput
     clientId?: SortOrder
-    notificationsClientPushTokens?: NotificationsClientPushTokensOrderByRelationAggregateInput
   }
 
   export type ClientPushTokenWhereUniqueInput = {
@@ -13001,7 +12956,7 @@ export namespace Prisma {
     body?: StringFilter | string
     createdAt?: DateTimeFilter | Date | string
     payload?: JsonNullableFilter
-    notificationsClientPushTokens?: NotificationsClientPushTokensListRelationFilter
+    clients?: NotificationsClientsListRelationFilter
   }
 
   export type NotificationOrderByWithRelationInput = {
@@ -13011,7 +12966,7 @@ export namespace Prisma {
     body?: SortOrder
     createdAt?: SortOrder
     payload?: SortOrder
-    notificationsClientPushTokens?: NotificationsClientPushTokensOrderByRelationAggregateInput
+    clients?: NotificationsClientsOrderByRelationAggregateInput
   }
 
   export type NotificationWhereUniqueInput = {
@@ -13042,45 +12997,45 @@ export namespace Prisma {
     payload?: JsonNullableWithAggregatesFilter
   }
 
-  export type NotificationsClientPushTokensWhereInput = {
-    AND?: Enumerable<NotificationsClientPushTokensWhereInput>
-    OR?: Enumerable<NotificationsClientPushTokensWhereInput>
-    NOT?: Enumerable<NotificationsClientPushTokensWhereInput>
+  export type NotificationsClientsWhereInput = {
+    AND?: Enumerable<NotificationsClientsWhereInput>
+    OR?: Enumerable<NotificationsClientsWhereInput>
+    NOT?: Enumerable<NotificationsClientsWhereInput>
     isViewed?: BoolFilter | boolean
     notification?: XOR<NotificationRelationFilter, NotificationWhereInput>
-    clientPushToken?: XOR<ClientPushTokenRelationFilter, ClientPushTokenWhereInput>
     notificationId?: StringFilter | string
-    clientPushTokenToken?: StringFilter | string
+    client?: XOR<ClientRelationFilter, ClientWhereInput>
+    clientId?: StringFilter | string
   }
 
-  export type NotificationsClientPushTokensOrderByWithRelationInput = {
+  export type NotificationsClientsOrderByWithRelationInput = {
     isViewed?: SortOrder
     notification?: NotificationOrderByWithRelationInput
-    clientPushToken?: ClientPushTokenOrderByWithRelationInput
     notificationId?: SortOrder
-    clientPushTokenToken?: SortOrder
+    client?: ClientOrderByWithRelationInput
+    clientId?: SortOrder
   }
 
-  export type NotificationsClientPushTokensWhereUniqueInput = {
-    notificationId_clientPushTokenToken?: NotificationsClientPushTokensNotificationIdClientPushTokenTokenCompoundUniqueInput
+  export type NotificationsClientsWhereUniqueInput = {
+    notificationId_clientId?: NotificationsClientsNotificationIdClientIdCompoundUniqueInput
   }
 
-  export type NotificationsClientPushTokensOrderByWithAggregationInput = {
+  export type NotificationsClientsOrderByWithAggregationInput = {
     isViewed?: SortOrder
     notificationId?: SortOrder
-    clientPushTokenToken?: SortOrder
-    _count?: NotificationsClientPushTokensCountOrderByAggregateInput
-    _max?: NotificationsClientPushTokensMaxOrderByAggregateInput
-    _min?: NotificationsClientPushTokensMinOrderByAggregateInput
+    clientId?: SortOrder
+    _count?: NotificationsClientsCountOrderByAggregateInput
+    _max?: NotificationsClientsMaxOrderByAggregateInput
+    _min?: NotificationsClientsMinOrderByAggregateInput
   }
 
-  export type NotificationsClientPushTokensScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<NotificationsClientPushTokensScalarWhereWithAggregatesInput>
-    OR?: Enumerable<NotificationsClientPushTokensScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<NotificationsClientPushTokensScalarWhereWithAggregatesInput>
+  export type NotificationsClientsScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<NotificationsClientsScalarWhereWithAggregatesInput>
+    OR?: Enumerable<NotificationsClientsScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<NotificationsClientsScalarWhereWithAggregatesInput>
     isViewed?: BoolWithAggregatesFilter | boolean
     notificationId?: StringWithAggregatesFilter | string
-    clientPushTokenToken?: StringWithAggregatesFilter | string
+    clientId?: StringWithAggregatesFilter | string
   }
 
   export type CustomerServiceWhereInput = {
@@ -13285,6 +13240,7 @@ export namespace Prisma {
     notifyAnnouncements: boolean
     notifyNewProducts: boolean
     notifyEventsAndActions: boolean
+    notifications?: NotificationsClientsCreateNestedManyWithoutClientInput
   }
 
   export type ClientUncheckedCreateInput = {
@@ -13300,6 +13256,7 @@ export namespace Prisma {
     notifyAnnouncements: boolean
     notifyNewProducts: boolean
     notifyEventsAndActions: boolean
+    notifications?: NotificationsClientsUncheckedCreateNestedManyWithoutClientInput
   }
 
   export type ClientUpdateInput = {
@@ -13315,6 +13272,7 @@ export namespace Prisma {
     notifyAnnouncements?: BoolFieldUpdateOperationsInput | boolean
     notifyNewProducts?: BoolFieldUpdateOperationsInput | boolean
     notifyEventsAndActions?: BoolFieldUpdateOperationsInput | boolean
+    notifications?: NotificationsClientsUpdateManyWithoutClientNestedInput
   }
 
   export type ClientUncheckedUpdateInput = {
@@ -13330,6 +13288,7 @@ export namespace Prisma {
     notifyAnnouncements?: BoolFieldUpdateOperationsInput | boolean
     notifyNewProducts?: BoolFieldUpdateOperationsInput | boolean
     notifyEventsAndActions?: BoolFieldUpdateOperationsInput | boolean
+    notifications?: NotificationsClientsUncheckedUpdateManyWithoutClientNestedInput
   }
 
   export type ClientCreateManyInput = {
@@ -13498,25 +13457,21 @@ export namespace Prisma {
   export type ClientPushTokenCreateInput = {
     token: string
     client: ClientCreateNestedOneWithoutPushTokensInput
-    notificationsClientPushTokens?: NotificationsClientPushTokensCreateNestedManyWithoutClientPushTokenInput
   }
 
   export type ClientPushTokenUncheckedCreateInput = {
     token: string
     clientId: string
-    notificationsClientPushTokens?: NotificationsClientPushTokensUncheckedCreateNestedManyWithoutClientPushTokenInput
   }
 
   export type ClientPushTokenUpdateInput = {
     token?: StringFieldUpdateOperationsInput | string
     client?: ClientUpdateOneRequiredWithoutPushTokensNestedInput
-    notificationsClientPushTokens?: NotificationsClientPushTokensUpdateManyWithoutClientPushTokenNestedInput
   }
 
   export type ClientPushTokenUncheckedUpdateInput = {
     token?: StringFieldUpdateOperationsInput | string
     clientId?: StringFieldUpdateOperationsInput | string
-    notificationsClientPushTokens?: NotificationsClientPushTokensUncheckedUpdateManyWithoutClientPushTokenNestedInput
   }
 
   export type ClientPushTokenCreateManyInput = {
@@ -13596,7 +13551,7 @@ export namespace Prisma {
     body: string
     createdAt: Date | string
     payload?: NullableJsonNullValueInput | InputJsonValue
-    notificationsClientPushTokens?: NotificationsClientPushTokensCreateNestedManyWithoutNotificationInput
+    clients?: NotificationsClientsCreateNestedManyWithoutNotificationInput
   }
 
   export type NotificationUncheckedCreateInput = {
@@ -13606,7 +13561,7 @@ export namespace Prisma {
     body: string
     createdAt: Date | string
     payload?: NullableJsonNullValueInput | InputJsonValue
-    notificationsClientPushTokens?: NotificationsClientPushTokensUncheckedCreateNestedManyWithoutNotificationInput
+    clients?: NotificationsClientsUncheckedCreateNestedManyWithoutNotificationInput
   }
 
   export type NotificationUpdateInput = {
@@ -13616,7 +13571,7 @@ export namespace Prisma {
     body?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payload?: NullableJsonNullValueInput | InputJsonValue
-    notificationsClientPushTokens?: NotificationsClientPushTokensUpdateManyWithoutNotificationNestedInput
+    clients?: NotificationsClientsUpdateManyWithoutNotificationNestedInput
   }
 
   export type NotificationUncheckedUpdateInput = {
@@ -13626,7 +13581,7 @@ export namespace Prisma {
     body?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payload?: NullableJsonNullValueInput | InputJsonValue
-    notificationsClientPushTokens?: NotificationsClientPushTokensUncheckedUpdateManyWithoutNotificationNestedInput
+    clients?: NotificationsClientsUncheckedUpdateManyWithoutNotificationNestedInput
   }
 
   export type NotificationCreateManyInput = {
@@ -13656,44 +13611,44 @@ export namespace Prisma {
     payload?: NullableJsonNullValueInput | InputJsonValue
   }
 
-  export type NotificationsClientPushTokensCreateInput = {
+  export type NotificationsClientsCreateInput = {
     isViewed: boolean
-    notification: NotificationCreateNestedOneWithoutNotificationsClientPushTokensInput
-    clientPushToken: ClientPushTokenCreateNestedOneWithoutNotificationsClientPushTokensInput
+    notification: NotificationCreateNestedOneWithoutClientsInput
+    client: ClientCreateNestedOneWithoutNotificationsInput
   }
 
-  export type NotificationsClientPushTokensUncheckedCreateInput = {
-    isViewed: boolean
-    notificationId: string
-    clientPushTokenToken: string
-  }
-
-  export type NotificationsClientPushTokensUpdateInput = {
-    isViewed?: BoolFieldUpdateOperationsInput | boolean
-    notification?: NotificationUpdateOneRequiredWithoutNotificationsClientPushTokensNestedInput
-    clientPushToken?: ClientPushTokenUpdateOneRequiredWithoutNotificationsClientPushTokensNestedInput
-  }
-
-  export type NotificationsClientPushTokensUncheckedUpdateInput = {
-    isViewed?: BoolFieldUpdateOperationsInput | boolean
-    notificationId?: StringFieldUpdateOperationsInput | string
-    clientPushTokenToken?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type NotificationsClientPushTokensCreateManyInput = {
+  export type NotificationsClientsUncheckedCreateInput = {
     isViewed: boolean
     notificationId: string
-    clientPushTokenToken: string
+    clientId: string
   }
 
-  export type NotificationsClientPushTokensUpdateManyMutationInput = {
+  export type NotificationsClientsUpdateInput = {
     isViewed?: BoolFieldUpdateOperationsInput | boolean
+    notification?: NotificationUpdateOneRequiredWithoutClientsNestedInput
+    client?: ClientUpdateOneRequiredWithoutNotificationsNestedInput
   }
 
-  export type NotificationsClientPushTokensUncheckedUpdateManyInput = {
+  export type NotificationsClientsUncheckedUpdateInput = {
     isViewed?: BoolFieldUpdateOperationsInput | boolean
     notificationId?: StringFieldUpdateOperationsInput | string
-    clientPushTokenToken?: StringFieldUpdateOperationsInput | string
+    clientId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type NotificationsClientsCreateManyInput = {
+    isViewed: boolean
+    notificationId: string
+    clientId: string
+  }
+
+  export type NotificationsClientsUpdateManyMutationInput = {
+    isViewed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type NotificationsClientsUncheckedUpdateManyInput = {
+    isViewed?: BoolFieldUpdateOperationsInput | boolean
+    notificationId?: StringFieldUpdateOperationsInput | string
+    clientId?: StringFieldUpdateOperationsInput | string
   }
 
   export type CustomerServiceCreateInput = {
@@ -13940,6 +13895,12 @@ export namespace Prisma {
     not?: NestedBoolFilter | boolean
   }
 
+  export type NotificationsClientsListRelationFilter = {
+    every?: NotificationsClientsWhereInput
+    some?: NotificationsClientsWhereInput
+    none?: NotificationsClientsWhereInput
+  }
+
   export type ClientPasswordResetRequestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -13953,6 +13914,10 @@ export namespace Prisma {
   }
 
   export type ClientSessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NotificationsClientsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14099,16 +14064,6 @@ export namespace Prisma {
     _count?: NestedIntFilter
     _min?: NestedEnumClientEmailChangeRequestStatusFilter
     _max?: NestedEnumClientEmailChangeRequestStatusFilter
-  }
-
-  export type NotificationsClientPushTokensListRelationFilter = {
-    every?: NotificationsClientPushTokensWhereInput
-    some?: NotificationsClientPushTokensWhereInput
-    none?: NotificationsClientPushTokensWhereInput
-  }
-
-  export type NotificationsClientPushTokensOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type ClientPushTokenCountOrderByAggregateInput = {
@@ -14296,32 +14251,27 @@ export namespace Prisma {
     isNot?: NotificationWhereInput
   }
 
-  export type ClientPushTokenRelationFilter = {
-    is?: ClientPushTokenWhereInput
-    isNot?: ClientPushTokenWhereInput
-  }
-
-  export type NotificationsClientPushTokensNotificationIdClientPushTokenTokenCompoundUniqueInput = {
+  export type NotificationsClientsNotificationIdClientIdCompoundUniqueInput = {
     notificationId: string
-    clientPushTokenToken: string
+    clientId: string
   }
 
-  export type NotificationsClientPushTokensCountOrderByAggregateInput = {
+  export type NotificationsClientsCountOrderByAggregateInput = {
     isViewed?: SortOrder
     notificationId?: SortOrder
-    clientPushTokenToken?: SortOrder
+    clientId?: SortOrder
   }
 
-  export type NotificationsClientPushTokensMaxOrderByAggregateInput = {
+  export type NotificationsClientsMaxOrderByAggregateInput = {
     isViewed?: SortOrder
     notificationId?: SortOrder
-    clientPushTokenToken?: SortOrder
+    clientId?: SortOrder
   }
 
-  export type NotificationsClientPushTokensMinOrderByAggregateInput = {
+  export type NotificationsClientsMinOrderByAggregateInput = {
     isViewed?: SortOrder
     notificationId?: SortOrder
-    clientPushTokenToken?: SortOrder
+    clientId?: SortOrder
   }
 
   export type CustomerServiceCountOrderByAggregateInput = {
@@ -14469,6 +14419,13 @@ export namespace Prisma {
     connect?: Enumerable<ClientSessionWhereUniqueInput>
   }
 
+  export type NotificationsClientsCreateNestedManyWithoutClientInput = {
+    create?: XOR<Enumerable<NotificationsClientsCreateWithoutClientInput>, Enumerable<NotificationsClientsUncheckedCreateWithoutClientInput>>
+    connectOrCreate?: Enumerable<NotificationsClientsCreateOrConnectWithoutClientInput>
+    createMany?: NotificationsClientsCreateManyClientInputEnvelope
+    connect?: Enumerable<NotificationsClientsWhereUniqueInput>
+  }
+
   export type ClientPasswordResetRequestUncheckedCreateNestedManyWithoutClientInput = {
     create?: XOR<Enumerable<ClientPasswordResetRequestCreateWithoutClientInput>, Enumerable<ClientPasswordResetRequestUncheckedCreateWithoutClientInput>>
     connectOrCreate?: Enumerable<ClientPasswordResetRequestCreateOrConnectWithoutClientInput>
@@ -14495,6 +14452,13 @@ export namespace Prisma {
     connectOrCreate?: Enumerable<ClientSessionCreateOrConnectWithoutClientInput>
     createMany?: ClientSessionCreateManyClientInputEnvelope
     connect?: Enumerable<ClientSessionWhereUniqueInput>
+  }
+
+  export type NotificationsClientsUncheckedCreateNestedManyWithoutClientInput = {
+    create?: XOR<Enumerable<NotificationsClientsCreateWithoutClientInput>, Enumerable<NotificationsClientsUncheckedCreateWithoutClientInput>>
+    connectOrCreate?: Enumerable<NotificationsClientsCreateOrConnectWithoutClientInput>
+    createMany?: NotificationsClientsCreateManyClientInputEnvelope
+    connect?: Enumerable<NotificationsClientsWhereUniqueInput>
   }
 
   export type ClientPasswordResetRequestUpdateManyWithoutClientNestedInput = {
@@ -14557,6 +14521,20 @@ export namespace Prisma {
     set?: boolean
   }
 
+  export type NotificationsClientsUpdateManyWithoutClientNestedInput = {
+    create?: XOR<Enumerable<NotificationsClientsCreateWithoutClientInput>, Enumerable<NotificationsClientsUncheckedCreateWithoutClientInput>>
+    connectOrCreate?: Enumerable<NotificationsClientsCreateOrConnectWithoutClientInput>
+    upsert?: Enumerable<NotificationsClientsUpsertWithWhereUniqueWithoutClientInput>
+    createMany?: NotificationsClientsCreateManyClientInputEnvelope
+    set?: Enumerable<NotificationsClientsWhereUniqueInput>
+    disconnect?: Enumerable<NotificationsClientsWhereUniqueInput>
+    delete?: Enumerable<NotificationsClientsWhereUniqueInput>
+    connect?: Enumerable<NotificationsClientsWhereUniqueInput>
+    update?: Enumerable<NotificationsClientsUpdateWithWhereUniqueWithoutClientInput>
+    updateMany?: Enumerable<NotificationsClientsUpdateManyWithWhereWithoutClientInput>
+    deleteMany?: Enumerable<NotificationsClientsScalarWhereInput>
+  }
+
   export type ClientPasswordResetRequestUncheckedUpdateManyWithoutClientNestedInput = {
     create?: XOR<Enumerable<ClientPasswordResetRequestCreateWithoutClientInput>, Enumerable<ClientPasswordResetRequestUncheckedCreateWithoutClientInput>>
     connectOrCreate?: Enumerable<ClientPasswordResetRequestCreateOrConnectWithoutClientInput>
@@ -14611,6 +14589,20 @@ export namespace Prisma {
     update?: Enumerable<ClientSessionUpdateWithWhereUniqueWithoutClientInput>
     updateMany?: Enumerable<ClientSessionUpdateManyWithWhereWithoutClientInput>
     deleteMany?: Enumerable<ClientSessionScalarWhereInput>
+  }
+
+  export type NotificationsClientsUncheckedUpdateManyWithoutClientNestedInput = {
+    create?: XOR<Enumerable<NotificationsClientsCreateWithoutClientInput>, Enumerable<NotificationsClientsUncheckedCreateWithoutClientInput>>
+    connectOrCreate?: Enumerable<NotificationsClientsCreateOrConnectWithoutClientInput>
+    upsert?: Enumerable<NotificationsClientsUpsertWithWhereUniqueWithoutClientInput>
+    createMany?: NotificationsClientsCreateManyClientInputEnvelope
+    set?: Enumerable<NotificationsClientsWhereUniqueInput>
+    disconnect?: Enumerable<NotificationsClientsWhereUniqueInput>
+    delete?: Enumerable<NotificationsClientsWhereUniqueInput>
+    connect?: Enumerable<NotificationsClientsWhereUniqueInput>
+    update?: Enumerable<NotificationsClientsUpdateWithWhereUniqueWithoutClientInput>
+    updateMany?: Enumerable<NotificationsClientsUpdateManyWithWhereWithoutClientInput>
+    deleteMany?: Enumerable<NotificationsClientsScalarWhereInput>
   }
 
   export type ClientCreateNestedOneWithoutSessionsInput = {
@@ -14669,54 +14661,12 @@ export namespace Prisma {
     connect?: ClientWhereUniqueInput
   }
 
-  export type NotificationsClientPushTokensCreateNestedManyWithoutClientPushTokenInput = {
-    create?: XOR<Enumerable<NotificationsClientPushTokensCreateWithoutClientPushTokenInput>, Enumerable<NotificationsClientPushTokensUncheckedCreateWithoutClientPushTokenInput>>
-    connectOrCreate?: Enumerable<NotificationsClientPushTokensCreateOrConnectWithoutClientPushTokenInput>
-    createMany?: NotificationsClientPushTokensCreateManyClientPushTokenInputEnvelope
-    connect?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-  }
-
-  export type NotificationsClientPushTokensUncheckedCreateNestedManyWithoutClientPushTokenInput = {
-    create?: XOR<Enumerable<NotificationsClientPushTokensCreateWithoutClientPushTokenInput>, Enumerable<NotificationsClientPushTokensUncheckedCreateWithoutClientPushTokenInput>>
-    connectOrCreate?: Enumerable<NotificationsClientPushTokensCreateOrConnectWithoutClientPushTokenInput>
-    createMany?: NotificationsClientPushTokensCreateManyClientPushTokenInputEnvelope
-    connect?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-  }
-
   export type ClientUpdateOneRequiredWithoutPushTokensNestedInput = {
     create?: XOR<ClientCreateWithoutPushTokensInput, ClientUncheckedCreateWithoutPushTokensInput>
     connectOrCreate?: ClientCreateOrConnectWithoutPushTokensInput
     upsert?: ClientUpsertWithoutPushTokensInput
     connect?: ClientWhereUniqueInput
     update?: XOR<ClientUpdateWithoutPushTokensInput, ClientUncheckedUpdateWithoutPushTokensInput>
-  }
-
-  export type NotificationsClientPushTokensUpdateManyWithoutClientPushTokenNestedInput = {
-    create?: XOR<Enumerable<NotificationsClientPushTokensCreateWithoutClientPushTokenInput>, Enumerable<NotificationsClientPushTokensUncheckedCreateWithoutClientPushTokenInput>>
-    connectOrCreate?: Enumerable<NotificationsClientPushTokensCreateOrConnectWithoutClientPushTokenInput>
-    upsert?: Enumerable<NotificationsClientPushTokensUpsertWithWhereUniqueWithoutClientPushTokenInput>
-    createMany?: NotificationsClientPushTokensCreateManyClientPushTokenInputEnvelope
-    set?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    disconnect?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    delete?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    connect?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    update?: Enumerable<NotificationsClientPushTokensUpdateWithWhereUniqueWithoutClientPushTokenInput>
-    updateMany?: Enumerable<NotificationsClientPushTokensUpdateManyWithWhereWithoutClientPushTokenInput>
-    deleteMany?: Enumerable<NotificationsClientPushTokensScalarWhereInput>
-  }
-
-  export type NotificationsClientPushTokensUncheckedUpdateManyWithoutClientPushTokenNestedInput = {
-    create?: XOR<Enumerable<NotificationsClientPushTokensCreateWithoutClientPushTokenInput>, Enumerable<NotificationsClientPushTokensUncheckedCreateWithoutClientPushTokenInput>>
-    connectOrCreate?: Enumerable<NotificationsClientPushTokensCreateOrConnectWithoutClientPushTokenInput>
-    upsert?: Enumerable<NotificationsClientPushTokensUpsertWithWhereUniqueWithoutClientPushTokenInput>
-    createMany?: NotificationsClientPushTokensCreateManyClientPushTokenInputEnvelope
-    set?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    disconnect?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    delete?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    connect?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    update?: Enumerable<NotificationsClientPushTokensUpdateWithWhereUniqueWithoutClientPushTokenInput>
-    updateMany?: Enumerable<NotificationsClientPushTokensUpdateManyWithWhereWithoutClientPushTokenInput>
-    deleteMany?: Enumerable<NotificationsClientPushTokensScalarWhereInput>
   }
 
   export type DecimalFieldUpdateOperationsInput = {
@@ -14731,78 +14681,78 @@ export namespace Prisma {
     set?: ContractWithdrawRequestStatus
   }
 
-  export type NotificationsClientPushTokensCreateNestedManyWithoutNotificationInput = {
-    create?: XOR<Enumerable<NotificationsClientPushTokensCreateWithoutNotificationInput>, Enumerable<NotificationsClientPushTokensUncheckedCreateWithoutNotificationInput>>
-    connectOrCreate?: Enumerable<NotificationsClientPushTokensCreateOrConnectWithoutNotificationInput>
-    createMany?: NotificationsClientPushTokensCreateManyNotificationInputEnvelope
-    connect?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
+  export type NotificationsClientsCreateNestedManyWithoutNotificationInput = {
+    create?: XOR<Enumerable<NotificationsClientsCreateWithoutNotificationInput>, Enumerable<NotificationsClientsUncheckedCreateWithoutNotificationInput>>
+    connectOrCreate?: Enumerable<NotificationsClientsCreateOrConnectWithoutNotificationInput>
+    createMany?: NotificationsClientsCreateManyNotificationInputEnvelope
+    connect?: Enumerable<NotificationsClientsWhereUniqueInput>
   }
 
-  export type NotificationsClientPushTokensUncheckedCreateNestedManyWithoutNotificationInput = {
-    create?: XOR<Enumerable<NotificationsClientPushTokensCreateWithoutNotificationInput>, Enumerable<NotificationsClientPushTokensUncheckedCreateWithoutNotificationInput>>
-    connectOrCreate?: Enumerable<NotificationsClientPushTokensCreateOrConnectWithoutNotificationInput>
-    createMany?: NotificationsClientPushTokensCreateManyNotificationInputEnvelope
-    connect?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
+  export type NotificationsClientsUncheckedCreateNestedManyWithoutNotificationInput = {
+    create?: XOR<Enumerable<NotificationsClientsCreateWithoutNotificationInput>, Enumerable<NotificationsClientsUncheckedCreateWithoutNotificationInput>>
+    connectOrCreate?: Enumerable<NotificationsClientsCreateOrConnectWithoutNotificationInput>
+    createMany?: NotificationsClientsCreateManyNotificationInputEnvelope
+    connect?: Enumerable<NotificationsClientsWhereUniqueInput>
   }
 
   export type EnumNotificationTypeFieldUpdateOperationsInput = {
     set?: NotificationType
   }
 
-  export type NotificationsClientPushTokensUpdateManyWithoutNotificationNestedInput = {
-    create?: XOR<Enumerable<NotificationsClientPushTokensCreateWithoutNotificationInput>, Enumerable<NotificationsClientPushTokensUncheckedCreateWithoutNotificationInput>>
-    connectOrCreate?: Enumerable<NotificationsClientPushTokensCreateOrConnectWithoutNotificationInput>
-    upsert?: Enumerable<NotificationsClientPushTokensUpsertWithWhereUniqueWithoutNotificationInput>
-    createMany?: NotificationsClientPushTokensCreateManyNotificationInputEnvelope
-    set?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    disconnect?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    delete?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    connect?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    update?: Enumerable<NotificationsClientPushTokensUpdateWithWhereUniqueWithoutNotificationInput>
-    updateMany?: Enumerable<NotificationsClientPushTokensUpdateManyWithWhereWithoutNotificationInput>
-    deleteMany?: Enumerable<NotificationsClientPushTokensScalarWhereInput>
+  export type NotificationsClientsUpdateManyWithoutNotificationNestedInput = {
+    create?: XOR<Enumerable<NotificationsClientsCreateWithoutNotificationInput>, Enumerable<NotificationsClientsUncheckedCreateWithoutNotificationInput>>
+    connectOrCreate?: Enumerable<NotificationsClientsCreateOrConnectWithoutNotificationInput>
+    upsert?: Enumerable<NotificationsClientsUpsertWithWhereUniqueWithoutNotificationInput>
+    createMany?: NotificationsClientsCreateManyNotificationInputEnvelope
+    set?: Enumerable<NotificationsClientsWhereUniqueInput>
+    disconnect?: Enumerable<NotificationsClientsWhereUniqueInput>
+    delete?: Enumerable<NotificationsClientsWhereUniqueInput>
+    connect?: Enumerable<NotificationsClientsWhereUniqueInput>
+    update?: Enumerable<NotificationsClientsUpdateWithWhereUniqueWithoutNotificationInput>
+    updateMany?: Enumerable<NotificationsClientsUpdateManyWithWhereWithoutNotificationInput>
+    deleteMany?: Enumerable<NotificationsClientsScalarWhereInput>
   }
 
-  export type NotificationsClientPushTokensUncheckedUpdateManyWithoutNotificationNestedInput = {
-    create?: XOR<Enumerable<NotificationsClientPushTokensCreateWithoutNotificationInput>, Enumerable<NotificationsClientPushTokensUncheckedCreateWithoutNotificationInput>>
-    connectOrCreate?: Enumerable<NotificationsClientPushTokensCreateOrConnectWithoutNotificationInput>
-    upsert?: Enumerable<NotificationsClientPushTokensUpsertWithWhereUniqueWithoutNotificationInput>
-    createMany?: NotificationsClientPushTokensCreateManyNotificationInputEnvelope
-    set?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    disconnect?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    delete?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    connect?: Enumerable<NotificationsClientPushTokensWhereUniqueInput>
-    update?: Enumerable<NotificationsClientPushTokensUpdateWithWhereUniqueWithoutNotificationInput>
-    updateMany?: Enumerable<NotificationsClientPushTokensUpdateManyWithWhereWithoutNotificationInput>
-    deleteMany?: Enumerable<NotificationsClientPushTokensScalarWhereInput>
+  export type NotificationsClientsUncheckedUpdateManyWithoutNotificationNestedInput = {
+    create?: XOR<Enumerable<NotificationsClientsCreateWithoutNotificationInput>, Enumerable<NotificationsClientsUncheckedCreateWithoutNotificationInput>>
+    connectOrCreate?: Enumerable<NotificationsClientsCreateOrConnectWithoutNotificationInput>
+    upsert?: Enumerable<NotificationsClientsUpsertWithWhereUniqueWithoutNotificationInput>
+    createMany?: NotificationsClientsCreateManyNotificationInputEnvelope
+    set?: Enumerable<NotificationsClientsWhereUniqueInput>
+    disconnect?: Enumerable<NotificationsClientsWhereUniqueInput>
+    delete?: Enumerable<NotificationsClientsWhereUniqueInput>
+    connect?: Enumerable<NotificationsClientsWhereUniqueInput>
+    update?: Enumerable<NotificationsClientsUpdateWithWhereUniqueWithoutNotificationInput>
+    updateMany?: Enumerable<NotificationsClientsUpdateManyWithWhereWithoutNotificationInput>
+    deleteMany?: Enumerable<NotificationsClientsScalarWhereInput>
   }
 
-  export type NotificationCreateNestedOneWithoutNotificationsClientPushTokensInput = {
-    create?: XOR<NotificationCreateWithoutNotificationsClientPushTokensInput, NotificationUncheckedCreateWithoutNotificationsClientPushTokensInput>
-    connectOrCreate?: NotificationCreateOrConnectWithoutNotificationsClientPushTokensInput
+  export type NotificationCreateNestedOneWithoutClientsInput = {
+    create?: XOR<NotificationCreateWithoutClientsInput, NotificationUncheckedCreateWithoutClientsInput>
+    connectOrCreate?: NotificationCreateOrConnectWithoutClientsInput
     connect?: NotificationWhereUniqueInput
   }
 
-  export type ClientPushTokenCreateNestedOneWithoutNotificationsClientPushTokensInput = {
-    create?: XOR<ClientPushTokenCreateWithoutNotificationsClientPushTokensInput, ClientPushTokenUncheckedCreateWithoutNotificationsClientPushTokensInput>
-    connectOrCreate?: ClientPushTokenCreateOrConnectWithoutNotificationsClientPushTokensInput
-    connect?: ClientPushTokenWhereUniqueInput
+  export type ClientCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<ClientCreateWithoutNotificationsInput, ClientUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: ClientCreateOrConnectWithoutNotificationsInput
+    connect?: ClientWhereUniqueInput
   }
 
-  export type NotificationUpdateOneRequiredWithoutNotificationsClientPushTokensNestedInput = {
-    create?: XOR<NotificationCreateWithoutNotificationsClientPushTokensInput, NotificationUncheckedCreateWithoutNotificationsClientPushTokensInput>
-    connectOrCreate?: NotificationCreateOrConnectWithoutNotificationsClientPushTokensInput
-    upsert?: NotificationUpsertWithoutNotificationsClientPushTokensInput
+  export type NotificationUpdateOneRequiredWithoutClientsNestedInput = {
+    create?: XOR<NotificationCreateWithoutClientsInput, NotificationUncheckedCreateWithoutClientsInput>
+    connectOrCreate?: NotificationCreateOrConnectWithoutClientsInput
+    upsert?: NotificationUpsertWithoutClientsInput
     connect?: NotificationWhereUniqueInput
-    update?: XOR<NotificationUpdateWithoutNotificationsClientPushTokensInput, NotificationUncheckedUpdateWithoutNotificationsClientPushTokensInput>
+    update?: XOR<NotificationUpdateWithoutClientsInput, NotificationUncheckedUpdateWithoutClientsInput>
   }
 
-  export type ClientPushTokenUpdateOneRequiredWithoutNotificationsClientPushTokensNestedInput = {
-    create?: XOR<ClientPushTokenCreateWithoutNotificationsClientPushTokensInput, ClientPushTokenUncheckedCreateWithoutNotificationsClientPushTokensInput>
-    connectOrCreate?: ClientPushTokenCreateOrConnectWithoutNotificationsClientPushTokensInput
-    upsert?: ClientPushTokenUpsertWithoutNotificationsClientPushTokensInput
-    connect?: ClientPushTokenWhereUniqueInput
-    update?: XOR<ClientPushTokenUpdateWithoutNotificationsClientPushTokensInput, ClientPushTokenUncheckedUpdateWithoutNotificationsClientPushTokensInput>
+  export type ClientUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<ClientCreateWithoutNotificationsInput, ClientUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: ClientCreateOrConnectWithoutNotificationsInput
+    upsert?: ClientUpsertWithoutNotificationsInput
+    connect?: ClientWhereUniqueInput
+    update?: XOR<ClientUpdateWithoutNotificationsInput, ClientUncheckedUpdateWithoutNotificationsInput>
   }
 
   export type NestedStringFilter = {
@@ -15122,12 +15072,10 @@ export namespace Prisma {
 
   export type ClientPushTokenCreateWithoutClientInput = {
     token: string
-    notificationsClientPushTokens?: NotificationsClientPushTokensCreateNestedManyWithoutClientPushTokenInput
   }
 
   export type ClientPushTokenUncheckedCreateWithoutClientInput = {
     token: string
-    notificationsClientPushTokens?: NotificationsClientPushTokensUncheckedCreateNestedManyWithoutClientPushTokenInput
   }
 
   export type ClientPushTokenCreateOrConnectWithoutClientInput = {
@@ -15155,6 +15103,26 @@ export namespace Prisma {
 
   export type ClientSessionCreateManyClientInputEnvelope = {
     data: Enumerable<ClientSessionCreateManyClientInput>
+    skipDuplicates?: boolean
+  }
+
+  export type NotificationsClientsCreateWithoutClientInput = {
+    isViewed: boolean
+    notification: NotificationCreateNestedOneWithoutClientsInput
+  }
+
+  export type NotificationsClientsUncheckedCreateWithoutClientInput = {
+    isViewed: boolean
+    notificationId: string
+  }
+
+  export type NotificationsClientsCreateOrConnectWithoutClientInput = {
+    where: NotificationsClientsWhereUniqueInput
+    create: XOR<NotificationsClientsCreateWithoutClientInput, NotificationsClientsUncheckedCreateWithoutClientInput>
+  }
+
+  export type NotificationsClientsCreateManyClientInputEnvelope = {
+    data: Enumerable<NotificationsClientsCreateManyClientInput>
     skipDuplicates?: boolean
   }
 
@@ -15258,6 +15226,31 @@ export namespace Prisma {
     clientId?: StringFilter | string
   }
 
+  export type NotificationsClientsUpsertWithWhereUniqueWithoutClientInput = {
+    where: NotificationsClientsWhereUniqueInput
+    update: XOR<NotificationsClientsUpdateWithoutClientInput, NotificationsClientsUncheckedUpdateWithoutClientInput>
+    create: XOR<NotificationsClientsCreateWithoutClientInput, NotificationsClientsUncheckedCreateWithoutClientInput>
+  }
+
+  export type NotificationsClientsUpdateWithWhereUniqueWithoutClientInput = {
+    where: NotificationsClientsWhereUniqueInput
+    data: XOR<NotificationsClientsUpdateWithoutClientInput, NotificationsClientsUncheckedUpdateWithoutClientInput>
+  }
+
+  export type NotificationsClientsUpdateManyWithWhereWithoutClientInput = {
+    where: NotificationsClientsScalarWhereInput
+    data: XOR<NotificationsClientsUpdateManyMutationInput, NotificationsClientsUncheckedUpdateManyWithoutNotificationsInput>
+  }
+
+  export type NotificationsClientsScalarWhereInput = {
+    AND?: Enumerable<NotificationsClientsScalarWhereInput>
+    OR?: Enumerable<NotificationsClientsScalarWhereInput>
+    NOT?: Enumerable<NotificationsClientsScalarWhereInput>
+    isViewed?: BoolFilter | boolean
+    notificationId?: StringFilter | string
+    clientId?: StringFilter | string
+  }
+
   export type ClientCreateWithoutSessionsInput = {
     id: string
     email: string
@@ -15270,6 +15263,7 @@ export namespace Prisma {
     notifyAnnouncements: boolean
     notifyNewProducts: boolean
     notifyEventsAndActions: boolean
+    notifications?: NotificationsClientsCreateNestedManyWithoutClientInput
   }
 
   export type ClientUncheckedCreateWithoutSessionsInput = {
@@ -15284,6 +15278,7 @@ export namespace Prisma {
     notifyAnnouncements: boolean
     notifyNewProducts: boolean
     notifyEventsAndActions: boolean
+    notifications?: NotificationsClientsUncheckedCreateNestedManyWithoutClientInput
   }
 
   export type ClientCreateOrConnectWithoutSessionsInput = {
@@ -15308,6 +15303,7 @@ export namespace Prisma {
     notifyAnnouncements?: BoolFieldUpdateOperationsInput | boolean
     notifyNewProducts?: BoolFieldUpdateOperationsInput | boolean
     notifyEventsAndActions?: BoolFieldUpdateOperationsInput | boolean
+    notifications?: NotificationsClientsUpdateManyWithoutClientNestedInput
   }
 
   export type ClientUncheckedUpdateWithoutSessionsInput = {
@@ -15322,6 +15318,7 @@ export namespace Prisma {
     notifyAnnouncements?: BoolFieldUpdateOperationsInput | boolean
     notifyNewProducts?: BoolFieldUpdateOperationsInput | boolean
     notifyEventsAndActions?: BoolFieldUpdateOperationsInput | boolean
+    notifications?: NotificationsClientsUncheckedUpdateManyWithoutClientNestedInput
   }
 
   export type ClientCreateWithoutPasswordResetRequestsInput = {
@@ -15336,6 +15333,7 @@ export namespace Prisma {
     notifyAnnouncements: boolean
     notifyNewProducts: boolean
     notifyEventsAndActions: boolean
+    notifications?: NotificationsClientsCreateNestedManyWithoutClientInput
   }
 
   export type ClientUncheckedCreateWithoutPasswordResetRequestsInput = {
@@ -15350,6 +15348,7 @@ export namespace Prisma {
     notifyAnnouncements: boolean
     notifyNewProducts: boolean
     notifyEventsAndActions: boolean
+    notifications?: NotificationsClientsUncheckedCreateNestedManyWithoutClientInput
   }
 
   export type ClientCreateOrConnectWithoutPasswordResetRequestsInput = {
@@ -15374,6 +15373,7 @@ export namespace Prisma {
     notifyAnnouncements?: BoolFieldUpdateOperationsInput | boolean
     notifyNewProducts?: BoolFieldUpdateOperationsInput | boolean
     notifyEventsAndActions?: BoolFieldUpdateOperationsInput | boolean
+    notifications?: NotificationsClientsUpdateManyWithoutClientNestedInput
   }
 
   export type ClientUncheckedUpdateWithoutPasswordResetRequestsInput = {
@@ -15388,6 +15388,7 @@ export namespace Prisma {
     notifyAnnouncements?: BoolFieldUpdateOperationsInput | boolean
     notifyNewProducts?: BoolFieldUpdateOperationsInput | boolean
     notifyEventsAndActions?: BoolFieldUpdateOperationsInput | boolean
+    notifications?: NotificationsClientsUncheckedUpdateManyWithoutClientNestedInput
   }
 
   export type ClientCreateWithoutEmailChangeRequestsInput = {
@@ -15402,6 +15403,7 @@ export namespace Prisma {
     notifyAnnouncements: boolean
     notifyNewProducts: boolean
     notifyEventsAndActions: boolean
+    notifications?: NotificationsClientsCreateNestedManyWithoutClientInput
   }
 
   export type ClientUncheckedCreateWithoutEmailChangeRequestsInput = {
@@ -15416,6 +15418,7 @@ export namespace Prisma {
     notifyAnnouncements: boolean
     notifyNewProducts: boolean
     notifyEventsAndActions: boolean
+    notifications?: NotificationsClientsUncheckedCreateNestedManyWithoutClientInput
   }
 
   export type ClientCreateOrConnectWithoutEmailChangeRequestsInput = {
@@ -15440,6 +15443,7 @@ export namespace Prisma {
     notifyAnnouncements?: BoolFieldUpdateOperationsInput | boolean
     notifyNewProducts?: BoolFieldUpdateOperationsInput | boolean
     notifyEventsAndActions?: BoolFieldUpdateOperationsInput | boolean
+    notifications?: NotificationsClientsUpdateManyWithoutClientNestedInput
   }
 
   export type ClientUncheckedUpdateWithoutEmailChangeRequestsInput = {
@@ -15454,6 +15458,7 @@ export namespace Prisma {
     notifyAnnouncements?: BoolFieldUpdateOperationsInput | boolean
     notifyNewProducts?: BoolFieldUpdateOperationsInput | boolean
     notifyEventsAndActions?: BoolFieldUpdateOperationsInput | boolean
+    notifications?: NotificationsClientsUncheckedUpdateManyWithoutClientNestedInput
   }
 
   export type ClientCreateWithoutPushTokensInput = {
@@ -15468,6 +15473,7 @@ export namespace Prisma {
     notifyAnnouncements: boolean
     notifyNewProducts: boolean
     notifyEventsAndActions: boolean
+    notifications?: NotificationsClientsCreateNestedManyWithoutClientInput
   }
 
   export type ClientUncheckedCreateWithoutPushTokensInput = {
@@ -15482,31 +15488,12 @@ export namespace Prisma {
     notifyAnnouncements: boolean
     notifyNewProducts: boolean
     notifyEventsAndActions: boolean
+    notifications?: NotificationsClientsUncheckedCreateNestedManyWithoutClientInput
   }
 
   export type ClientCreateOrConnectWithoutPushTokensInput = {
     where: ClientWhereUniqueInput
     create: XOR<ClientCreateWithoutPushTokensInput, ClientUncheckedCreateWithoutPushTokensInput>
-  }
-
-  export type NotificationsClientPushTokensCreateWithoutClientPushTokenInput = {
-    isViewed: boolean
-    notification: NotificationCreateNestedOneWithoutNotificationsClientPushTokensInput
-  }
-
-  export type NotificationsClientPushTokensUncheckedCreateWithoutClientPushTokenInput = {
-    isViewed: boolean
-    notificationId: string
-  }
-
-  export type NotificationsClientPushTokensCreateOrConnectWithoutClientPushTokenInput = {
-    where: NotificationsClientPushTokensWhereUniqueInput
-    create: XOR<NotificationsClientPushTokensCreateWithoutClientPushTokenInput, NotificationsClientPushTokensUncheckedCreateWithoutClientPushTokenInput>
-  }
-
-  export type NotificationsClientPushTokensCreateManyClientPushTokenInputEnvelope = {
-    data: Enumerable<NotificationsClientPushTokensCreateManyClientPushTokenInput>
-    skipDuplicates?: boolean
   }
 
   export type ClientUpsertWithoutPushTokensInput = {
@@ -15526,6 +15513,7 @@ export namespace Prisma {
     notifyAnnouncements?: BoolFieldUpdateOperationsInput | boolean
     notifyNewProducts?: BoolFieldUpdateOperationsInput | boolean
     notifyEventsAndActions?: BoolFieldUpdateOperationsInput | boolean
+    notifications?: NotificationsClientsUpdateManyWithoutClientNestedInput
   }
 
   export type ClientUncheckedUpdateWithoutPushTokensInput = {
@@ -15540,113 +15528,109 @@ export namespace Prisma {
     notifyAnnouncements?: BoolFieldUpdateOperationsInput | boolean
     notifyNewProducts?: BoolFieldUpdateOperationsInput | boolean
     notifyEventsAndActions?: BoolFieldUpdateOperationsInput | boolean
+    notifications?: NotificationsClientsUncheckedUpdateManyWithoutClientNestedInput
   }
 
-  export type NotificationsClientPushTokensUpsertWithWhereUniqueWithoutClientPushTokenInput = {
-    where: NotificationsClientPushTokensWhereUniqueInput
-    update: XOR<NotificationsClientPushTokensUpdateWithoutClientPushTokenInput, NotificationsClientPushTokensUncheckedUpdateWithoutClientPushTokenInput>
-    create: XOR<NotificationsClientPushTokensCreateWithoutClientPushTokenInput, NotificationsClientPushTokensUncheckedCreateWithoutClientPushTokenInput>
-  }
-
-  export type NotificationsClientPushTokensUpdateWithWhereUniqueWithoutClientPushTokenInput = {
-    where: NotificationsClientPushTokensWhereUniqueInput
-    data: XOR<NotificationsClientPushTokensUpdateWithoutClientPushTokenInput, NotificationsClientPushTokensUncheckedUpdateWithoutClientPushTokenInput>
-  }
-
-  export type NotificationsClientPushTokensUpdateManyWithWhereWithoutClientPushTokenInput = {
-    where: NotificationsClientPushTokensScalarWhereInput
-    data: XOR<NotificationsClientPushTokensUpdateManyMutationInput, NotificationsClientPushTokensUncheckedUpdateManyWithoutNotificationsClientPushTokensInput>
-  }
-
-  export type NotificationsClientPushTokensScalarWhereInput = {
-    AND?: Enumerable<NotificationsClientPushTokensScalarWhereInput>
-    OR?: Enumerable<NotificationsClientPushTokensScalarWhereInput>
-    NOT?: Enumerable<NotificationsClientPushTokensScalarWhereInput>
-    isViewed?: BoolFilter | boolean
-    notificationId?: StringFilter | string
-    clientPushTokenToken?: StringFilter | string
-  }
-
-  export type NotificationsClientPushTokensCreateWithoutNotificationInput = {
+  export type NotificationsClientsCreateWithoutNotificationInput = {
     isViewed: boolean
-    clientPushToken: ClientPushTokenCreateNestedOneWithoutNotificationsClientPushTokensInput
+    client: ClientCreateNestedOneWithoutNotificationsInput
   }
 
-  export type NotificationsClientPushTokensUncheckedCreateWithoutNotificationInput = {
+  export type NotificationsClientsUncheckedCreateWithoutNotificationInput = {
     isViewed: boolean
-    clientPushTokenToken: string
-  }
-
-  export type NotificationsClientPushTokensCreateOrConnectWithoutNotificationInput = {
-    where: NotificationsClientPushTokensWhereUniqueInput
-    create: XOR<NotificationsClientPushTokensCreateWithoutNotificationInput, NotificationsClientPushTokensUncheckedCreateWithoutNotificationInput>
-  }
-
-  export type NotificationsClientPushTokensCreateManyNotificationInputEnvelope = {
-    data: Enumerable<NotificationsClientPushTokensCreateManyNotificationInput>
-    skipDuplicates?: boolean
-  }
-
-  export type NotificationsClientPushTokensUpsertWithWhereUniqueWithoutNotificationInput = {
-    where: NotificationsClientPushTokensWhereUniqueInput
-    update: XOR<NotificationsClientPushTokensUpdateWithoutNotificationInput, NotificationsClientPushTokensUncheckedUpdateWithoutNotificationInput>
-    create: XOR<NotificationsClientPushTokensCreateWithoutNotificationInput, NotificationsClientPushTokensUncheckedCreateWithoutNotificationInput>
-  }
-
-  export type NotificationsClientPushTokensUpdateWithWhereUniqueWithoutNotificationInput = {
-    where: NotificationsClientPushTokensWhereUniqueInput
-    data: XOR<NotificationsClientPushTokensUpdateWithoutNotificationInput, NotificationsClientPushTokensUncheckedUpdateWithoutNotificationInput>
-  }
-
-  export type NotificationsClientPushTokensUpdateManyWithWhereWithoutNotificationInput = {
-    where: NotificationsClientPushTokensScalarWhereInput
-    data: XOR<NotificationsClientPushTokensUpdateManyMutationInput, NotificationsClientPushTokensUncheckedUpdateManyWithoutNotificationsClientPushTokensInput>
-  }
-
-  export type NotificationCreateWithoutNotificationsClientPushTokensInput = {
-    id: string
-    type: NotificationType
-    title: string
-    body: string
-    createdAt: Date | string
-    payload?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type NotificationUncheckedCreateWithoutNotificationsClientPushTokensInput = {
-    id: string
-    type: NotificationType
-    title: string
-    body: string
-    createdAt: Date | string
-    payload?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type NotificationCreateOrConnectWithoutNotificationsClientPushTokensInput = {
-    where: NotificationWhereUniqueInput
-    create: XOR<NotificationCreateWithoutNotificationsClientPushTokensInput, NotificationUncheckedCreateWithoutNotificationsClientPushTokensInput>
-  }
-
-  export type ClientPushTokenCreateWithoutNotificationsClientPushTokensInput = {
-    token: string
-    client: ClientCreateNestedOneWithoutPushTokensInput
-  }
-
-  export type ClientPushTokenUncheckedCreateWithoutNotificationsClientPushTokensInput = {
-    token: string
     clientId: string
   }
 
-  export type ClientPushTokenCreateOrConnectWithoutNotificationsClientPushTokensInput = {
-    where: ClientPushTokenWhereUniqueInput
-    create: XOR<ClientPushTokenCreateWithoutNotificationsClientPushTokensInput, ClientPushTokenUncheckedCreateWithoutNotificationsClientPushTokensInput>
+  export type NotificationsClientsCreateOrConnectWithoutNotificationInput = {
+    where: NotificationsClientsWhereUniqueInput
+    create: XOR<NotificationsClientsCreateWithoutNotificationInput, NotificationsClientsUncheckedCreateWithoutNotificationInput>
   }
 
-  export type NotificationUpsertWithoutNotificationsClientPushTokensInput = {
-    update: XOR<NotificationUpdateWithoutNotificationsClientPushTokensInput, NotificationUncheckedUpdateWithoutNotificationsClientPushTokensInput>
-    create: XOR<NotificationCreateWithoutNotificationsClientPushTokensInput, NotificationUncheckedCreateWithoutNotificationsClientPushTokensInput>
+  export type NotificationsClientsCreateManyNotificationInputEnvelope = {
+    data: Enumerable<NotificationsClientsCreateManyNotificationInput>
+    skipDuplicates?: boolean
   }
 
-  export type NotificationUpdateWithoutNotificationsClientPushTokensInput = {
+  export type NotificationsClientsUpsertWithWhereUniqueWithoutNotificationInput = {
+    where: NotificationsClientsWhereUniqueInput
+    update: XOR<NotificationsClientsUpdateWithoutNotificationInput, NotificationsClientsUncheckedUpdateWithoutNotificationInput>
+    create: XOR<NotificationsClientsCreateWithoutNotificationInput, NotificationsClientsUncheckedCreateWithoutNotificationInput>
+  }
+
+  export type NotificationsClientsUpdateWithWhereUniqueWithoutNotificationInput = {
+    where: NotificationsClientsWhereUniqueInput
+    data: XOR<NotificationsClientsUpdateWithoutNotificationInput, NotificationsClientsUncheckedUpdateWithoutNotificationInput>
+  }
+
+  export type NotificationsClientsUpdateManyWithWhereWithoutNotificationInput = {
+    where: NotificationsClientsScalarWhereInput
+    data: XOR<NotificationsClientsUpdateManyMutationInput, NotificationsClientsUncheckedUpdateManyWithoutClientsInput>
+  }
+
+  export type NotificationCreateWithoutClientsInput = {
+    id: string
+    type: NotificationType
+    title: string
+    body: string
+    createdAt: Date | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type NotificationUncheckedCreateWithoutClientsInput = {
+    id: string
+    type: NotificationType
+    title: string
+    body: string
+    createdAt: Date | string
+    payload?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type NotificationCreateOrConnectWithoutClientsInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutClientsInput, NotificationUncheckedCreateWithoutClientsInput>
+  }
+
+  export type ClientCreateWithoutNotificationsInput = {
+    id: string
+    email: string
+    passwordHash: string
+    numericPasswordHash: string
+    name: string
+    passwordResetRequests?: ClientPasswordResetRequestCreateNestedManyWithoutClientInput
+    emailChangeRequests?: ClientEmailChangeRequestCreateNestedManyWithoutClientInput
+    pushTokens?: ClientPushTokenCreateNestedManyWithoutClientInput
+    sessions?: ClientSessionCreateNestedManyWithoutClientInput
+    notifyAnnouncements: boolean
+    notifyNewProducts: boolean
+    notifyEventsAndActions: boolean
+  }
+
+  export type ClientUncheckedCreateWithoutNotificationsInput = {
+    id: string
+    email: string
+    passwordHash: string
+    numericPasswordHash: string
+    name: string
+    passwordResetRequests?: ClientPasswordResetRequestUncheckedCreateNestedManyWithoutClientInput
+    emailChangeRequests?: ClientEmailChangeRequestUncheckedCreateNestedManyWithoutClientInput
+    pushTokens?: ClientPushTokenUncheckedCreateNestedManyWithoutClientInput
+    sessions?: ClientSessionUncheckedCreateNestedManyWithoutClientInput
+    notifyAnnouncements: boolean
+    notifyNewProducts: boolean
+    notifyEventsAndActions: boolean
+  }
+
+  export type ClientCreateOrConnectWithoutNotificationsInput = {
+    where: ClientWhereUniqueInput
+    create: XOR<ClientCreateWithoutNotificationsInput, ClientUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type NotificationUpsertWithoutClientsInput = {
+    update: XOR<NotificationUpdateWithoutClientsInput, NotificationUncheckedUpdateWithoutClientsInput>
+    create: XOR<NotificationCreateWithoutClientsInput, NotificationUncheckedCreateWithoutClientsInput>
+  }
+
+  export type NotificationUpdateWithoutClientsInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumNotificationTypeFieldUpdateOperationsInput | NotificationType
     title?: StringFieldUpdateOperationsInput | string
@@ -15655,7 +15639,7 @@ export namespace Prisma {
     payload?: NullableJsonNullValueInput | InputJsonValue
   }
 
-  export type NotificationUncheckedUpdateWithoutNotificationsClientPushTokensInput = {
+  export type NotificationUncheckedUpdateWithoutClientsInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumNotificationTypeFieldUpdateOperationsInput | NotificationType
     title?: StringFieldUpdateOperationsInput | string
@@ -15664,19 +15648,39 @@ export namespace Prisma {
     payload?: NullableJsonNullValueInput | InputJsonValue
   }
 
-  export type ClientPushTokenUpsertWithoutNotificationsClientPushTokensInput = {
-    update: XOR<ClientPushTokenUpdateWithoutNotificationsClientPushTokensInput, ClientPushTokenUncheckedUpdateWithoutNotificationsClientPushTokensInput>
-    create: XOR<ClientPushTokenCreateWithoutNotificationsClientPushTokensInput, ClientPushTokenUncheckedCreateWithoutNotificationsClientPushTokensInput>
+  export type ClientUpsertWithoutNotificationsInput = {
+    update: XOR<ClientUpdateWithoutNotificationsInput, ClientUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<ClientCreateWithoutNotificationsInput, ClientUncheckedCreateWithoutNotificationsInput>
   }
 
-  export type ClientPushTokenUpdateWithoutNotificationsClientPushTokensInput = {
-    token?: StringFieldUpdateOperationsInput | string
-    client?: ClientUpdateOneRequiredWithoutPushTokensNestedInput
+  export type ClientUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    numericPasswordHash?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    passwordResetRequests?: ClientPasswordResetRequestUpdateManyWithoutClientNestedInput
+    emailChangeRequests?: ClientEmailChangeRequestUpdateManyWithoutClientNestedInput
+    pushTokens?: ClientPushTokenUpdateManyWithoutClientNestedInput
+    sessions?: ClientSessionUpdateManyWithoutClientNestedInput
+    notifyAnnouncements?: BoolFieldUpdateOperationsInput | boolean
+    notifyNewProducts?: BoolFieldUpdateOperationsInput | boolean
+    notifyEventsAndActions?: BoolFieldUpdateOperationsInput | boolean
   }
 
-  export type ClientPushTokenUncheckedUpdateWithoutNotificationsClientPushTokensInput = {
-    token?: StringFieldUpdateOperationsInput | string
-    clientId?: StringFieldUpdateOperationsInput | string
+  export type ClientUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    numericPasswordHash?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    passwordResetRequests?: ClientPasswordResetRequestUncheckedUpdateManyWithoutClientNestedInput
+    emailChangeRequests?: ClientEmailChangeRequestUncheckedUpdateManyWithoutClientNestedInput
+    pushTokens?: ClientPushTokenUncheckedUpdateManyWithoutClientNestedInput
+    sessions?: ClientSessionUncheckedUpdateManyWithoutClientNestedInput
+    notifyAnnouncements?: BoolFieldUpdateOperationsInput | boolean
+    notifyNewProducts?: BoolFieldUpdateOperationsInput | boolean
+    notifyEventsAndActions?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PanelUserSessionCreateManyPanelUserInput = {
@@ -15713,6 +15717,11 @@ export namespace Prisma {
 
   export type ClientSessionCreateManyClientInput = {
     token: string
+  }
+
+  export type NotificationsClientsCreateManyClientInput = {
+    isViewed: boolean
+    notificationId: string
   }
 
   export type ClientPasswordResetRequestUpdateWithoutClientInput = {
@@ -15753,12 +15762,10 @@ export namespace Prisma {
 
   export type ClientPushTokenUpdateWithoutClientInput = {
     token?: StringFieldUpdateOperationsInput | string
-    notificationsClientPushTokens?: NotificationsClientPushTokensUpdateManyWithoutClientPushTokenNestedInput
   }
 
   export type ClientPushTokenUncheckedUpdateWithoutClientInput = {
     token?: StringFieldUpdateOperationsInput | string
-    notificationsClientPushTokens?: NotificationsClientPushTokensUncheckedUpdateManyWithoutClientPushTokenNestedInput
   }
 
   export type ClientPushTokenUncheckedUpdateManyWithoutPushTokensInput = {
@@ -15777,39 +15784,39 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
   }
 
-  export type NotificationsClientPushTokensCreateManyClientPushTokenInput = {
-    isViewed: boolean
-    notificationId: string
-  }
-
-  export type NotificationsClientPushTokensUpdateWithoutClientPushTokenInput = {
+  export type NotificationsClientsUpdateWithoutClientInput = {
     isViewed?: BoolFieldUpdateOperationsInput | boolean
-    notification?: NotificationUpdateOneRequiredWithoutNotificationsClientPushTokensNestedInput
+    notification?: NotificationUpdateOneRequiredWithoutClientsNestedInput
   }
 
-  export type NotificationsClientPushTokensUncheckedUpdateWithoutClientPushTokenInput = {
+  export type NotificationsClientsUncheckedUpdateWithoutClientInput = {
     isViewed?: BoolFieldUpdateOperationsInput | boolean
     notificationId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type NotificationsClientPushTokensUncheckedUpdateManyWithoutNotificationsClientPushTokensInput = {
+  export type NotificationsClientsUncheckedUpdateManyWithoutNotificationsInput = {
     isViewed?: BoolFieldUpdateOperationsInput | boolean
     notificationId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type NotificationsClientPushTokensCreateManyNotificationInput = {
+  export type NotificationsClientsCreateManyNotificationInput = {
     isViewed: boolean
-    clientPushTokenToken: string
+    clientId: string
   }
 
-  export type NotificationsClientPushTokensUpdateWithoutNotificationInput = {
+  export type NotificationsClientsUpdateWithoutNotificationInput = {
     isViewed?: BoolFieldUpdateOperationsInput | boolean
-    clientPushToken?: ClientPushTokenUpdateOneRequiredWithoutNotificationsClientPushTokensNestedInput
+    client?: ClientUpdateOneRequiredWithoutNotificationsNestedInput
   }
 
-  export type NotificationsClientPushTokensUncheckedUpdateWithoutNotificationInput = {
+  export type NotificationsClientsUncheckedUpdateWithoutNotificationInput = {
     isViewed?: BoolFieldUpdateOperationsInput | boolean
-    clientPushTokenToken?: StringFieldUpdateOperationsInput | string
+    clientId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type NotificationsClientsUncheckedUpdateManyWithoutClientsInput = {
+    isViewed?: BoolFieldUpdateOperationsInput | boolean
+    clientId?: StringFieldUpdateOperationsInput | string
   }
 
 

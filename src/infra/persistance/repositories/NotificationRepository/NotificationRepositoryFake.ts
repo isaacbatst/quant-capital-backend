@@ -1,7 +1,7 @@
-import {ClientNotification} from '../../../domain/entities/Notification/ClientNotification';
-import {type Notification} from '../../../domain/entities/Notification/Notification';
-import {Paginator} from '../../../domain/entities/Paginator';
-import {NotFoundError} from '../../../domain/errors/NotFoundError';
+import {ClientNotification} from '../../../../domain/entities/Notification/ClientNotification';
+import {type Notification} from '../../../../domain/entities/Notification/Notification';
+import {Paginator} from '../../../../domain/entities/Paginator';
+import {NotFoundError} from '../../../../domain/errors/NotFoundError';
 import {type NotificationRepository} from './NotificationRepository';
 import {NotificationRepositoryFakeData} from './NotificationRepositoryFakeData';
 

@@ -13,6 +13,7 @@ export type NotificationParams = {
 };
 
 export abstract class Notification {
+	protected readonly payload?: Record<string, unknown>;
 	private readonly id: string;
 	private readonly type: NotificationType;
 	private readonly title: string;
@@ -56,6 +57,10 @@ export abstract class Notification {
 
 	getTo(): string[] {
 		return this.to;
+	}
+
+	getPayload(): Record<string, unknown> | undefined {
+		return this.payload;
 	}
 
 	private validateTo(): void {

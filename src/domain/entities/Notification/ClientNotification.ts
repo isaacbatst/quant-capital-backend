@@ -1,9 +1,18 @@
 import {ConflictError} from '../../errors/ConflictError';
-import {type Notification} from './Notification';
+import {type NotificationType, type Notification} from './Notification';
+
+type NotificationData = {
+	payload?: Record<string, unknown>;
+	id: string;
+	type: NotificationType;
+	title: string;
+	body: string;
+	createdAt: Date;
+};
 
 export class ClientNotification {
 	constructor(
-		private readonly notification: Notification,
+		private readonly notification: NotificationData,
 		private isViewed: boolean,
 		private readonly clientId: string,
 	) {}
@@ -20,7 +29,7 @@ export class ClientNotification {
 		return this.clientId;
 	}
 
-	getNotification(): Notification {
+	getNotification(): NotificationData {
 		return this.notification;
 	}
 
