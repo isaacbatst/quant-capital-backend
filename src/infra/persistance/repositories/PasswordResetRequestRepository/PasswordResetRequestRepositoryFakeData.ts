@@ -1,5 +1,5 @@
-import {EmailAddress} from '../../../domain/entities/Account/EmailAddress';
-import {PasswordResetRequest} from '../../../domain/entities/Account/PasswordResetRequest';
+import {EmailAddress} from '../../../../domain/entities/Account/EmailAddress';
+import {PasswordResetRequest} from '../../../../domain/entities/Account/PasswordResetRequest';
 
 export class PasswordResetRequestRepositoryFakeData {
 	static get requests(): PasswordResetRequest[] {

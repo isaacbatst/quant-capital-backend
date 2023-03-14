@@ -1,5 +1,5 @@
-import {type PasswordResetRequest} from '../../../domain/entities/Account/PasswordResetRequest';
-import {NotFoundError} from '../../../domain/errors/NotFoundError';
+import {type PasswordResetRequest} from '../../../../domain/entities/Account/PasswordResetRequest';
+import {NotFoundError} from '../../../../domain/errors/NotFoundError';
 import {type PasswordResetRequestRepository} from './PasswordResetRequestRepository';
 import {PasswordResetRequestRepositoryFakeData} from './PasswordResetRequestRepositoryFakeData';
 

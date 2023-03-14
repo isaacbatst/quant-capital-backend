@@ -4,7 +4,7 @@ import {ContractWithdrawRequestRepositoryFake} from './ContractWithdrawRequestRe
 import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository/EmailChangeRequestRepository';
 import {EmailChangeRequestRepositoryFake} from './EmailChangeRequestRepository/EmailChangeRequestRepositoryFake';
 import {NotificationRepositoryFake} from './NotificationRepository/NotificationRepositoryFake';
-import {PasswordResetRequestRepositoryFake} from './PasswordResetRequestRepositoryFake';
+import {PasswordResetRequestRepositoryFake} from './PasswordResetRequestRepository/PasswordResetRequestRepositoryFake';
 import {ProductRepositoryFake} from './ProductRepositoryFake';
 import {type RepositoryFactory} from './RepositoryFactory';
 
