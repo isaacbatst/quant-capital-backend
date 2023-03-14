@@ -8,24 +8,38 @@ generator client {
 }
 
 model PanelUser {
-  id           String @id
-  email        String @unique
+  id           String             @id
+  email        String             @unique
   passwordHash String
   name         String
+  sessions     PanelUserSession[]
+}
+
+model PanelUserSession {
+  token       String    @id
+  panelUser   PanelUser @relation(fields: [panelUserId], references: [id])
+  panelUserId String
 }
 
 model Client {
-  id                                 String                       @id
-  email                              String                       @unique
-  passwordHash                       String
-  numericPasswordHash                String
-  name                               String
-  passwordResetRequests              ClientPasswordResetRequest[]
-  emailChangeRequests                ClientEmailChangeRequest[]
-  pushTokens                         ClientPushToken[]
-  notifyAnnouncements                Boolean
-  notifyNewProducts                  Boolean
-  notifyEventsAndActions             Boolean
+  id                     String                       @id
+  email                  String                       @unique
+  passwordHash           String
+  numericPasswordHash    String
+  name                   String
+  passwordResetRequests  ClientPasswordResetRequest[]
+  emailChangeRequests    ClientEmailChangeRequest[]
+  pushTokens             ClientPushToken[]
+  sessions               ClientSession[]
+  notifyAnnouncements    Boolean
+  notifyNewProducts      Boolean
+  notifyEventsAndActions Boolean
+}
+
+model ClientSession {
+  token    String @id
+  client   Client @relation(fields: [clientId], references: [id])
+  clientId String
 }
 
 model ClientPasswordResetRequest {
