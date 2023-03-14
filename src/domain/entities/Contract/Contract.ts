@@ -11,13 +11,12 @@ export type ContractVersions = {
 
 type ContractParams = {
 	id: string;
-	contractDate: Date;
+	contractDate?: Date;
 	clientId: string;
 	balance: number;
 	initialVersion: {
 		startDate: Date;
-		dueDate: Date;
-		type: ContractVersionType;
+		dueDate?: Date;
 		rate: ContractRate;
 		balance: number;
 		initialTransactionValue: number;
@@ -28,7 +27,7 @@ type ContractParams = {
 
 export class Contract {
 	private readonly id: string;
-	private readonly contractDate: Date;
+	private readonly contractDate?: Date;
 	private readonly userId: string;
 	private readonly balance: number;
 	private readonly versions: ContractVersions;
@@ -41,10 +40,10 @@ export class Contract {
 		this.versions = {
 			initial: new ContractVersion({
 				id: this.id,
+				type: 'contract',
 				balance: params.initialVersion.balance,
 				dueDate: params.initialVersion.dueDate,
 				startDate: params.initialVersion.startDate,
-				type: params.initialVersion.type,
 				rate: params.initialVersion.rate,
 				initialTransaction: new ContractTransactionInitial({
 					date: params.initialVersion.startDate,
@@ -80,7 +79,7 @@ export class Contract {
 		return this.id;
 	}
 
-	getDate(): Date {
+	getDate(): Date | undefined {
 		return this.contractDate;
 	}
 

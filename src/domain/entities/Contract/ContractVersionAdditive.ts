@@ -1,11 +1,11 @@
 import {ContractVersion, type ContractVersionParams} from './ContractVersion';
 
 export type ContractVersionAdditiveParams = Omit<ContractVersionParams, 'type'> & {
-	readjustmentDate: Date;
+	readjustmentDate?: Date;
 };
 
 export class ContractVersionAdditive extends ContractVersion {
-	private readonly readjustmentDate: Date;
+	private readonly readjustmentDate?: Date;
 
 	constructor(params: ContractVersionAdditiveParams) {
 		super({
@@ -16,7 +16,7 @@ export class ContractVersionAdditive extends ContractVersion {
 		this.readjustmentDate = params.readjustmentDate;
 	}
 
-	getReajustmentDate(): Date {
+	getReajustmentDate(): Date | undefined {
 		return this.readjustmentDate;
 	}
 }

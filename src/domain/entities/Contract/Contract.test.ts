@@ -29,7 +29,6 @@ describe('Contract', () => {
 			initialVersion: {
 				startDate: new Date('2022-08-15'),
 				dueDate: new Date('2023-02-15'),
-				type: 'contract',
 				rate: new ContractRate(100, 'perYear'),
 				balance: 27600,
 				initialTransactionValue: 27600,
@@ -51,7 +50,6 @@ describe('Contract', () => {
 			initialVersion: {
 				startDate: new Date('2022-08-15'),
 				dueDate: new Date('2023-02-15'),
-				type: 'contract',
 				rate: new ContractRate(1.5, 'perYear'),
 				balance: 27600,
 				initialTransactionValue: 27600,
@@ -96,7 +94,6 @@ describe('Contract', () => {
 			initialVersion: {
 				startDate: new Date('2022-08-15'),
 				dueDate: new Date('2023-02-15'),
-				type: 'contract',
 				rate: new ContractRate(1.5, 'perYear'),
 				balance: 27600,
 				initialTransactionValue: 27600,
@@ -154,7 +151,6 @@ describe('Contract', () => {
 			initialVersion: {
 				startDate: new Date('2020-10-09'),
 				dueDate: new Date('2021-10-09'),
-				type: 'contract',
 				rate: new ContractRate(1.5, 'perMonth'),
 				balance: 5000,
 				initialTransactionValue: 5000,

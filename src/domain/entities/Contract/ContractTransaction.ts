@@ -2,14 +2,14 @@ export type ContractTransactionType = 'contribution' | 'withdraw' | 'yield' | 'i
 
 export type ContractTransactionParams = {
 	id: string;
-	date: Date;
+	date?: Date;
 	value: number;
 	type: ContractTransactionType;
 };
 
 export class ContractTransaction {
 	private readonly id: string;
-	private readonly date: Date;
+	private readonly date?: Date;
 	private readonly value: number;
 	private readonly type: ContractTransactionType;
 
@@ -24,7 +24,7 @@ export class ContractTransaction {
 		return this.id;
 	}
 
-	getDate(): Date {
+	getDate(): Date | undefined {
 		return this.date;
 	}
 

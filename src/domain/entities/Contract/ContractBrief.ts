@@ -1,6 +1,6 @@
 type ContractBriefParams = {
 	id: string;
-	date: Date;
+	date?: Date;
 	balance: number;
 	clientId: string;
 };
@@ -8,7 +8,7 @@ type ContractBriefParams = {
 export class ContractBrief {
 	private readonly id: string;
 	private readonly clientId: string;
-	private readonly date: Date;
+	private readonly date?: Date;
 	private readonly balance: number;
 
 	constructor({id, date, balance, clientId}: ContractBriefParams) {
@@ -22,7 +22,7 @@ export class ContractBrief {
 		return this.id;
 	}
 
-	getDate(): Date {
+	getDate(): Date | undefined {
 		return this.date;
 	}
 
