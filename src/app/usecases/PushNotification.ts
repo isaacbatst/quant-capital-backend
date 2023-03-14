@@ -1,6 +1,6 @@
 import {type Notification} from '../../domain/entities/Notification/Notification';
 import {NotificationFactory} from '../../domain/entities/Notification/NotificationFactory';
-import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
+import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository/AccountRepository';
 import {type NotificationRepository} from '../../infra/persistance/repositories/NotificationRepository';
 import {type IdGenerator} from '../../infra/util/IdGenerator/IdGenerator';
 

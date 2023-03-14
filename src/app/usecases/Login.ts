@@ -1,6 +1,6 @@
 import {EmailAddress} from '../../domain/entities/Account/EmailAddress';
 import {AuthError} from '../../domain/errors/AuthError';
-import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
+import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository/AccountRepository';
 import {type Encrypter} from '../../infra/util/Encrypter/Encrypter';
 import {type TokenGenerator} from '../../infra/util/TokenGenerator/TokenGenerator';
 

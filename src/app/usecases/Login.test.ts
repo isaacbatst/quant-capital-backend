@@ -1,5 +1,5 @@
 import {describe, it} from 'vitest';
-import {AccountRepositoryFake} from '../../infra/persistance/repositories/AccountRepositoryFake';
+import {AccountRepositoryFake} from '../../infra/persistance/repositories/AccountRepository/AccountRepositoryFake';
 import {EncrypterFake} from '../../infra/util/Encrypter/EncrypterFake';
 import {TokenGeneratorFake} from '../../infra/util/TokenGenerator/TokenGeneratorFake';
 import {Login} from './Login';

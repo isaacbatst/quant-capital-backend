@@ -1,4 +1,4 @@
-import {type AccountRepository} from './AccountRepository';
+import {type AccountRepository} from './AccountRepository/AccountRepository';
 import {type ContractRepository} from './ContractRepository';
 import {type ContractWithdrawRequestRepository} from './ContractWithdrawRequestRepository';
 import {type EmailChangeRequestRepository} from './EmailChangeRequestRepository';

@@ -1,7 +1,7 @@
-import {type Account} from '../../../domain/entities/Account/Account';
-import {type AccountRegistrationData} from '../../../domain/entities/Account/AccountRegistrationData';
-import {type EmailAddress} from '../../../domain/entities/Account/EmailAddress';
-import {type NotificationSettings} from '../../../domain/entities/NotificationSettings';
+import {type Account} from '../../../../domain/entities/Account/Account';
+import {type AccountRegistrationData} from '../../../../domain/entities/Account/AccountRegistrationData';
+import {type EmailAddress} from '../../../../domain/entities/Account/EmailAddress';
+import {type NotificationSettings} from '../../../../domain/entities/NotificationSettings';
 
 export type AccountRepository = {
 	getByEmail(email: EmailAddress): Promise<Account | undefined>;

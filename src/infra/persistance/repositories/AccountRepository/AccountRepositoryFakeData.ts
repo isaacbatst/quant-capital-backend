@@ -1,7 +1,7 @@
-import {Account} from '../../../domain/entities/Account/Account';
-import {AccountRegistrationData} from '../../../domain/entities/Account/AccountRegistrationData';
-import {EmailAddress} from '../../../domain/entities/Account/EmailAddress';
-import {type NotificationSettings} from '../../../domain/entities/NotificationSettings';
+import {Account} from '../../../../domain/entities/Account/Account';
+import {AccountRegistrationData} from '../../../../domain/entities/Account/AccountRegistrationData';
+import {EmailAddress} from '../../../../domain/entities/Account/EmailAddress';
+import {type NotificationSettings} from '../../../../domain/entities/NotificationSettings';
 
 export class AccountRepositoryFakeData {
 	static get accounts(): Array<{

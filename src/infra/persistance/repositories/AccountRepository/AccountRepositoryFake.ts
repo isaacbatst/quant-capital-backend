@@ -1,8 +1,8 @@
-import {type Account} from '../../../domain/entities/Account/Account';
-import {AccountRegistrationData} from '../../../domain/entities/Account/AccountRegistrationData';
-import {type EmailAddress} from '../../../domain/entities/Account/EmailAddress';
-import {type NotificationSettings} from '../../../domain/entities/NotificationSettings';
-import {NotFoundError} from '../../../domain/errors/NotFoundError';
+import {type Account} from '../../../../domain/entities/Account/Account';
+import {AccountRegistrationData} from '../../../../domain/entities/Account/AccountRegistrationData';
+import {type EmailAddress} from '../../../../domain/entities/Account/EmailAddress';
+import {type NotificationSettings} from '../../../../domain/entities/NotificationSettings';
+import {NotFoundError} from '../../../../domain/errors/NotFoundError';
 import {type AccountRepository} from './AccountRepository';
 import {AccountRepositoryFakeData} from './AccountRepositoryFakeData';
 

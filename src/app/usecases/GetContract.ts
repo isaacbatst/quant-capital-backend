@@ -3,7 +3,7 @@ import {type ContractRateType} from '../../domain/entities/Contract/ContractRate
 import {type ContractTransaction, type ContractTransactionType} from '../../domain/entities/Contract/ContractTransaction';
 import {type ContractVersion, type ContractVersionTransactions, type ContractVersionType} from '../../domain/entities/Contract/ContractVersion';
 import {NotFoundError} from '../../domain/errors/NotFoundError';
-import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository';
+import {type AccountRepository} from '../../infra/persistance/repositories/AccountRepository/AccountRepository';
 import {type ContractRepository} from '../../infra/persistance/repositories/ContractRepository';
 import {type RepositoryFactory} from '../../infra/persistance/repositories/RepositoryFactory';
 import {type AuthService} from './AuthService';
