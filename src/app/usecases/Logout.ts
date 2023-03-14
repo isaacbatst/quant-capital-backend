@@ -5,9 +5,12 @@ export class Logout {
 		private readonly authService: AuthService,
 	) {}
 
-	async execute(sessionToken: string) {
+	async execute(sessionToken: string, pushToken?: string) {
 		const account = await this.authService.getAccountBySessionToken(sessionToken);
 		await this.authService.accountRepository.removeSessionToken(account.getId(), sessionToken);
-		await this.authService.accountRepository.removePushToken(account.getId(), sessionToken);
+
+		if (pushToken) {
+			await this.authService.accountRepository.removePushToken(account.getId(), pushToken);
+		}
 	}
 }

@@ -1,7 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {ClientNotification} from './ClientNotification';
 import {NotificationType} from './Notification';
-import {NotificationBasic} from './NotificationBasic';
 
 describe('ClientNotification', () => {
 	it('should create a client notification', () => {

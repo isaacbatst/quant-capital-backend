@@ -2,6 +2,8 @@ import express from 'express';
 import 'express-async-errors';
 import morgan from 'morgan';
 import path from 'path';
+import {PrismaClient as PrismaAppClient} from '../prisma/generated/appClient';
+import {PrismaClient as PrismaRpClient} from '../prisma/generated/rpClient';
 import {AuthService} from './app/usecases/AuthService';
 import {ChangePassword} from './app/usecases/ChangePassword';
 import {ForgotMyPassword} from './app/usecases/ForgotMyPassword';
@@ -54,7 +56,7 @@ import {ViewNotificationController} from './infra/controllers/ViewNotification';
 import {type EmailGateway} from './infra/gateways/EmailGateway/EmailGateway';
 import {AuthMiddleware} from './infra/middlewares/AuthMiddleware';
 import {ErrorMiddleware} from './infra/middlewares/ErrorMiddleware';
-import {RepositoryFactoryFake} from './infra/persistance/repositories/RepositoryFactory/RepositoryFactoryFake';
+import {RepositoryFactoryPrisma} from './infra/persistance/repositories/RepositoryFactory/RepositoryFactoryPrisma';
 import {EncrypterBcrypt} from './infra/util/Encrypter/EncrypterBcrypt';
 import {IdGeneratorCrypto} from './infra/util/IdGenerator/IdGeneratorCrypto';
 import {TokenGeneratorCrypto} from './infra/util/TokenGenerator/TokenGeneratorCrypto';
@@ -68,7 +70,8 @@ export class App {
 		this.app.use(express.json());
 		this.app.use('/', express.static(path.join(__dirname, 'static', 'images')));
 
-		const repositoryFactory = new RepositoryFactoryFake(appUrl);
+		// Const repositoryFactory = new RepositoryFactoryFake(appUrl);
+		const repositoryFactory = new RepositoryFactoryPrisma(new PrismaAppClient(), new PrismaRpClient());
 
 		const encrypter = new EncrypterBcrypt();
 		const tokenGenerator = new TokenGeneratorCrypto();
